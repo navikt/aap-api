@@ -1,3 +1,3 @@
-rootProject.name = "aap-api"
+rootProject.name = "api"
 
 include("api")
