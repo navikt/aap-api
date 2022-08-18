@@ -13,28 +13,28 @@ internal class ActuatorsRouteTest {
 
     @Test
     fun `liveness configured`() {
-        KafkaStreamsMock().use { kafka ->
+//        KafkaStreamsMock().use { kafka ->
             testApplication {
                 environment { config = environmentVariables }
-                application { api(kafka) }
+                application { api() }
 
                 val liveness = client.get("/actuator/live")
                 assertEquals(HttpStatusCode.OK, liveness.status)
             }
-        }
+//        }
     }
 
     @Test
     fun `readiness configured`() {
-        KafkaStreamsMock().use { kafka ->
+//        KafkaStreamsMock().use { kafka ->
             testApplication {
                 environment { config = environmentVariables }
-                application { api(kafka) }
+                application { api() }
 
                 val readiness = client.get("/actuator/ready")
                 assertEquals(HttpStatusCode.OK, readiness.status)
             }
-        }
+//        }
     }
 
     private val environmentVariables = MapApplicationConfig(
