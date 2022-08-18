@@ -1,8 +1,8 @@
 # Docker multistage layer with a fatty jar stripped of unused rocskdb-instances
-FROM alpine:3.16 as app
+FROM alpine:3.16 as api
 RUN apk --update --no-cache add zip
-COPY /api/build/libs/app-all.jar app.jar
-RUN zip -d app.jar librocksdbjni-linux32.so librocksdbjni-linux32-musl.so librocksdbjni-linux64.so \
+COPY /api/build/libs/api-all.jar api.jar
+RUN zip -d api.jar librocksdbjni-linux32.so librocksdbjni-linux32-musl.so librocksdbjni-linux64.so \
     librocksdbjni-linux-aarch64.so librocksdbjni-linux-aarch64-musl.so librocksdbjni-linux-ppc64le.so \
     librocksdbjni-linux-ppc64le-musl.so librocksdbjni-linux-s390x.so librocksdbjni-linux-s390x-musl.so \
     librocksdbjni-osx-arm64.jnilib librocksdbjni-osx-x86_64.jnilib librocksdbjni-win64.dll
@@ -12,5 +12,5 @@ RUN zip -d app.jar librocksdbjni-linux32.so librocksdbjni-linux32-musl.so libroc
 FROM eclipse-temurin:18.0.2_9-jre-alpine
 ENV LANG='nb_NO.UTF-8' LANGUAGE='nb_NO:nb' LC_ALL='nb:NO.UTF-8' TZ="Europe/Oslo"
 RUN apk --update --no-cache add libstdc++
-COPY --from=app app.jar .
-CMD ["java", "-Xmx4G", "-Xms2G", "-XX:+UseParallelGC", "-jar", "app.jar"]
+COPY --from=api api.jar .
+CMD ["java", "-Xmx4G", "-Xms2G", "-XX:+UseParallelGC", "-jar", "api.jar"]
