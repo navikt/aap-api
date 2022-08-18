@@ -1,14 +1,24 @@
+# Idea project files
+*.iml
+.idea/
+!.idea/codeStyles/
+.run
+
+# Gradle files
+out/
+build/
+.gradle/
+
+# Generated sources
+src/generated
+
+# OS specific
+.DS_Store
+.devcontainer
+
+
+# Ignore Gradle project-specific cache directory
 .gradle
-/build/
 
-# Ignore Gradle GUI config
-gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
-# Cache of project
-.gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
+# Ignore Gradle build output directory
+build
