@@ -7,6 +7,8 @@ import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.ktor.config.loadConfig
 import routing.actuators
+import routing.meldepliktshendelser
+import routing.vedtak
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
@@ -25,6 +27,8 @@ fun Application.api() {
 //    )
 
     routing {
+        vedtak()
+        meldepliktshendelser()
         actuators(prometheus)
     }
 }

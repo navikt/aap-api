@@ -1,2 +1,4 @@
 kafka:
   pool: nav-dev
+
+ingress: https://aap-api.dev.intern.nav.no
