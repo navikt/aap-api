@@ -13,7 +13,7 @@ fun Routing.vedtak(httpClient: HttpClient) {
     get("/vedtak/{personident}") {
         val personident = call.parameters.getOrFail("personident")
 
-        val søker = httpClient.get("http://sink/søker/{personident}/last") {
+        val søker = httpClient.get("http://sink/søker/{personident}/latest") {
             parameter("personident", personident)
             accept(ContentType.Application.Json)
             contentType(ContentType.Application.Json)
