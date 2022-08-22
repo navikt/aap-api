@@ -34,15 +34,8 @@ fun Application.api() {
 
     val sinkClient = HttpClientFactory.create()
 
-//    kafka.connect(
-//        config = config.kafka,
-//        registry = prometheus,
-//        topology = StreamsBuilder().build(),
-//    )
-
-
     routing {
-        vedtak(sinkClient)
+        vedtak(config, sinkClient)
         meldepliktshendelser()
         actuators(prometheus)
     }

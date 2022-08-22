@@ -5,7 +5,6 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
-import no.nav.aap.kafka.streams.test.KafkaStreamsMock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -14,26 +13,26 @@ internal class ActuatorsRouteTest {
     @Test
     fun `liveness configured`() {
 //        KafkaStreamsMock().use { kafka ->
-            testApplication {
-                environment { config = environmentVariables }
-                application { api() }
+        testApplication {
+            environment { config = environmentVariables }
+            application { api() }
 
-                val liveness = client.get("/actuator/live")
-                assertEquals(HttpStatusCode.OK, liveness.status)
-            }
+            val liveness = client.get("/actuator/live")
+            assertEquals(HttpStatusCode.OK, liveness.status)
+        }
 //        }
     }
 
     @Test
     fun `readiness configured`() {
 //        KafkaStreamsMock().use { kafka ->
-            testApplication {
-                environment { config = environmentVariables }
-                application { api() }
+        testApplication {
+            environment { config = environmentVariables }
+            application { api() }
 
-                val readiness = client.get("/actuator/ready")
-                assertEquals(HttpStatusCode.OK, readiness.status)
-            }
+            val readiness = client.get("/actuator/ready")
+            assertEquals(HttpStatusCode.OK, readiness.status)
+        }
 //        }
     }
 
@@ -44,5 +43,6 @@ internal class ActuatorsRouteTest {
         "KAFKA_KEYSTORE_PATH" to "",
         "KAFKA_CREDSTORE_PASSWORD" to "",
         "KAFKA_CLIENT_ID" to "api",
+        "SINK_HOST" to "http://localhost:8080",
     )
 }
