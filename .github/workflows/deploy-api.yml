@@ -46,7 +46,9 @@ jobs:
     strategy:
       matrix:
         name: [ app.yml ]
-        cluster: [ dev-gcp, prod-gcp ]
+        cluster:
+          - dev-gcp
+#          - prod-gcp
         include:
           - cluster: dev-gcp
             vars: dev.yml
