@@ -52,8 +52,8 @@ jobs:
         include:
           - cluster: dev-gcp
             vars: dev.yml
-          - cluster: prod-gcp
-            vars: prod.yml
+#          - cluster: prod-gcp
+#            vars: prod.yml
 
     name: Deploy (${{ matrix.cluster }})
     runs-on: ubuntu-latest

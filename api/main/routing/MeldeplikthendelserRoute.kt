@@ -7,7 +7,7 @@ import io.ktor.server.routing.*
 import java.time.LocalDate
 
 fun Routing.meldepliktshendelser() {
-    get("/vedtak") {
+    get("/meldepliktshendelser") {
         call.respond(HttpStatusCode.OK)
     }
 }
