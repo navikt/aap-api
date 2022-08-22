@@ -15,7 +15,7 @@ fun Routing.vedtak(httpClient: HttpClient) {
 
         val søker = httpClient.get("http://sink/søker/$personident/latest") {
             accept(ContentType.Application.Json)
-            contentType(ContentType.Application.Json)
+//            contentType(ContentType.Application.Json)
         }.body<SøkerDao>()
 
         call.respond(HttpStatusCode.OK, søker)
