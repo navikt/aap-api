@@ -16,7 +16,7 @@ object HttpClientFactory {
         install(HttpRequestRetry)
         install(HttpTimeout)
         install(Logging) {
-            level = LogLevel.BODY
+            level = LogLevel.ALL
             logger = HttpClientLogger(LoggerFactory.getLogger("secureLog"))
         }
     }
