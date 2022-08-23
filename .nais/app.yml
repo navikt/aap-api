@@ -9,9 +9,10 @@ metadata:
     github.url: "https://github.com/navikt/aap-api"
 spec:
   image: {{image}}
-  outbound:
-    rules:
-      - application: sink
+  accessPolicy:
+    outbound:
+      rules:
+        - application: sink
   ingresses:
     - {{ingress}}
   replicas:
