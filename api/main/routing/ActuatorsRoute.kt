@@ -7,17 +7,8 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 
 fun Routing.actuators(prometheus: PrometheusMeterRegistry) {
     route("/actuator") {
-        get("/metrics") {
-            val metrics = prometheus.scrape()
-            call.respondText(metrics)
-        }
-
-        get("/live") {
-            call.respondText("api")
-        }
-
-        get("/ready") {
-            call.respondText("api")
-        }
+        get("/metrics") { call.respondText(prometheus.scrape()) }
+        get("/live") { call.respondText("api") }
+        get("/ready") { call.respondText("api") }
     }
 }

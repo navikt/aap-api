@@ -6,4 +6,4 @@ kafka:
     keystorePath: ${KAFKA_KEYSTORE_PATH}
     credstorePsw: ${KAFKA_CREDSTORE_PASSWORD}
 
-sink-host: ${SINK_HOST:-http://sink}
+sink-host: ${SINK_HOST}

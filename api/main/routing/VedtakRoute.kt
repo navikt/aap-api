@@ -13,8 +13,8 @@ import io.ktor.server.util.*
 fun Routing.vedtak(config: Config, httpClient: HttpClient) {
     get("/vedtak/{personident}") {
         val personident = call.parameters.getOrFail("personident")
-
-        val søker = httpClient.get("${config.sinkHost}/soker/$personident/latest") {
+        val sinkHost = config.sinkHost.also { println(it) }
+        val søker = httpClient.get("$sinkHost/soker/$personident/latest") {
 //            accept(ContentType.Application.Json)
 //            contentType(ContentType.Application.Json)
         }.body<SøkerDao>()
