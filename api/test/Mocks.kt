@@ -60,7 +60,14 @@ private fun Application.sinkMock() {
 
         get("/soker/{personident}/latest") {
             val personident = call.parameters["personident"] ?: error("personident required")
-            val søkerDao = defaultDao<SøkereKafkaDto>(personident) { null }
+            val søkerDao = defaultDao(personident) {
+                SøkereKafkaDto(
+                    personident = personident,
+                    fødselsdato = LocalDate.now().minusYears(46),
+                    saker = listOf(),
+                    null,
+                )
+            }
 
             call.respond(HttpStatusCode.OK, søkerDao)
         }
@@ -73,10 +80,10 @@ internal val jackson = jacksonObjectMapper()
 
 private inline fun <reified T> defaultDao(
     personident: String,
-    record: () -> T?,
+    record: () -> T,
 ): Dao = Dao(
     personident,
-    jackson.writeValueAsString(record()) ?: "tombstone",
+    jackson.writeValueAsString(record()),
     null,
     0,
     0L,
