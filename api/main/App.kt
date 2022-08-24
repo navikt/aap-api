@@ -14,7 +14,8 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.ktor.config.loadConfig
 import routing.actuators
 import routing.meldepliktshendelser
-import routing.vedtak
+import søker.søker
+import vedtak.vedtak
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
@@ -36,10 +37,23 @@ fun Application.api() {
 
     routing {
         vedtak(config, sinkClient)
+        søker(config, sinkClient)
         meldepliktshendelser()
         actuators(prometheus)
     }
 }
+
+data class Dao(
+    val personident: String,
+    val record: String,
+    val dtoVersion: Int?,
+    val partition: Int,
+    val offset: Long,
+    val topic: String,
+    val timestamp: Long,
+    val systemTimeMs: Long,
+    val streamTimeMs: Long,
+)
 
 internal class HttpClientLogger(private val log: org.slf4j.Logger) : Logger {
     override fun log(message: String) = log.info(message)

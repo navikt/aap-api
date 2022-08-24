@@ -1,5 +1,6 @@
 package routing
 
+import Dao
 import api
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -31,6 +32,19 @@ internal class VedtakRouteTest {
         }
     }
 
+    @Test
+    fun `søker route accessible`() {
+        Mocks().use { mocks ->
+            testApplication {
+                environment { config = mocks.environmentVariables }
+                application { api() }
+
+                val response = client.get("/soker/1234")
+                assertEquals(HttpStatusCode.OK, response.status)
+            }
+        }
+    }
+
     class Mocks : AutoCloseable {
         private val sink = embeddedServer(Netty, port = 0, module = Application::sinkMock).apply { start() }
 
@@ -57,9 +71,14 @@ internal class VedtakRouteTest {
 private fun Application.sinkMock() {
     install(ContentNegotiation) { jackson() }
     routing {
+        get("/vedtak/1234/latest") {
+            val dao = Dao("1234", "", null, 0, 0L, "", 0L, 0L, 0L)
+            call.respond(HttpStatusCode.OK, dao)
+        }
+
         get("/soker/1234/latest") {
-            val søkerDao = SøkerDao("1234", "", null, 0, 0L, "", 0L, 0L, 0L)
-            call.respond(HttpStatusCode.OK, søkerDao)
+            val dao = Dao("1234", "", null, 0, 0L, "", 0L, 0L, 0L)
+            call.respond(HttpStatusCode.OK, dao)
         }
     }
 }
