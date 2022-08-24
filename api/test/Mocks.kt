@@ -84,7 +84,7 @@ private inline fun <reified T> defaultDao(
 ): Dao = Dao(
     personident,
     jackson.writeValueAsString(record()),
-    null,
+    7,
     0,
     0L,
     "dummy-topic",

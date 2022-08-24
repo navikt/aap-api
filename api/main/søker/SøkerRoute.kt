@@ -25,8 +25,11 @@ fun Routing.søker(config: Config, httpClient: HttpClient) {
         val personident: String = call.parameters.getOrFail("personident")
 
         val søkerDao = httpClient.get("${config.sinkHost}/soker/$personident/latest").body<Dao>()
-        val søkerDto = jackson.readValue<SøkereKafkaDto>(søkerDao.record)
+        if (søkerDao.dtoVersion in listOf(null, 7)) {
+            val søkerDto = jackson.readValue<SøkereKafkaDto>(søkerDao.record)
+            call.respond(HttpStatusCode.OK, søkerDto)
+        }
 
-        call.respond(HttpStatusCode.OK, søkerDto)
+        call.respondText("unsupported dto version ${søkerDao.dtoVersion}")
     }
 }

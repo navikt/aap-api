@@ -25,8 +25,11 @@ fun Routing.vedtak(config: Config, httpClient: HttpClient) {
         val personident: String = call.parameters.getOrFail("personident")
 
         val vedtakDao = httpClient.get("${config.sinkHost}/vedtak/$personident/latest").body<Dao>()
-        val vedtakDto = jackson.readValue<VedtakKafkaDto>(vedtakDao.record)
+        if (vedtakDao.dtoVersion in listOf(null, 7)) {
+            val vedtakDto = jackson.readValue<VedtakKafkaDto>(vedtakDao.record)
+            call.respond(HttpStatusCode.OK, vedtakDto)
+        }
 
-        call.respond(HttpStatusCode.OK, vedtakDto)
+        call.respondText("unsupported dto version ${vedtakDao.dtoVersion}")
     }
 }
