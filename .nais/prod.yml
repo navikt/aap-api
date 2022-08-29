@@ -1,4 +1,4 @@
 kafka:
   pool: nav-prod
 
-ingress: ""
+ingress: https://aap-api.intern.nav.no

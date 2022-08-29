@@ -9,7 +9,7 @@ env:
 
 jobs:
   build:
-    name: Build and Test
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: styfle/cancel-workflow-action@0.10.0
@@ -21,7 +21,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2.2.4
         with:
-          arguments: test api:buildFatJar --continue --no-daemon --configuration-cache
+          arguments: test api:buildFatJar --continue --no-daemon --configuration-cache --scan
 
       - uses: dorny/test-reporter@v1.5.0
         if: success() || failure()

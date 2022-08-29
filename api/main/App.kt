@@ -43,6 +43,8 @@ fun Application.api(kafka: KStreams = KafkaStreams) {
         }
     }
 
+    Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
+    environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
     kafka.connect(
         config = config.kafka,
@@ -57,8 +59,8 @@ fun Application.api(kafka: KStreams = KafkaStreams) {
 
         route("/actuator") {
             get("/metrics") { call.respondText(prometheus.scrape()) }
-            get("/live") { call.respond(if (kafka.isLive()) OK else InternalServerError, "oppgavestyring") }
-            get("/ready") { call.respond(if (kafka.isReady()) OK else { InternalServerError }, "oppgavestyring") }
+            get("/live") { call.respond(if (kafka.isLive()) OK else InternalServerError, "api") }
+            get("/ready") { call.respond(if (kafka.isReady()) OK else InternalServerError, "api") }
         }
     }
 }
