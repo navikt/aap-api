@@ -3,7 +3,7 @@ package vedtak
 import java.time.LocalDate
 import java.util.*
 
-data class VedtakKafkaDto(
+data class IverksettVedtakKafkaDto(
     val vedtaksid: UUID,
     val innvilget: Boolean,
     val grunnlagsfaktor: Double,

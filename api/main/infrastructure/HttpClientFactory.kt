@@ -1,6 +1,5 @@
 package infrastructure
 
-import HttpClientLogger
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -20,4 +19,8 @@ object HttpClientFactory {
             logger = HttpClientLogger(LoggerFactory.getLogger("secureLog"))
         }
     }
+}
+
+internal class HttpClientLogger(private val log: org.slf4j.Logger) : Logger {
+    override fun log(message: String) = log.info(message)
 }
