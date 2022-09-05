@@ -8,10 +8,10 @@ import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import kafka.Topics
 import kotlinx.coroutines.delay
+import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import org.apache.kafka.streams.TestInputTopic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import vedtak.IverksettVedtakKafkaDto
 import java.time.LocalDate
 import java.util.*
 

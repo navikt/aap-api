@@ -15,6 +15,7 @@ import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kafka.Tables
 import kafka.Topics
+import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.kafka.streams.KStreams
 import no.nav.aap.kafka.streams.KafkaStreams
 import no.nav.aap.kafka.streams.extension.consume
@@ -23,7 +24,6 @@ import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
-import vedtak.IverksettVedtakKafkaDto
 import vedtak.vedtak
 import kotlin.time.Duration.Companion.minutes
 

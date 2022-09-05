@@ -1,9 +1,6 @@
 import io.ktor.server.config.*
 import no.nav.aap.kafka.streams.test.KafkaStreamsMock
 import org.apache.kafka.streams.TestInputTopic
-import vedtak.IverksettVedtakKafkaDto
-import java.time.LocalDate
-import java.util.*
 
 class Mocks : AutoCloseable {
     val kafka = KafkaStreamsMock()
