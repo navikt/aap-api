@@ -8,7 +8,7 @@ application {
 }
 
 val aapLibVersion = "3.1.14"
-val ktorVersion = "2.1.1"
+val ktorVersion = "2.1.2"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
