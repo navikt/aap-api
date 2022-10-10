@@ -27,7 +27,7 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.4.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.9.4")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.9.5")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 
     testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
