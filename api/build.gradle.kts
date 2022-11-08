@@ -26,7 +26,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
 
     implementation("ch.qos.logback:logback-classic:1.4.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.9.4")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 
