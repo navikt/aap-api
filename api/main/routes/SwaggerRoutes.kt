@@ -7,7 +7,7 @@ import io.ktor.server.routing.*
 
 fun Routing.swaggerRoutes() {
     static("static") {
-        resources("web")
+        resources("main")
     }
     get("/") {
         call.respondRedirect("/webjars/swagger-ui/index.html?url=/static/openapi.yml")
