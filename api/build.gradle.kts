@@ -15,7 +15,7 @@ dependencies {
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt:aap-vedtak:1.0.139")
 
-    implementation("com.auth0:jwks-rsa:0.17.0")
+    implementation("com.auth0:jwks-rsa:0.21.2")
     implementation("com.nimbusds:nimbus-jose-jwt:9.25")
 
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
