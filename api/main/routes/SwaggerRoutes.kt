@@ -10,6 +10,6 @@ fun Routing.swaggerRoutes() {
         resources("web")
     }
     get("/") {
-        call.respondRedirect("/webjars/swagger-ui/index.html?url=/static/openapi.yaml")
+        call.respondRedirect("/webjars/swagger-ui/index.html?url=/static/openapi.yml")
     }
 }
