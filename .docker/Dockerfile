@@ -13,4 +13,4 @@ FROM eclipse-temurin:18.0.2_9-jre-alpine
 ENV LANG='nb_NO.UTF-8' LANGUAGE='nb_NO:nb' LC_ALL='nb:NO.UTF-8' TZ="Europe/Oslo"
 RUN apk --update --no-cache add libstdc++
 COPY --from=api api.jar .
-CMD ["java", "-Xmx4G", "-Xms2G", "-XX:+UseParallelGC", "-jar", "api.jar"]
+CMD ["java", "-Xmx4G", "-Xms4G", "-XX:+UseParallelGC", "-jar", "api.jar"]

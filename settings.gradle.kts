@@ -1,3 +1,5 @@
 rootProject.name = "api"
 
-include("api")
+include(
+    "api",
+)

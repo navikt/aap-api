@@ -9,7 +9,7 @@ import io.ktor.server.testing.*
 import kafka.Topics
 import kotlinx.coroutines.delay
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
-import org.apache.kafka.streams.TestInputTopic
+import no.nav.aap.kafka.streams.test.TestTopic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -20,13 +20,13 @@ internal class VedtakRouteTest {
     @Test
     fun `vedtak route accessible`() {
         Mocks().use { mocks ->
-            lateinit var vedtakTopic: TestInputTopic<String, IverksettVedtakKafkaDto>
+            lateinit var vedtakTopic: TestTopic<IverksettVedtakKafkaDto>
 
             testApplication {
                 environment { config = mocks.environmentVariables }
                 application {
                     api(mocks.kafka)
-                    vedtakTopic = mocks.kafka.inputTopic(Topics.vedtak)
+                    vedtakTopic = mocks.kafka.testTopic(Topics.vedtak)
                 }
 
                 while (client.get("/actuator/ready").status != HttpStatusCode.OK) delay(10)

@@ -1,19 +1,22 @@
 plugins {
+    kotlin("jvm")
     id("io.ktor.plugin")
-    application
 }
 
 application {
     mainClass.set("AppKt")
 }
 
-val aapLibVersion = "3.1.14"
-val ktorVersion = "2.1.1"
+val aapLibVersion = "3.5.22"
+val ktorVersion = "2.1.2"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
-    implementation("com.github.navikt:aap-vedtak:1.0.18")
+    implementation("com.github.navikt:aap-vedtak:1.0.139")
+
+    implementation("com.auth0:jwks-rsa:0.17.0")
+    implementation("com.nimbusds:nimbus-jose-jwt:9.25")
 
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -34,3 +37,8 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))
 }
+
+kotlin.sourceSets["main"].kotlin.srcDirs("main")
+kotlin.sourceSets["test"].kotlin.srcDirs("test")
+sourceSets["main"].resources.srcDirs("main")
+sourceSets["test"].resources.srcDirs("test")

@@ -17,6 +17,16 @@ spec:
   kafka:
     pool: {{kafka.pool}}
     streams: true
+  maskinporten:
+    enabled: true
+    scopes:
+      exposes:
+        - name: "vedtak"
+          enabled: true
+          product: "aap"
+          consumers:
+            - name: "NAV"
+              orgno: "889640782"
   liveness:
     path: /actuator/live
     initialDelay: 1

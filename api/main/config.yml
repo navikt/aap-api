@@ -5,3 +5,13 @@ kafka:
     truststorePath: ${KAFKA_TRUSTSTORE_PATH}
     keystorePath: ${KAFKA_KEYSTORE_PATH}
     credstorePsw: ${KAFKA_CREDSTORE_PASSWORD}
+
+oauth:
+  maskinporten:
+    issuer:
+      name: ${MASKINPORTEN_ISSUER_NAME}
+      discoveryUrl: ${MASKINPORTEN_WELL_KNOWN_URL}
+      audience: ${AAP_AUDIENCE} # same as ingress "https://aap-api.dev.nav.no" and https://aap-api.nav.no
+      optionalClaims: "sub,nbf"
+    scope:
+      vedtak: "nav:aap:vedtak"
