@@ -33,6 +33,9 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.9.4")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 
+    implementation("io.ktor:ktor-server-webjars:$ktorVersion")
+    runtimeOnly("org.webjars:swagger-ui:4.15.0")
+
     testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))

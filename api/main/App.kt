@@ -1,15 +1,13 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import io.ktor.http.HttpStatusCode.Companion.InternalServerError
-import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.webjars.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
@@ -24,6 +22,8 @@ import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
+import routes.actuatorRoutes
+import routes.swaggerRoutes
 import vedtak.vedtak
 import kotlin.time.Duration.Companion.minutes
 
@@ -35,6 +35,7 @@ fun Application.api(kafka: KStreams = KafkaStreams) {
     val config = loadConfig<Config>("/config.yml")
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
+    install(Webjars)
     install(MicrometerMetrics) { registry = prometheus }
     install(ContentNegotiation) {
         jackson {
@@ -55,13 +56,9 @@ fun Application.api(kafka: KStreams = KafkaStreams) {
     val vedtakStore = kafka.getStore<IverksettVedtakKafkaDto>(Tables.vedtak.stateStoreName)
 
     routing {
+        actuatorRoutes(prometheus, kafka)
+        swaggerRoutes()
         vedtak(vedtakStore)
-
-        route("/actuator") {
-            get("/metrics") { call.respondText(prometheus.scrape()) }
-            get("/live") { call.respond(if (kafka.isLive()) OK else InternalServerError, "api") }
-            get("/ready") { call.respond(if (kafka.isReady()) OK else InternalServerError, "api") }
-        }
     }
 }
 
