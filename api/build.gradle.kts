@@ -22,7 +22,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
 
-    runtimeOnly("org.webjars:swagger-ui:4.15.0")
+    runtimeOnly("org.webjars:swagger-ui:4.15.5")
     implementation("ch.qos.logback:logback-classic:1.4.4")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.10.0")
