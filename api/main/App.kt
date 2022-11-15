@@ -34,7 +34,7 @@ import java.util.*
 import kotlin.time.Duration.Companion.minutes
 
 fun main() {
-    embeddedServer(Netty, port = 8080, module = Application::test).start(wait = true)
+    embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
 }
 
 fun Application.test() {
