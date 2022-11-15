@@ -8,34 +8,28 @@ application {
 }
 
 val aapLibVersion = "3.5.22"
-val ktorVersion = "2.1.2"
+val ktorVersion = "2.1.3"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt:aap-vedtak:1.0.139")
 
-    implementation("com.auth0:jwks-rsa:0.17.0")
-    implementation("com.nimbusds:nimbus-jose-jwt:9.25")
-
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+    implementation("io.ktor:ktor-server-webjars:$ktorVersion")
 
-    implementation("ch.qos.logback:logback-classic:1.4.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.9.4")
+    runtimeOnly("org.webjars:swagger-ui:4.15.0")
+    implementation("ch.qos.logback:logback-classic:1.4.4")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.10.0")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 
-    implementation("io.ktor:ktor-server-webjars:$ktorVersion")
-    runtimeOnly("org.webjars:swagger-ui:4.15.0")
-
+    testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))

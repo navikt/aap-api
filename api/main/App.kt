@@ -1,12 +1,16 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
+import io.ktor.server.http.content.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.*
 import io.ktor.server.webjars.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
@@ -24,11 +28,50 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import routes.actuatorRoutes
 import routes.swaggerRoutes
-import vedtak.vedtak
+import routes.vedtak
+import java.time.LocalDate
+import java.util.*
 import kotlin.time.Duration.Companion.minutes
 
 fun main() {
-    embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
+    embeddedServer(Netty, port = 8080, module = Application::test).start(wait = true)
+}
+
+fun Application.test() {
+    install(Webjars) {
+        path = "webjars"
+    }
+    install(ContentNegotiation) {
+        jackson {
+            registerModule(JavaTimeModule())
+            disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        }
+    }
+
+    routing {
+        static("static") {
+            resources("web")
+        }
+
+        get("/") {
+            call.respondRedirect("/webjars/swagger-ui/index.html")
+        }
+
+        get("/vedtak/{personident}") {
+            call.parameters.getOrFail("personident")
+
+            call.respond(
+                HttpStatusCode.OK, IverksettVedtakKafkaDto(
+                    UUID.randomUUID(),
+                    true,
+                    2.3,
+                    LocalDate.now(),
+                    LocalDate.now(),
+                    LocalDate.now()
+                )
+            )
+        }
+    }
 }
 
 fun Application.api(kafka: KStreams = KafkaStreams) {

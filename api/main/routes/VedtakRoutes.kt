@@ -1,4 +1,4 @@
-package vedtak
+package routes
 
 import io.ktor.http.*
 import io.ktor.server.application.*
