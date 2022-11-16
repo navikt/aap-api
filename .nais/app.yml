@@ -49,6 +49,3 @@ spec:
       requests:
         cpu: 200m
         memory: 1Gi
-  env:
-    - name: QUERY_CONFIG_ENABLED
-      value: "true"
