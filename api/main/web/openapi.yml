@@ -11,16 +11,18 @@ paths:
         - bearerAuth: []
       parameters:
         - name: personident
-          in: query
+          in: path
           schema:
             type: string
       responses:
         200:
-          description: 200 description
+          description: Aktivt vedtak
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Vedtak"
+        404:
+          description: Ingen vedtak
 
 components:
   securitySchemes:
