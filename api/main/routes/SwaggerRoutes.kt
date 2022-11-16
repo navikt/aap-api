@@ -11,7 +11,6 @@ fun Routing.swaggerRoutes() {
     }
 
     get("/") {
-        call.respondRedirect("/webjars/swagger-ui/index.html")
+        call.respondRedirect("/webjars/swagger-ui/index.html?url=/static/openapi.yml")
     }
-
 }
