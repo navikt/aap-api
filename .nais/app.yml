@@ -10,7 +10,9 @@ metadata:
 spec:
   image: {{image}}
   ingresses:
-    - {{ingress}}
+  {{#each ingresses as |url|}}
+    - {{url}}
+  {{/each}}
   replicas:
     max: 1
     min: 1

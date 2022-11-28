@@ -1,4 +1,6 @@
 kafka:
   pool: nav-dev
 
-ingress: https://aap-api.dev.intern.nav.no
+ingresses:
+  - "https://aap-api.dev.intern.nav.no"
+  - "https://aap-api.ekstern.dev.nav.no"

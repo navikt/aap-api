@@ -15,6 +15,8 @@ dependencies {
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt:aap-vedtak:1.0.139")
 
+    implementation("io.ktor:ktor-server-auth:$ktorVersion")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
