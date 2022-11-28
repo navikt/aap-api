@@ -16,7 +16,8 @@ class Mocks : AutoCloseable {
         "KAFKA_CLIENT_ID" to "api",
         "MASKINPORTEN_ISSUER_NAME" to "",
         "MASKINPORTEN_WELL_KNOWN_URL" to "",
-        "AAP_AUDIENCE" to "test"
+        "AAP_AUDIENCE" to "test",
+        "MASKINPORTEN_JWKS_URI" to "http://localhost"
     )
 }
 
