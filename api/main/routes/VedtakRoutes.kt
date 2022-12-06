@@ -2,6 +2,7 @@ package routes
 
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
@@ -21,12 +22,14 @@ fun Routing.vedtak(vedtakStore: Store<IverksettVedtakKafkaDto>) {
         fødselsdato = LocalDate.now()
     )
 
-    get("/vedtak/{personident}") {
-        val personident: String = call.parameters.getOrFail("personident")
+    authenticate {
+        get("/vedtak/{personident}") {
+            val personident: String = call.parameters.getOrFail("personident")
 
-        when (val vedtak = vedtakStore[personident]) {
-            null -> call.respond(HttpStatusCode.OK, dummy)
-            else -> call.respond(HttpStatusCode.OK, vedtak)
+            when (val vedtak = vedtakStore[personident]) {
+                null -> call.respond(HttpStatusCode.OK, dummy)
+                else -> call.respond(HttpStatusCode.OK, vedtak)
+            }
         }
     }
 }

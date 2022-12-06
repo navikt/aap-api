@@ -86,6 +86,7 @@ fun Application.api(kafka: KStreams = KafkaStreams) {
         actuatorRoutes(prometheus, kafka)
         swaggerRoutes()
         vedtak(vedtakStore)
+
     }
 }
 

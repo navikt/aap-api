@@ -1,4 +1,5 @@
 import no.nav.aap.kafka.streams.KStreamsConfig
+import java.net.URL
 
 data class Config(
     val kafka: KStreamsConfig,
@@ -10,7 +11,7 @@ data class OauthConfig(
 )
 
 data class MaskinportenConfig(
-    val jwksUri: String,
+    val jwksUri: URL,
     val issuer: IssuerCionfig,
     val scope: ScopeConfig
 ) {

@@ -1,5 +1,7 @@
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.nimbusds.jwt.SignedJWT
+import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -8,6 +10,7 @@ import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import kafka.Topics
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.kafka.streams.test.TestTopic
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -52,12 +55,18 @@ internal class VedtakRouteTest {
                     )
                 }
 
-                val response = client.get("/vedtak/1234")
-                assertEquals(HttpStatusCode.OK, response.status)
-
-                val dao = response.body<IverksettVedtakKafkaDto>()
-                assertEquals(UUID.fromString("ac9a1900-dbdc-4f89-b646-d8649a534e26"), dao.vedtaksid)
+                assertEquals(UUID.fromString("ac9a1900-dbdc-4f89-b646-d8649a534e26"), client.getVedtak("/vedtak/1234", JwtGenerator::generateToken).vedtaksid)
             }
         }
+    }
+
+    private fun HttpClient.getVedtak(path: String, tokenSupplier: () -> SignedJWT): IverksettVedtakKafkaDto = runBlocking {
+        val response = get(path) {
+            bearerAuth(tokenSupplier().serialize())
+            accept(ContentType.Application.Json)
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        response.body()
     }
 }
