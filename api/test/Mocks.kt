@@ -33,7 +33,7 @@ class Mocks : AutoCloseable {
         "KAFKA_KEYSTORE_PATH" to "",
         "KAFKA_CREDSTORE_PASSWORD" to "",
         "KAFKA_CLIENT_ID" to "api",
-        "MASKINPORTEN_ISSUER_NAME" to "maskinporten",
+        "MASKINPORTEN_ISSUER" to "maskinporten",
         "MASKINPORTEN_WELL_KNOWN_URL" to "",
         "AAP_AUDIENCE" to "aap",
         "MASKINPORTEN_JWKS_URI" to "http://0.0.0.0:9999/jwks"

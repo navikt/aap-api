@@ -10,7 +10,7 @@ oauth:
   maskinporten:
     jwksUri: ${MASKINPORTEN_JWKS_URI}
     issuer:
-      name: ${MASKINPORTEN_ISSUER_NAME}
+      name: ${MASKINPORTEN_ISSUER}
       discoveryUrl: ${MASKINPORTEN_WELL_KNOWN_URL}
       audience: ${AAP_AUDIENCE} # same as ingress "https://aap-api.dev.nav.no" and https://aap-api.nav.no
       optionalClaims: "sub,nbf"
