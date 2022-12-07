@@ -28,11 +28,14 @@ import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
+import org.slf4j.LoggerFactory
 import routes.actuatorRoutes
 import routes.swaggerRoutes
 import routes.vedtak
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.minutes
+
+private val logger = LoggerFactory.getLogger("App")
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
@@ -61,10 +64,14 @@ fun Application.api(kafka: KStreams = KafkaStreams) {
             verifier(jwkProvider, config.oauth.maskinporten.issuer.name)
             challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang") }
             validate { cred ->
-                if (!cred.audience.contains(config.oauth.maskinporten.issuer.audience))
+                if (!cred.audience.contains(config.oauth.maskinporten.issuer.audience)) {
+                    logger.warn("Audience does not match")
                     return@validate null
-                if (cred.getClaim("scopes", String::class) != config.oauth.maskinporten.scope.vedtak)
+                }
+                if (cred.getClaim("scopes", String::class) != config.oauth.maskinporten.scope.vedtak) {
+                    logger.warn("Wrong scope in claim")
                     return@validate null
+                }
 
                 JWTPrincipal(cred.payload)
             }
