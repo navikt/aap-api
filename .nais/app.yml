@@ -51,3 +51,6 @@ spec:
       requests:
         cpu: 200m
         memory: 1Gi
+  env:
+    - name: AAP_AUDIENCE
+      value: {{audience}}

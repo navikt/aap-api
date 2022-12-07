@@ -2,3 +2,5 @@ kafka:
   pool: nav-prod
 
 ingress: https://aap-api.intern.nav.no
+
+audience: "https://aap-api.nav.no"
