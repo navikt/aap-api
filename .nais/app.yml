@@ -50,7 +50,7 @@ spec:
         memory: 8Gi
       requests:
         cpu: 200m
-        memory: 1Gi
+        memory: 4Gi
   env:
     - name: AAP_AUDIENCE
       value: {{audience}}
