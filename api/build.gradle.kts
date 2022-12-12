@@ -13,7 +13,7 @@ val ktorVersion = "2.1.3"
 dependencies {
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
-    implementation("com.github.navikt:aap-vedtak:1.0.139")
+    implementation("com.github.navikt:aap-vedtak:1.0.265")
 
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
