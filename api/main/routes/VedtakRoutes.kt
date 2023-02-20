@@ -7,11 +7,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
-import no.nav.aap.kafka.streams.Store
+import no.nav.aap.kafka.streams.v2.StateStore
 import java.time.LocalDate
 import java.util.*
 
-fun Routing.vedtak(vedtakStore: Store<IverksettVedtakKafkaDto>) {
+fun Routing.vedtak(vedtakStore: StateStore<IverksettVedtakKafkaDto>) {
 
     val dummy = IverksettVedtakKafkaDto(
         vedtaksid = UUID.randomUUID(),

@@ -1,8 +1,9 @@
-import no.nav.aap.kafka.streams.KStreamsConfig
+
+import no.nav.aap.kafka.streams.v2.config.StreamsConfig
 import java.net.URL
 
 data class Config(
-    val kafka: KStreamsConfig,
+    val kafka: StreamsConfig,
     val oauth: OauthConfig,
 )
 

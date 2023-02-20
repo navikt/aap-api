@@ -5,7 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import no.nav.aap.kafka.streams.KStreams
+import no.nav.aap.kafka.streams.v2.KStreams
 
 fun Routing.actuatorRoutes(
     prometheus: PrometheusMeterRegistry,
@@ -17,13 +17,13 @@ fun Routing.actuatorRoutes(
         }
 
         get("/live") {
-            when (kafka.isLive()) {
+            when (kafka.live()) {
                 true -> call.respond(HttpStatusCode.OK, "api")
                 false -> call.respond(HttpStatusCode.InternalServerError, "api")
             }
         }
         get("/ready") {
-            when (kafka.isReady()) {
+            when (kafka.ready()) {
                 true -> call.respond(HttpStatusCode.OK, "api")
                 false -> call.respond(HttpStatusCode.InternalServerError, "api")
             }

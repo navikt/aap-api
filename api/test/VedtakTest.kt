@@ -12,7 +12,7 @@ import kafka.Topics
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
-import no.nav.aap.kafka.streams.test.TestTopic
+import no.nav.aap.kafka.streams.v2.test.TestTopic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

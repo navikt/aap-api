@@ -6,8 +6,7 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import no.nav.aap.kafka.streams.test.KafkaStreamsMock
-import org.apache.kafka.streams.TestInputTopic
+import no.nav.aap.kafka.streams.v2.test.KStreamsMock
 
 class Mocks : AutoCloseable {
 
@@ -20,7 +19,7 @@ class Mocks : AutoCloseable {
         }
     }.start()
 
-    val kafka = KafkaStreamsMock()
+    val kafka = KStreamsMock()
 
     override fun close() {
         oauth.stop()
@@ -40,4 +39,3 @@ class Mocks : AutoCloseable {
     )
 }
 
-inline fun <reified V : Any> TestInputTopic<String, V>.produce(key: String, value: () -> V) = pipeInput(key, value())
