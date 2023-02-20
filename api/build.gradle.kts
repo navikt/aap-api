@@ -7,11 +7,11 @@ application {
     mainClass.set("AppKt")
 }
 
-val aapLibVersion = "3.5.67"
+val aapLibVersion = "3.5.68"
 val ktorVersion = "2.2.3"
 
 dependencies {
-    implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
+    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt:aap-vedtak:1.0.139")
 
@@ -32,7 +32,7 @@ dependencies {
 
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
+    testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("com.nimbusds:nimbus-jose-jwt:9.30.2")
     testImplementation(kotlin("test"))
