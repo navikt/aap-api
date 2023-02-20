@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.7.10"
-    id("io.ktor.plugin") version "2.1.0" apply false
+    kotlin("jvm") version "1.8.10"
+    id("io.ktor.plugin") version "2.2.3" apply false
 }
 
 allprojects {
@@ -13,7 +13,7 @@ allprojects {
 subprojects {
     tasks {
         withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions.jvmTarget = "18"
+            kotlinOptions.jvmTarget = "19"
         }
 
         withType<Test> {
