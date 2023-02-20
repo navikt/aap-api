@@ -18,7 +18,7 @@ jobs:
           java-version: 19
           distribution: 'temurin'
 
-      - uses: gradle/gradle-build-action@v2.3.0
+      - uses: gradle/gradle-build-action@v2.3.3
         with:
           arguments: test api:buildFatJar --continue --no-daemon --configuration-cache
 
