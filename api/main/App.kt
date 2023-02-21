@@ -13,7 +13,6 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.webjars.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
@@ -43,7 +42,6 @@ fun Application.api(kafka: KStreams = KafkaStreams()) {
     val config = loadConfig<Config>("/config.yml")
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
-    install(Webjars)
     install(MicrometerMetrics) { registry = prometheus }
     install(ContentNegotiation) {
         jackson {

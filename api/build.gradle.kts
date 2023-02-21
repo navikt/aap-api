@@ -24,7 +24,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
 
-    runtimeOnly("org.webjars:swagger-ui:4.15.5")
+    implementation("io.ktor:ktor-server-swagger:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:1.4.5")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
     implementation("io.micrometer:micrometer-registry-prometheus:1.10.4")
