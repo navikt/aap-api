@@ -1,13 +1,13 @@
 plugins {
-    kotlin("jvm")
-    id("io.ktor.plugin")
+    kotlin("jvm") version "1.8.10"
+    id("io.ktor.plugin") version "2.2.3"
 }
 
 application {
     mainClass.set("AppKt")
 }
 
-val aapLibVersion = "3.5.71"
+val aapLibVersion = "3.5.73"
 val ktorVersion = "2.2.3"
 
 dependencies {
@@ -36,6 +36,21 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("com.nimbusds:nimbus-jose-jwt:9.30.2")
     testImplementation(kotlin("test"))
+}
+
+tasks {
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "19"
+    }
+
+    withType<Test> {
+        useJUnitPlatform()
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("main")

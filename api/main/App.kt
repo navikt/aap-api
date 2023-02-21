@@ -23,6 +23,7 @@ import no.nav.aap.kafka.streams.v2.KStreams
 import no.nav.aap.kafka.streams.v2.KafkaStreams
 import no.nav.aap.kafka.streams.v2.Topology
 import no.nav.aap.kafka.streams.v2.processor.state.GaugeStoreEntriesStateScheduleProcessor
+import no.nav.aap.kafka.streams.v2.topology
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 import routes.actuatorRoutes
@@ -94,7 +95,7 @@ fun Application.api(kafka: KStreams = KafkaStreams()) {
     }
 }
 
-internal fun topology(prometheus: MeterRegistry): Topology = no.nav.aap.kafka.streams.v2.topology{
+internal fun topology(prometheus: MeterRegistry): Topology = topology{
 
     val vedtakTable =
         consume(Topics.vedtak)
