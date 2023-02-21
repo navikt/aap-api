@@ -4,5 +4,5 @@ import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 
 fun Routing.swaggerRoutes() {
-    swaggerUI(path = "swagger", swaggerFile = "openapi.yml")
+    swaggerUI(path = "/", swaggerFile = "openapi.yml")
 }
