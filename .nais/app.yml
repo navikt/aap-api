@@ -17,6 +17,13 @@ spec:
   replicas:
     max: 1
     min: 1
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 8Gi
+    requests:
+      cpu: 500m
+      memory: 4Gi
   kafka:
     pool: {{kafka.pool}}
     streams: true
@@ -45,13 +52,6 @@ spec:
     path: /actuator/metrics
   secureLogs:
     enabled: true
-    resources:
-      limits:
-        cpu: 2000m
-        memory: 8Gi
-      requests:
-        cpu: 200m
-        memory: 4Gi
   env:
     - name: AAP_AUDIENCE
       value: {{audience}}
