@@ -1,19 +1,19 @@
 plugins {
     kotlin("jvm") version "1.8.10"
-    id("io.ktor.plugin") version "2.2.3"
+    id("io.ktor.plugin") version "2.2.4"
 }
 
 application {
     mainClass.set("AppKt")
 }
 
-val aapLibVersion = "3.5.73"
-val ktorVersion = "2.2.3"
+val aapLibVersion = "3.6.27"
+val ktorVersion = "2.2.4"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
-    implementation("com.github.navikt:aap-vedtak:1.0.347")
+    implementation("com.github.navikt.aap-vedtak:kafka-dto:1.1.1")
 
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")

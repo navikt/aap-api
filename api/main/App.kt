@@ -17,7 +17,6 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kafka.Tables
-import kafka.Topics
 import no.nav.aap.kafka.streams.v2.KStreams
 import no.nav.aap.kafka.streams.v2.KafkaStreams
 import no.nav.aap.kafka.streams.v2.Topology
@@ -94,13 +93,10 @@ fun Application.api(kafka: KStreams = KafkaStreams()) {
 
 internal fun topology(prometheus: MeterRegistry): Topology = topology{
 
-    val vedtakTable =
-        consume(Topics.vedtak)
-        .produce(Tables.vedtak)
+    val vedtakTable = consume(Tables.vedtak)
 
     vedtakTable.schedule(GaugeStoreEntriesStateScheduleProcessor(
-        named = "state-store-metrics",
-        table = vedtakTable,
+        ktable = vedtakTable,
         interval = 2.toDuration(DurationUnit.MINUTES),
         registry = prometheus
     ))
