@@ -34,7 +34,7 @@ dependencies {
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("com.nimbusds:nimbus-jose-jwt:9.30.2")
+    testImplementation("com.nimbusds:nimbus-jose-jwt:9.31")
     testImplementation(kotlin("test"))
 }
 
