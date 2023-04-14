@@ -6,20 +6,13 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import no.nav.aap.kafka.streams.v2.test.KStreamsMock
+import no.nav.aap.kafka.streams.v2.test.StreamsMock
 
 class Mocks : AutoCloseable {
 
-    private val oauth = embeddedServer(Netty, port = 9999) {
-        install(ContentNegotiation) { jackson {} }
-        routing {
-            get("/jwks") {
-                call.respondText(this::class.java.getResource("/jwkset.json")!!.readText())
-            }
-        }
-    }.start()
+    private val oauth = embeddedServer(Netty, port = 9999, module = Application::oauth).start()
 
-    val kafka = KStreamsMock()
+    val kafka = StreamsMock()
 
     override fun close() {
         oauth.stop()
@@ -37,5 +30,14 @@ class Mocks : AutoCloseable {
         "AAP_AUDIENCE" to "aap",
         "MASKINPORTEN_JWKS_URI" to "http://0.0.0.0:9999/jwks"
     )
+}
+
+private fun Application.oauth() {
+    install(ContentNegotiation) { jackson {} }
+    routing {
+        get("/jwks") {
+            call.respondText(this::class.java.getResource("/jwkset.json")!!.readText())
+        }
+    }
 }
 

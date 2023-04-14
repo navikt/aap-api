@@ -17,7 +17,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kafka.Tables
-import no.nav.aap.kafka.streams.v2.KStreams
+import no.nav.aap.kafka.streams.v2.Streams
 import no.nav.aap.kafka.streams.v2.KafkaStreams
 import no.nav.aap.kafka.streams.v2.Topology
 import no.nav.aap.kafka.streams.v2.processor.state.GaugeStoreEntriesStateScheduleProcessor
@@ -37,7 +37,7 @@ fun main() {
     embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
 }
 
-fun Application.api(kafka: KStreams = KafkaStreams()) {
+fun Application.api(kafka: Streams = KafkaStreams()) {
     val config = loadConfig<Config>("/config.yml")
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 

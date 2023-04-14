@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.2.4"
 }
 
@@ -7,7 +7,7 @@ application {
     mainClass.set("AppKt")
 }
 
-val aapLibVersion = "3.6.35"
+val aapLibVersion = "3.7.12"
 val ktorVersion = "2.2.4"
 
 dependencies {
@@ -25,7 +25,7 @@ dependencies {
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
 
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
-    implementation("ch.qos.logback:logback-classic:1.4.5")
+    implementation("ch.qos.logback:logback-classic:1.4.6")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
     implementation("io.micrometer:micrometer-registry-prometheus:1.10.5")
     implementation("net.logstash.logback:logstash-logback-encoder:7.3")
