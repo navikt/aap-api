@@ -27,7 +27,7 @@ dependencies {
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:1.4.7")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.10.6")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.0")
     implementation("net.logstash.logback:logstash-logback-encoder:7.3")
 
     testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
