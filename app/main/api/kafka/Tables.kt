@@ -1,4 +1,4 @@
-package kafka
+package api.kafka
 
 import no.nav.aap.kafka.streams.v2.Table
 

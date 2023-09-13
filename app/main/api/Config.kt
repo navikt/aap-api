@@ -1,4 +1,4 @@
-
+package api
 import no.nav.aap.kafka.streams.v2.config.StreamsConfig
 import java.net.URL
 

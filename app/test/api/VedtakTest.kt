@@ -1,3 +1,5 @@
+package api
+
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.nimbusds.jwt.SignedJWT
@@ -8,7 +10,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
-import kafka.Topics
+import api.kafka.Topics
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto

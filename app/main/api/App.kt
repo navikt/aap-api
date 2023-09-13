@@ -1,3 +1,5 @@
+package api
+
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -16,7 +18,7 @@ import io.ktor.server.routing.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import kafka.Tables
+import api.kafka.Tables
 import no.nav.aap.kafka.streams.v2.Streams
 import no.nav.aap.kafka.streams.v2.KafkaStreams
 import no.nav.aap.kafka.streams.v2.Topology
@@ -24,9 +26,9 @@ import no.nav.aap.kafka.streams.v2.processor.state.GaugeStoreEntriesStateSchedul
 import no.nav.aap.kafka.streams.v2.topology
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
-import routes.actuatorRoutes
-import routes.swaggerRoutes
-import routes.vedtak
+import api.routes.actuatorRoutes
+import api.routes.swaggerRoutes
+import api.routes.vedtak
 import java.util.concurrent.TimeUnit
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -38,7 +40,7 @@ fun main() {
 }
 
 fun Application.api(kafka: Streams = KafkaStreams()) {
-    val config = loadConfig<Config>("/config.yml")
+    val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
     install(MicrometerMetrics) { registry = prometheus }

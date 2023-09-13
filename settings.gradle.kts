@@ -1,5 +1,5 @@
 rootProject.name = "api"
 
 include(
-    "api",
+    "app",
 )
