@@ -1,5 +1,6 @@
 package api.routes
 
+import io.github.smiley4.ktorswaggerui.dsl.get
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -23,7 +24,15 @@ fun Routing.vedtak(vedtakStore: StateStore<IverksettVedtakKafkaDto>) {
     )
 
     authenticate {
-        get("/vedtak/{personident}") {
+        get("/vedtak/{personident}", {
+            securitySchemeNames = setOf("Maskinporten")
+            response {
+                HttpStatusCode.OK to {
+                    description = "Henter et vedtak"
+                    body<IverksettVedtakKafkaDto> {}
+                }
+            }
+        }) {
             val personident: String = call.parameters.getOrFail("personident")
 
             when (val vedtak = vedtakStore[personident]) {

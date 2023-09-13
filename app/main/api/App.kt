@@ -27,8 +27,10 @@ import no.nav.aap.kafka.streams.v2.topology
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 import api.routes.actuatorRoutes
-import api.routes.swaggerRoutes
 import api.routes.vedtak
+import io.github.smiley4.ktorswaggerui.SwaggerUI
+import io.github.smiley4.ktorswaggerui.dsl.AuthScheme
+import io.github.smiley4.ktorswaggerui.dsl.AuthType
 import java.util.concurrent.TimeUnit
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -48,6 +50,26 @@ fun Application.api(kafka: Streams = KafkaStreams()) {
         jackson {
             registerModule(JavaTimeModule())
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        }
+    }
+
+    install(SwaggerUI) {
+        swagger {
+            swaggerUrl = "swagger-ui"
+            forwardRoot = true
+        }
+        info {
+            title = "AAP - Api"
+            version = "latest"
+            description = ""
+        }
+        server {
+            url = "http://localhost:8080"
+            description = ""
+        }
+        securityScheme("Maskinporten") {
+            type = AuthType.HTTP
+            scheme = AuthScheme.BEARER
         }
     }
 
@@ -88,7 +110,6 @@ fun Application.api(kafka: Streams = KafkaStreams()) {
 
     routing {
         actuatorRoutes(prometheus, kafka)
-        swaggerRoutes()
         vedtak(vedtakStore)
     }
 }
