@@ -2,7 +2,7 @@ package api.routes
 
 import api.arena.ArenaoppslagRequest
 import api.arena.ArenaoppslagRestClient
-import io.github.smiley4.ktorswaggerui.dsl.get
+import io.github.smiley4.ktorswaggerui.dsl.post
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,7 +17,7 @@ import java.util.*
 
 fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
     //authenticate {
-        get("/fellesordning/vedtak", {
+        post("/fellesordning/vedtak", {
             securitySchemeNames = setOf("Maskinporten")
             response {
                 HttpStatusCode.OK to {
