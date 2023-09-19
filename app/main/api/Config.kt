@@ -1,10 +1,12 @@
 package api
 import no.nav.aap.kafka.streams.v2.config.StreamsConfig
+import no.nav.aap.ktor.client.AzureConfig
 import java.net.URL
 
 data class Config(
-    val kafka: StreamsConfig,
     val oauth: OauthConfig,
+    val arenaoppslag: ArenaoppslagConfig,
+    val azureConfig: AzureConfig
 )
 
 data class OauthConfig(
@@ -26,4 +28,11 @@ data class MaskinportenConfig(
     data class ScopeConfig(
         val vedtak: String
     )
+
+
 }
+
+data class ArenaoppslagConfig(
+    val proxyBaseUrl:String,
+    val scope: String
+)

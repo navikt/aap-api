@@ -2,7 +2,11 @@ kafka:
   pool: nav-dev
 
 ingresses:
-  - "https://aap-api.dev.intern.nav.no"
-  - "https://aap-api.ekstern.dev.nav.no"
+  - https://aap-api.dev.intern.nav.no
+  - https://aap-api.ekstern.dev.nav.no
 
-audience: "https://aap-api.ekstern.dev.nav.no"
+audience: https://aap-api.ekstern.dev.nav.no
+
+arenaoppslag:
+  proxyBaseUrl: https://arenaoppslag.dev-fss-pub.nais.io
+  scope: api://arenaoppslag.dev-fss-pub.nais.io/.default

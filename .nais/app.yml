@@ -22,9 +22,9 @@ spec:
     requests:
       cpu: 500m
       memory: 4Gi
-  kafka:
-    pool: {{kafka.pool}}
-    streams: true
+  azure:
+    application:
+      enabled: true
   maskinporten:
     enabled: true
     scopes:
@@ -53,3 +53,7 @@ spec:
   env:
     - name: AAP_AUDIENCE
       value: {{audience}}
+    - name: ARENAOPPSLAG_PROXY_BASE_URL
+      value: {{arenaoppslag.proxyBaseUrl}}
+    - name: ARENAOPPSLAG_SCOPE
+      value: {{arenaoppslag.scope}}

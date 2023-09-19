@@ -1,5 +1,6 @@
 package api
 
+import api.arena.ArenaoppslagRestClient
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -15,15 +16,8 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import api.kafka.Tables
-import no.nav.aap.kafka.streams.v2.Streams
-import no.nav.aap.kafka.streams.v2.KafkaStreams
-import no.nav.aap.kafka.streams.v2.Topology
-import no.nav.aap.kafka.streams.v2.processor.state.GaugeStoreEntriesStateScheduleProcessor
-import no.nav.aap.kafka.streams.v2.topology
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 import api.routes.actuatorRoutes
@@ -32,8 +26,6 @@ import io.github.smiley4.ktorswaggerui.SwaggerUI
 import io.github.smiley4.ktorswaggerui.dsl.AuthScheme
 import io.github.smiley4.ktorswaggerui.dsl.AuthType
 import java.util.concurrent.TimeUnit
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 private val logger = LoggerFactory.getLogger("App")
 
@@ -41,7 +33,7 @@ fun main() {
     embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
 }
 
-fun Application.api(kafka: Streams = KafkaStreams()) {
+fun Application.api() {
     val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
@@ -98,29 +90,10 @@ fun Application.api(kafka: Streams = KafkaStreams()) {
     }
 
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
-    environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
-
-    kafka.connect(
-        config = config.kafka,
-        registry = prometheus,
-        topology = topology(prometheus)
-    )
-
-    val vedtakStore = kafka.getStore(Tables.vedtak)
+    val arenaRestClient= ArenaoppslagRestClient(config.arenaoppslag, config.azureConfig)
 
     routing {
-        actuatorRoutes(prometheus, kafka)
-        vedtak(vedtakStore)
+        actuatorRoutes(prometheus)
+        vedtak(arenaRestClient)
     }
-}
-
-internal fun topology(prometheus: MeterRegistry): Topology = topology{
-
-    val vedtakTable = consume(Tables.vedtak)
-
-    vedtakTable.schedule(GaugeStoreEntriesStateScheduleProcessor(
-        ktable = vedtakTable,
-        interval = 2.toDuration(DurationUnit.MINUTES),
-        registry = prometheus
-    ))
 }

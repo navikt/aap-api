@@ -9,8 +9,7 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.kafka.streams.v2.Streams
 
 fun Routing.actuatorRoutes(
-    prometheus: PrometheusMeterRegistry,
-    kafka: Streams,
+    prometheus: PrometheusMeterRegistry
 ) {
     route("/actuator", {
         hidden = true
@@ -20,16 +19,10 @@ fun Routing.actuatorRoutes(
         }
 
         get("/live") {
-            when (kafka.live()) {
-                true -> call.respond(HttpStatusCode.OK, "api")
-                false -> call.respond(HttpStatusCode.InternalServerError, "api")
-            }
+            call.respond(HttpStatusCode.OK, "api")
         }
         get("/ready") {
-            when (kafka.ready()) {
-                true -> call.respond(HttpStatusCode.OK, "api")
-                false -> call.respond(HttpStatusCode.InternalServerError, "api")
-            }
+            call.respond(HttpStatusCode.OK, "api")
         }
     }
 }

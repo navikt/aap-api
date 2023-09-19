@@ -14,6 +14,7 @@ dependencies {
     implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt.aap-vedtak:kafka-dto:1.1.67")
+    implementation("com.github.navikt.aap-libs:ktor-auth-azuread:$aapLibVersion")
 
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
@@ -31,8 +32,12 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.11.3")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
 
-    testImplementation("io.ktor:ktor-client-cio:$ktorVersion")
-    testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-client-auth:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-client-jackson:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("com.nimbusds:nimbus-jose-jwt:9.31")
