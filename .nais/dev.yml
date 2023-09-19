@@ -9,3 +9,4 @@ audience: https://aap-api.ekstern.dev.nav.no
 arenaoppslag:
   proxyBaseUrl: https://arenaoppslag.dev-fss-pub.nais.io
   scope: api://dev-fss.aap.arenaoppslag/.default
+  host: arenaoppslag.dev-fss-pub.nais.io

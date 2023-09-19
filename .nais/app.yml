@@ -52,7 +52,7 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: {{arenaoppslag.proxyBaseUrl}}
+        - host: {{arenaoppslag.host}}
   env:
     - name: AAP_AUDIENCE
       value: {{audience}}
