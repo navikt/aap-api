@@ -40,6 +40,10 @@ fun Application.api() {
     val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
+    Thread.currentThread().setUncaughtExceptionHandler { _, e ->
+        logger.error("Uhåndtert feil", e)
+    }
+
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/actuator").not() }
