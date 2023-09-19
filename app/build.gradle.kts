@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass.set("AppKt")
+    mainClass.set("api.AppKt")
 }
 
 val aapLibVersion = "3.7.56"
