@@ -17,7 +17,6 @@ spec:
     min: 1
   resources:
     limits:
-      cpu: 2000m
       memory: 8Gi
     requests:
       cpu: 500m
@@ -52,10 +51,8 @@ spec:
     enabled: true
   accessPolicy:
     outbound:
-      rules:
-        - application: arenaoppslag
-          cluster: dev-fss
-          namespace: aap
+      external:
+        - host: {{arenaoppslag.proxyBaseUrl}}
   env:
     - name: AAP_AUDIENCE
       value: {{audience}}
