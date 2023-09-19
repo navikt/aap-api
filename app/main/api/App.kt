@@ -100,7 +100,6 @@ fun Application.api() {
         }
     }
 
-    Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     routing {

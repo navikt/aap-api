@@ -9,9 +9,9 @@ metadata:
 spec:
   image: {{image}}
   ingresses:
-  {{#each ingresses as |url|}}
+    {{#each ingresses as |url|}}
     - {{url}}
-  {{/each}}
+    {{/each}}
   replicas:
     max: 1
     min: 1
@@ -50,6 +50,12 @@ spec:
     path: /actuator/metrics
   secureLogs:
     enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: arenaoppslag
+          cluster: dev-fss
+          namespace: aap
   env:
     - name: AAP_AUDIENCE
       value: {{audience}}
