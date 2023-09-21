@@ -9,18 +9,15 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.util.*
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
-import no.nav.aap.kafka.streams.v2.StateStore
 import org.slf4j.LoggerFactory
 import java.lang.Exception
-import java.time.LocalDate
-import java.util.*
+
 
 private val logger = LoggerFactory.getLogger("VedtakRoutes")
 
 fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
-    //authenticate {
+    authenticate {
         post("/fellesordning/vedtak", {
             securitySchemeNames = setOf("Maskinporten")
             response {
@@ -39,5 +36,5 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
                 call.respond(HttpStatusCode.InternalServerError)
             }
         }
-    //}
+    }
 }
