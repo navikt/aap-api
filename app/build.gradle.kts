@@ -11,9 +11,7 @@ val aapLibVersion = "3.7.56"
 val ktorVersion = "2.3.3"
 
 dependencies {
-    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
-    implementation("com.github.navikt.aap-vedtak:kafka-dto:1.1.67")
     implementation("com.github.navikt.aap-libs:ktor-auth-azuread:$aapLibVersion")
 
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
@@ -23,6 +21,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:2.3.1")

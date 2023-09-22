@@ -20,6 +20,7 @@ import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -40,15 +41,20 @@ fun Application.api() {
     val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
-    Thread.currentThread().setUncaughtExceptionHandler { _, e ->
-        logger.error("Uhåndtert feil", e)
-    }
-
     install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/actuator").not() }
     }
+
     install(MicrometerMetrics) { registry = prometheus }
+
+    install(StatusPages) {
+        exception<Throwable> { call, cause ->
+            logger.error("Uhåndtert feil", cause)
+            call.respondText(text = "Feil i tjeneste: ${cause.message}" , status = HttpStatusCode.InternalServerError)
+        }
+    }
+
     install(ContentNegotiation) {
         jackson {
             registerModule(JavaTimeModule())
