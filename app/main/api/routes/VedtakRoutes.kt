@@ -1,6 +1,7 @@
 package api.routes
 
 import api.arena.ArenaoppslagRequest
+import api.arena.ArenaoppslagResponse
 import api.arena.ArenaoppslagRestClient
 import io.github.smiley4.ktorswaggerui.dsl.post
 import io.ktor.http.*
@@ -9,7 +10,6 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import org.slf4j.LoggerFactory
 import java.lang.Exception
 
@@ -23,7 +23,7 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
             response {
                 HttpStatusCode.OK to {
                     description = "Henter et vedtak"
-                    body<IverksettVedtakKafkaDto> {}
+                    body<ArenaoppslagResponse> {}
                 }
             }
         }) {

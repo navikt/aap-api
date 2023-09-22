@@ -92,10 +92,9 @@ fun Application.api() {
             verifier(jwkProvider, config.oauth.maskinporten.issuer.name)
             challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang") }
             validate { cred ->
-                if (!cred.audience.contains(config.oauth.maskinporten.issuer.audience)) {
-                    logger.warn("Audience does not match")
-                    return@validate null
-                }
+                logger.info("Issuer: ${cred.issuer}")
+                logger.info("Audience: ${cred.audience}")
+                logger.info("Subject: ${cred.getClaim("scopes", String::class)}")
                 if (cred.getClaim("scopes", String::class) != config.oauth.maskinporten.scope.vedtak) {
                     logger.warn("Wrong scope in claim")
                     return@validate null
