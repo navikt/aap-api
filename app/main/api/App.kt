@@ -43,6 +43,13 @@ fun Application.api() {
 
     install(CallLogging) {
         level = Level.INFO
+        format { call ->
+            val status = call.response.status()
+            val httpMethod = call.request.httpMethod.value
+            val userAgent = call.request.headers["User-Agent"]
+            val callId = call.request.header("x-callId") ?: call.request.header("nav-callId") ?: "ukjent"
+            "Status: $status, HTTP method: $httpMethod, User agent: $userAgent, callId: $callId"
+        }
         filter { call -> call.request.path().startsWith("/actuator").not() }
     }
 
@@ -92,10 +99,9 @@ fun Application.api() {
             verifier(jwkProvider, config.oauth.maskinporten.issuer.name)
             challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang") }
             validate { cred ->
-                logger.info("Issuer: ${cred.issuer}")
-                logger.info("Audience: ${cred.audience}")
-                logger.info("Subject: ${cred.getClaim("scopes", String::class)}")
-                if (cred.getClaim("scopes", String::class) != config.oauth.maskinporten.scope.vedtak) {
+                logger.info("claims: ${cred.payload.claims}")
+                logger.info("scope: ${cred.getClaim("scope", String::class)}")
+                if (cred.getClaim("scope", String::class) != config.oauth.maskinporten.scope.vedtak) {
                     logger.warn("Wrong scope in claim")
                     return@validate null
                 }
