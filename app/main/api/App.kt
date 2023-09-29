@@ -1,10 +1,10 @@
 package api
 
 import api.arena.ArenaoppslagRestClient
+import api.auth.maskinporten
+import api.auth.samtykke
 import api.routes.actuatorRoutes
 import api.routes.vedtak
-import com.auth0.jwk.JwkProvider
-import com.auth0.jwk.JwkProviderBuilder
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.github.smiley4.ktorswaggerui.SwaggerUI
@@ -14,7 +14,6 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.netty.*
@@ -29,7 +28,6 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
-import java.util.concurrent.TimeUnit
 
 private val logger = LoggerFactory.getLogger("App")
 
@@ -89,24 +87,9 @@ fun Application.api() {
         }
     }
 
-    val jwkProvider: JwkProvider = JwkProviderBuilder(config.oauth.maskinporten.jwksUri)
-        .cached(10, 24, TimeUnit.HOURS)
-        .rateLimited(10, 1, TimeUnit.MINUTES)
-        .build()
-
     install(Authentication) {
-        jwt {
-            verifier(jwkProvider, config.oauth.maskinporten.issuer.name)
-            challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang") }
-            validate { cred ->
-                if (cred.getClaim("scope", String::class) != config.oauth.maskinporten.scope.vedtak) {
-                    logger.warn("Wrong scope in claim")
-                    return@validate null
-                }
-
-                JWTPrincipal(cred.payload)
-            }
-        }
+        maskinporten(config)
+        samtykke(config)
     }
 
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
@@ -116,3 +99,4 @@ fun Application.api() {
         vedtak(arenaRestClient)
     }
 }
+

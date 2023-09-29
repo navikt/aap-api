@@ -31,6 +31,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
     implementation("io.micrometer:micrometer-registry-prometheus:1.11.3")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation("com.nimbusds:nimbus-jose-jwt:9.31")
 
     implementation("io.ktor:ktor-client-auth:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
@@ -41,7 +42,6 @@ dependencies {
 
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("com.nimbusds:nimbus-jose-jwt:9.31")
     testImplementation(kotlin("test"))
 }
 

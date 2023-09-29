@@ -3,6 +3,8 @@ package api.routes
 import api.arena.ArenaoppslagRequest
 import api.arena.ArenaoppslagResponse
 import api.arena.ArenaoppslagRestClient
+import api.auth.MASKINPORTEN_AUTH_NAME
+import api.auth.SAMTYKKE_AUTH_NAME
 import io.github.smiley4.ktorswaggerui.dsl.post
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -17,7 +19,7 @@ import java.lang.Exception
 private val logger = LoggerFactory.getLogger("VedtakRoutes")
 
 fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
-    authenticate {
+    authenticate(MASKINPORTEN_AUTH_NAME) {
         post("/fellesordning/vedtak", {
             securitySchemeNames = setOf("Maskinporten")
             response {
@@ -34,6 +36,11 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
             } catch(e: Exception) {
                 logger.error("Feil i kall", e)
                 call.respond(HttpStatusCode.InternalServerError)
+            }
+        }
+        authenticate(SAMTYKKE_AUTH_NAME) {
+            get("/test") {
+                call.respond("OK")
             }
         }
     }

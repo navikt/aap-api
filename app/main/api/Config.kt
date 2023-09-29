@@ -1,4 +1,5 @@
 package api
+
 import no.nav.aap.ktor.client.AzureConfig
 import java.net.URL
 
@@ -9,7 +10,8 @@ data class Config(
 )
 
 data class OauthConfig(
-    val maskinporten: MaskinportenConfig
+    val maskinporten: MaskinportenConfig,
+    val samtykke: SamtykkeConfig
 )
 
 data class MaskinportenConfig(
@@ -27,11 +29,13 @@ data class MaskinportenConfig(
     data class ScopeConfig(
         val vedtak: String
     )
-
-
 }
 
 data class ArenaoppslagConfig(
     val proxyBaseUrl:String,
     val scope: String
+)
+
+data class SamtykkeConfig(
+    val wellknownUrl: String
 )
