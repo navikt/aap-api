@@ -52,6 +52,7 @@ spec:
   accessPolicy:
     outbound:
       external:
+        - host: {{altinn.host}}
         - host: {{arenaoppslag.host}}
   env:
     - name: AAP_AUDIENCE

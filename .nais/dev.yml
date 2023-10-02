@@ -12,4 +12,5 @@ arenaoppslag:
   host: arenaoppslag.dev-fss-pub.nais.io
 
 altinn:
+  host: aap-test-token-provider.intern.dev.nav.no
   wellknown: https://aap-test-token-provider.intern.dev.nav.no/.well-known/oauth-authorization-server
