@@ -28,10 +28,12 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
+import kotlin.system.exitProcess
 
 private val logger = LoggerFactory.getLogger("App")
 
 fun main() {
+    Thread.currentThread().setUncaughtExceptionHandler { _, e -> logger.error("Uhåndtert feil", e) }
     embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
 }
 
