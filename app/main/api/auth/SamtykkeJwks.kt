@@ -11,6 +11,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import kotlinx.coroutines.runBlocking
+import java.net.URI
 import java.net.URL
 
 class SamtykkeJwks (
@@ -27,7 +28,7 @@ class SamtykkeJwks (
         }
 
         issuer = samtykke.issuer
-        jwksUri = URL(samtykke.jwksUri)
+        jwksUri = URI(samtykke.jwksUri).toURL()
     }
 
     private data class SamtykkeResponse(
