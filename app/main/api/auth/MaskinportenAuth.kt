@@ -10,7 +10,7 @@ import io.ktor.server.response.*
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
-private val logger = LoggerFactory.getLogger("Auth")
+private val logger = LoggerFactory.getLogger("MaskinportenAuth")
 
 const val MASKINPORTEN_AUTH_NAME = "maskinporten"
 

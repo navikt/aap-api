@@ -60,3 +60,5 @@ spec:
       value: {{arenaoppslag.proxyBaseUrl}}
     - name: ARENAOPPSLAG_SCOPE
       value: {{arenaoppslag.scope}}
+    - name: ALTINN_WELLKNOWN
+      value: {{altinn.wellknown}}

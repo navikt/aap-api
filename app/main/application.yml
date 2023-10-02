@@ -8,6 +8,8 @@ oauth:
       optionalClaims: "sub,nbf"
     scope:
       vedtak: "nav:aap:vedtak.read"
+  samtykke:
+    wellknownUrl: ${ALTINN_WELLKNOWN}
 
 arenaoppslag:
   proxyBaseUrl: ${ARENAOPPSLAG_PROXY_BASE_URL}
