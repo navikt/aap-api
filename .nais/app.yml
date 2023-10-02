@@ -51,8 +51,9 @@ spec:
     enabled: true
   accessPolicy:
     outbound:
+      rules:
+        - application: test-token-provider
       external:
-        - host: {{altinn.host}}
         - host: {{arenaoppslag.host}}
   env:
     - name: AAP_AUDIENCE
