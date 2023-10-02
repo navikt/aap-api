@@ -39,7 +39,7 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
             }
         }
         authenticate(SAMTYKKE_AUTH_NAME) {
-            get("/test") {
+            get("/dsop/test") {
                 call.respond("OK")
             }
         }
