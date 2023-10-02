@@ -13,4 +13,4 @@ arenaoppslag:
 
 altinn:
   host: aap-test-token-provider.intern.dev.nav.no
-  wellknown: https://aap-test-token-provider.intern.dev.nav.no/.well-known/oauth-authorization-server
+  wellknown: https://aap-test-token-provider.intern.dev.nav.no/samtykke/.well-known/oauth-authorization-server
