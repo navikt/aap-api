@@ -38,10 +38,11 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient) {
                 call.respond(HttpStatusCode.InternalServerError)
             }
         }
-        authenticate(SAMTYKKE_AUTH_NAME) {
-            get("/dsop/test") {
-                call.respond("OK")
-            }
+
+    }
+    authenticate(SAMTYKKE_AUTH_NAME, MASKINPORTEN_AUTH_NAME) {
+        get("/dsop/test") {
+            call.respond("OK")
         }
     }
 }
