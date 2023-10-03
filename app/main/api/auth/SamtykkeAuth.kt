@@ -25,7 +25,7 @@ const val SAMTYKKE_AUTH_NAME = "samtykke"
 
 private val logger = LoggerFactory.getLogger("SamtykkeAuth")
 
-fun verifyJwt(token: String, config: Config):Boolean{
+fun verifyJwt(token: String, authId:String, personIdent:String, config: Config):Boolean{
     val samtykkeJwks = SamtykkeJwks(config.oauth.samtykke.wellknownUrl)
     val jwkProvider = UrlJwkProvider(samtykkeJwks.jwksUri)
 
@@ -49,6 +49,8 @@ fun verifyJwt(token: String, config: Config):Boolean{
     val verifier = JWT.require(algorithm) // signature
         .withIssuer(samtykkeJwks.issuer)
         .withAudience("https://aap-test-token-provider.intern.dev.nav.no")
+        .withClaim("OfferedBy", authId)
+        .withClaim("offeredBy", personIdent)
         .build()
 
     return try {
