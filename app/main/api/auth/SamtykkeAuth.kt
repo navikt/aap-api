@@ -52,7 +52,7 @@ fun verifyJwt(token: String, config: Config):Boolean{
         .build()
 
     return try {
-        val verified = verifier.verify(token)
+        verifier.verify(token)
         true
     } catch (e: Exception) {
         logger.info("Token not verified: $e")
