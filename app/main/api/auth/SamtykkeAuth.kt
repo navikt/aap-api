@@ -29,12 +29,7 @@ fun verifyJwt(token: String, authId:String, personIdent:String, config: Config):
     val samtykkeJwks = SamtykkeJwks(config.oauth.samtykke.wellknownUrl)
     val jwkProvider = UrlJwkProvider(samtykkeJwks.jwksUri)
 
-    logger.info("jwkProvider: $jwkProvider")
-
     val jwt = JWT.decode(token)
-
-    logger.info("jwtketId: ${jwt.keyId}")
-
     val jwk = jwkProvider.get(jwt.keyId)
 
     //val publicKey: RSAPublicKey = jwk.publicKey as RSAPublicKey // unsafe
