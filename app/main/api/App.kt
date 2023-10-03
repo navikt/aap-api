@@ -91,7 +91,6 @@ fun Application.api() {
 
     install(Authentication) {
         maskinporten(config)
-        samtykke(config)
     }
 
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)

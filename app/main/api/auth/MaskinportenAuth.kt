@@ -23,10 +23,6 @@ fun AuthenticationConfig.maskinporten(config: Config) {
         .build()
 
     jwt(MASKINPORTEN_AUTH_NAME) {
-        authHeader { call ->
-            val authHeader = requireNotNull(call.request.header("Authorization")) { "Auth-header mangler" }
-            parseAuthorizationHeader(authHeader)
-        }
         verifier(maskinportenJwkProvider, config.oauth.maskinporten.issuer.name)
         challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang til maskinporten") }
         validate { cred ->
