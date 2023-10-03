@@ -43,8 +43,12 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Confi
         }
         get("/dsop/test") {
             val principal = call.principal<JWTPrincipal>()
-            val token = principal?.payload?.getClaim("consumer")
-            logger.info("Token: {$token}")
+            val consumer = principal?.payload?.getClaim("consumer")
+            val token = principal?.payload?.getClaim("consumer.ID")
+            val id = principal?.payload?.getClaim("ID")
+            logger.info("consumer: ${consumer}")
+            logger.info("Consumer.ID: {$token}")
+            logger.info("Token: {$id}")
             if(verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), config)) {
                 call.respond(HttpStatusCode.Forbidden)
             }
