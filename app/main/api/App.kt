@@ -97,7 +97,7 @@ fun Application.api() {
 
     routing {
         actuatorRoutes(prometheus)
-        vedtak(arenaRestClient)
+        vedtak(arenaRestClient, config)
     }
 }
 

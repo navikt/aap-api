@@ -25,6 +25,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
     implementation("io.github.smiley4:ktor-swagger-ui:2.3.1")
+    implementation("com.auth0:java-jwt:3.3.0")
 
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:1.4.11")
