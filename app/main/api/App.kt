@@ -2,7 +2,6 @@ package api
 
 import api.arena.ArenaoppslagRestClient
 import api.auth.maskinporten
-import api.auth.samtykke
 import api.routes.actuatorRoutes
 import api.routes.vedtak
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -28,7 +27,6 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
-import kotlin.system.exitProcess
 
 private val logger = LoggerFactory.getLogger("App")
 
