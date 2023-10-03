@@ -42,6 +42,7 @@ fun verifyJwt(token: String, config: Config):Boolean{
 
     val algorithm = when (jwk.algorithm) {
         "RS256" -> Algorithm.RSA256(publicKey, null)
+        "RSA-OAEP-256" -> Algorithm.RSA256(publicKey, null)
         else -> throw Exception("Unsupported algorithm")
     }
 
