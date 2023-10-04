@@ -10,6 +10,7 @@ oauth:
       vedtak: "nav:aap:vedtak.read"
   samtykke:
     wellknownUrl: ${ALTINN_WELLKNOWN}
+    audience: ${ALTINN_AUDIENCE}
 
 arenaoppslag:
   proxyBaseUrl: ${ARENAOPPSLAG_PROXY_BASE_URL}

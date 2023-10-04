@@ -13,3 +13,4 @@ arenaoppslag:
 
 altinn:
   wellknown: http://test-token-provider/samtykke/.well-known/oauth-authorization-server
+  audience: https://aap-test-token-provider.intern.dev.nav.no

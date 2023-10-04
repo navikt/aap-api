@@ -11,8 +11,6 @@ import io.ktor.server.auth.jwt.*
 import org.slf4j.LoggerFactory
 import java.security.interfaces.RSAPublicKey
 import java.time.LocalDate
-import java.time.LocalDateTime
-
 
 private val logger = LoggerFactory.getLogger("SamtykkeAuth")
 
@@ -23,25 +21,25 @@ data class SamtykkeData(
     val samtykketoken: String,
     val tidspunkt: LocalDate = LocalDate.now(),
 )
-data class Samtykkeperiode(val fraOgMed:LocalDate, val tilOgMed:LocalDate)
-class SamtykkeIkkeGittException: Exception("Samtykke ikke gitt")
 
-fun hentConsumerId(call:ApplicationCall):String{
-    return call.principal<JWTPrincipal>()?.payload?.getClaim("consumer")?.asMap()?.get("ID").toString().split(":").last()
+data class Samtykkeperiode(val fraOgMed:LocalDate, val tilOgMed:LocalDate)
+
+class SamtykkeIkkeGittException: Exception {
+    constructor(msg: String): super(msg)
+    constructor(msg: String, cause: Throwable): super(msg, cause)
 }
 
-fun verifyJwt(token: String, call:ApplicationCall, config: Config):SamtykkeData{
+fun verifiserOgPakkUtSamtykkeToken(token: String, call:ApplicationCall, config: Config): SamtykkeData {
     val samtykkeJwks = SamtykkeJwks(config.oauth.samtykke.wellknownUrl)
     val jwkProvider = UrlJwkProvider(samtykkeJwks.jwksUri)
 
     val consumerId = hentConsumerId(call)
-    val personIdent = call.request.headers["NAV-PersonIdent"]?: ""
+    val personIdent = hentPersonIdent(call)
 
     val jwt = JWT.decode(token)
     val jwk = jwkProvider.get(jwt.keyId)
 
-    //val publicKey: RSAPublicKey = jwk.publicKey as RSAPublicKey // unsafe
-    val publicKey = jwk.publicKey as? RSAPublicKey ?: throw Exception("Invalid key type") // safe
+    val publicKey = jwk.publicKey as? RSAPublicKey ?: throw Exception("Invalid key type")
 
     val algorithm = when (jwk.algorithm) {
         "RS256" -> Algorithm.RSA256(publicKey, null)
@@ -49,10 +47,9 @@ fun verifyJwt(token: String, call:ApplicationCall, config: Config):SamtykkeData{
         else -> throw Exception("Unsupported algorithm")
     }
 
-
     val verifier = JWT.require(algorithm) // signature
         .withIssuer(samtykkeJwks.issuer)
-        .withAudience("https://aap-test-token-provider.intern.dev.nav.no")
+        .withAudience(config.oauth.samtykke.audience)
         .withClaim("CoveredBy", consumerId)
         .withClaim("OfferedBy", personIdent)
         .build()
@@ -62,9 +59,18 @@ fun verifyJwt(token: String, call:ApplicationCall, config: Config):SamtykkeData{
         SamtykkeData(samtykketoken = token, consumerId = consumerId, personIdent = personIdent, samtykkeperiode = parseDates(jwt))
     } catch (e: Exception) {
         logger.info("Token not verified: $e")
-        throw SamtykkeIkkeGittException()
+        throw SamtykkeIkkeGittException("Klarte ikke godkjenne samtykketoken", e)
     }
 
+}
+
+private fun hentPersonIdent(call: ApplicationCall): String =
+    call.request.headers["NAV-PersonIdent"]?: throw SamtykkeIkkeGittException("NAV-PersonIdent ikke satt")
+
+private fun hentConsumerId(call:ApplicationCall): String {
+    val principal = requireNotNull(call.principal<JWTPrincipal>())
+    val consumer = requireNotNull(principal.payload.getClaim("consumer"))
+    return consumer.asMap()["ID"].toString().split(":").last()
 }
 
 private fun parseDates(jwt:DecodedJWT):Samtykkeperiode{

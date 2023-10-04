@@ -5,14 +5,13 @@ import api.arena.ArenaoppslagRequest
 import api.arena.ArenaoppslagResponse
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AUTH_NAME
-import api.auth.verifyJwt
+import api.auth.verifiserOgPakkUtSamtykkeToken
 import api.sporingslogg.SporingsloggEntry
 import api.sporingslogg.SporingsloggKafkaClient
 import io.github.smiley4.ktorswaggerui.dsl.post
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -44,7 +43,7 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Confi
             }
         }
         get("/dsop/test") {
-            val samtykke = verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), call, config)
+            val samtykke = verifiserOgPakkUtSamtykkeToken(requireNotNull(call.request.header("NAV-samtykke-token")), call, config)
             logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
             sporingsloggKafkaClient.sendMelding(SporingsloggEntry(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
                 LocalDateTime.now(),"leverteData",samtykke.samtykketoken,"dataForespoersel", "leverandoer"))

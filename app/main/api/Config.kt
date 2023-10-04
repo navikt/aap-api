@@ -39,5 +39,6 @@ data class ArenaoppslagConfig(
 )
 
 data class SamtykkeConfig(
-    val wellknownUrl: String
+    val wellknownUrl: String,
+    val audience: String
 )

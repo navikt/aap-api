@@ -67,3 +67,5 @@ spec:
       value: {{arenaoppslag.scope}}
     - name: ALTINN_WELLKNOWN
       value: {{altinn.wellknown}}
+    - name: ALTINN_AUDIENCE
+      value: {{altinn.audience}}
