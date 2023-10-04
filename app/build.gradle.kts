@@ -42,6 +42,7 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging-jvm:2.3.3")
 
     implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
+    implementation("org.apache.kafka:kafka-streams:3.5.1")
 
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")

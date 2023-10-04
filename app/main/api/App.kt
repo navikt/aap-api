@@ -5,6 +5,7 @@ import api.auth.SamtykkeIkkeGittException
 import api.auth.maskinporten
 import api.routes.actuatorRoutes
 import api.routes.vedtak
+import api.sporingslogg.SporingsloggKafkaClient
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.github.smiley4.ktorswaggerui.SwaggerUI
@@ -39,6 +40,7 @@ fun main() {
 fun Application.api() {
     val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
+    val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka)
 
     install(CallLogging) {
         level = Level.INFO
@@ -101,7 +103,7 @@ fun Application.api() {
 
     routing {
         actuatorRoutes(prometheus)
-        vedtak(arenaRestClient, config)
+        vedtak(arenaRestClient, config, sporingsloggKafkaClient)
     }
 }
 
