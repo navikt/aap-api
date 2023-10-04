@@ -5,7 +5,6 @@ import api.arena.ArenaoppslagRequest
 import api.arena.ArenaoppslagResponse
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AUTH_NAME
-import api.auth.SAMTYKKE_AUTH_NAME
 import api.auth.verifyJwt
 import io.github.smiley4.ktorswaggerui.dsl.post
 import io.ktor.http.*
@@ -42,16 +41,9 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Confi
             }
         }
         get("/dsop/test") {
-            val principal = call.principal<JWTPrincipal>()
-            val idFull = principal?.payload?.getClaim("consumer")?.asMap()?.get("ID")
-            val id:String = idFull.toString().split(":").last()
-            logger.info("Token: $id")
+            val samtykkeperiode = verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), call, config)
+            logger.info("Samtykke OK: $samtykkeperiode")
 
-            val personIdent = call.request.headers["NAV-PersonIdent"]?: ""
-
-            if(!verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), id, personIdent, config)) {
-                call.respond(HttpStatusCode.Forbidden)
-            }
             call.respond("OK")
         }
 

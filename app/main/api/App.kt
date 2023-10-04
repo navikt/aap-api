@@ -1,6 +1,7 @@
 package api
 
 import api.arena.ArenaoppslagRestClient
+import api.auth.SamtykkeIkkeGittException
 import api.auth.maskinporten
 import api.routes.actuatorRoutes
 import api.routes.vedtak
@@ -54,10 +55,15 @@ fun Application.api() {
     install(MicrometerMetrics) { registry = prometheus }
 
     install(StatusPages) {
+        exception<SamtykkeIkkeGittException>{call, cause ->
+            logger.warn("Samtykke ikke gitt", cause)
+            call.respondText(text = "Samtykke ikke gitt", status = HttpStatusCode.Forbidden)
+        }
         exception<Throwable> { call, cause ->
             logger.error("Uhåndtert feil", cause)
             call.respondText(text = "Feil i tjeneste: ${cause.message}" , status = HttpStatusCode.InternalServerError)
         }
+
     }
 
     install(ContentNegotiation) {

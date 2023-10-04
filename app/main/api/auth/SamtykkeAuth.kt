@@ -1,33 +1,34 @@
 package api.auth
 
 import api.Config
-import com.auth0.jwk.JwkProvider
-import com.auth0.jwk.JwkProviderBuilder
 import com.auth0.jwk.UrlJwkProvider
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.http.*
-import io.ktor.http.auth.*
+import com.auth0.jwt.interfaces.DecodedJWT
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
 import org.slf4j.LoggerFactory
 import java.security.interfaces.RSAPublicKey
-import java.util.concurrent.TimeUnit
+import java.time.LocalDate
 
 
-private const val PERSONIDENT_HEADER = "NAV-PersonIdent"
-private const val SAMTYKKETOKEN_HEADER = "NAV-Samtykke-Token"
-
-const val SAMTYKKE_AUTH_NAME = "samtykke"
 
 private val logger = LoggerFactory.getLogger("SamtykkeAuth")
 
-fun verifyJwt(token: String, consumerId:String, personIdent:String, config: Config):Boolean{
+data class Samtykkeperiode(val fraOgMed:LocalDate, val tilOgMed:LocalDate)
+class SamtykkeIkkeGittException: Exception("Samtykke ikke gitt")
+
+fun hentConsumerId(call:ApplicationCall):String{
+    return call.principal<JWTPrincipal>()?.payload?.getClaim("consumer")?.asMap()?.get("ID").toString().split(":").last()
+}
+
+fun verifyJwt(token: String, call:ApplicationCall, config: Config):Samtykkeperiode{
     val samtykkeJwks = SamtykkeJwks(config.oauth.samtykke.wellknownUrl)
     val jwkProvider = UrlJwkProvider(samtykkeJwks.jwksUri)
+
+    val consumerId = hentConsumerId(call)
+    val personIdent = call.request.headers["NAV-PersonIdent"]?: ""
 
     val jwt = JWT.decode(token)
     val jwk = jwkProvider.get(jwt.keyId)
@@ -40,11 +41,6 @@ fun verifyJwt(token: String, consumerId:String, personIdent:String, config: Conf
         "RSA-OAEP-256" -> Algorithm.RSA256(publicKey, null)
         else -> throw Exception("Unsupported algorithm")
     }
-    logger.info("OfferedBy: ${personIdent}")
-    logger.info("actual OfferedBy: ${jwt.getClaim("OfferedBy").asString()}")
-
-    logger.info("CoveredBy: ${consumerId}")
-    logger.info("actual CoveredBy: ${jwt.getClaim("CoveredBy").asString()}")
 
 
     val verifier = JWT.require(algorithm) // signature
@@ -56,21 +52,18 @@ fun verifyJwt(token: String, consumerId:String, personIdent:String, config: Conf
 
     return try {
         verifier.verify(token)
-        true
+        parseDates(jwt)
     } catch (e: Exception) {
         logger.info("Token not verified: $e")
-        false
+        throw SamtykkeIkkeGittException()
     }
 
 }
 
-
-
-private fun kravOmPersonidentErOppfylt(call: ApplicationCall, cred: JWTCredential): Boolean {
-    val offeredBy = cred.payload.getClaim("OfferedBy")
-    if (offeredBy.isMissing) {
-        return false
-    }
-
-    return offeredBy.asString() == call.request.header(PERSONIDENT_HEADER)
+private fun parseDates(jwt:DecodedJWT):Samtykkeperiode{
+    val services = jwt.getClaim("Services").asArray(String::class.java)
+    return Samtykkeperiode(
+        LocalDate.parse(services[1].split("=").last()),
+        LocalDate.parse(services[2].split("=").last())
+    )
 }
