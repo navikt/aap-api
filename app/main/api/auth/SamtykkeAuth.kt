@@ -40,11 +40,11 @@ fun verifyJwt(token: String, consumerId:String, personIdent:String, config: Conf
         "RSA-OAEP-256" -> Algorithm.RSA256(publicKey, null)
         else -> throw Exception("Unsupported algorithm")
     }
-    logger.info("OfferedBy: ${consumerId}")
+    logger.info("OfferedBy: ${personIdent}")
     logger.info("actual OfferedBy: ${jwt.getClaim("OfferedBy").asString()}")
 
-    logger.info("CoveredBy: ${personIdent}")
-    logger.info("actual OfferedBy: ${jwt.getClaim("CoveredBy").asString()}")
+    logger.info("CoveredBy: ${consumerId}")
+    logger.info("actual CoveredBy: ${jwt.getClaim("CoveredBy").asString()}")
 
 
     val verifier = JWT.require(algorithm) // signature
