@@ -1,12 +1,14 @@
 package api
 
+import no.nav.aap.kafka.streams.v2.config.StreamsConfig
 import no.nav.aap.ktor.client.AzureConfig
 import java.net.URL
 
 data class Config(
     val oauth: OauthConfig,
     val arenaoppslag: ArenaoppslagConfig,
-    val azure: AzureConfig
+    val azure: AzureConfig,
+    val kafka: StreamsConfig
 )
 
 data class OauthConfig(

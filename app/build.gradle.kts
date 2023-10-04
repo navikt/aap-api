@@ -41,6 +41,8 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging-jvm:2.3.3")
 
+    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
+
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))

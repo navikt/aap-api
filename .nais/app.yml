@@ -15,6 +15,9 @@ spec:
   replicas:
     max: 1
     min: 1
+  kafka:
+    pool: {{kafka-pool}}
+    streams: true
   resources:
     limits:
       memory: 8Gi
