@@ -25,7 +25,7 @@ const val SAMTYKKE_AUTH_NAME = "samtykke"
 
 private val logger = LoggerFactory.getLogger("SamtykkeAuth")
 
-fun verifyJwt(token: String, authId:String, personIdent:String, config: Config):Boolean{
+fun verifyJwt(token: String, consumerId:String, personIdent:String, config: Config):Boolean{
     val samtykkeJwks = SamtykkeJwks(config.oauth.samtykke.wellknownUrl)
     val jwkProvider = UrlJwkProvider(samtykkeJwks.jwksUri)
 
@@ -40,14 +40,18 @@ fun verifyJwt(token: String, authId:String, personIdent:String, config: Config):
         "RSA-OAEP-256" -> Algorithm.RSA256(publicKey, null)
         else -> throw Exception("Unsupported algorithm")
     }
-    logger.info("issuer: ${samtykkeJwks.issuer}")
-    logger.info("actual issuer: ${jwt.issuer}")
+    logger.info("OfferedBy: ${consumerId}")
+    logger.info("actual OfferedBy: ${jwt.getClaim("OfferedBy").asString()}")
+
+    logger.info("CoveredBy: ${personIdent}")
+    logger.info("actual OfferedBy: ${jwt.getClaim("CoveredBy").asString()}")
+
 
     val verifier = JWT.require(algorithm) // signature
         .withIssuer(samtykkeJwks.issuer)
         .withAudience("https://aap-test-token-provider.intern.dev.nav.no")
-        .withClaim("OfferedBy", authId)
-        .withClaim("offeredBy", personIdent)
+        .withClaim("CoveredBy", consumerId)
+        .withClaim("OfferedBy", personIdent)
         .build()
 
     return try {

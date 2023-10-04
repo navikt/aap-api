@@ -45,7 +45,7 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Confi
             val principal = call.principal<JWTPrincipal>()
             val idFull = principal?.payload?.getClaim("consumer")?.asMap()?.get("ID")
             val id:String = idFull.toString().split(":").last()
-            logger.info("Token: {$id}")
+            logger.info("Token: $id")
 
             val personIdent = call.request.headers["NAV-PersonIdent"]?: ""
 
