@@ -40,6 +40,8 @@ fun verifyJwt(token: String, authId:String, personIdent:String, config: Config):
         "RSA-OAEP-256" -> Algorithm.RSA256(publicKey, null)
         else -> throw Exception("Unsupported algorithm")
     }
+    logger.info("issuer: ${samtykkeJwks.issuer}")
+    logger.info("actual issuer: ${jwt.issuer}")
 
     val verifier = JWT.require(algorithm) // signature
         .withIssuer(samtykkeJwks.issuer)

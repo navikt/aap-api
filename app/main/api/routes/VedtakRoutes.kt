@@ -49,7 +49,7 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Confi
 
             val personIdent = call.request.headers["NAV-PersonIdent"]?: ""
 
-            if(verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), id, personIdent, config)) {
+            if(!verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), id, personIdent, config)) {
                 call.respond(HttpStatusCode.Forbidden)
             }
             call.respond("OK")
