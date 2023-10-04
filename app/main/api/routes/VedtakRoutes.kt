@@ -6,6 +6,7 @@ import api.arena.ArenaoppslagResponse
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AUTH_NAME
 import api.auth.verifyJwt
+import api.sporingslogg.SporingsloggEntry
 import api.sporingslogg.SporingsloggKafkaClient
 import io.github.smiley4.ktorswaggerui.dsl.post
 import io.ktor.http.*
@@ -17,6 +18,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
 import java.lang.Exception
+import java.time.LocalDateTime
 
 
 private val logger = LoggerFactory.getLogger("VedtakRoutes")
@@ -42,9 +44,10 @@ fun Routing.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Confi
             }
         }
         get("/dsop/test") {
-            val samtykkeperiode = verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), call, config)
-            logger.info("Samtykke OK: $samtykkeperiode")
-
+            val samtykke = verifyJwt(requireNotNull(call.request.header("NAV-samtykke-token")), call, config)
+            logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
+            sporingsloggKafkaClient.sendMelding(SporingsloggEntry(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
+                LocalDateTime.now(),"leverteData",samtykke.samtykketoken,"dataForespoersel", "leverandoer"))
             call.respond("OK")
         }
 

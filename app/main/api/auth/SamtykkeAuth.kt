@@ -11,11 +11,18 @@ import io.ktor.server.auth.jwt.*
 import org.slf4j.LoggerFactory
 import java.security.interfaces.RSAPublicKey
 import java.time.LocalDate
-
+import java.time.LocalDateTime
 
 
 private val logger = LoggerFactory.getLogger("SamtykkeAuth")
 
+data class SamtykkeData(
+    val samtykkeperiode: Samtykkeperiode,
+    val personIdent: String,
+    val consumerId: String,
+    val samtykketoken: String,
+    val tidspunkt: LocalDate = LocalDate.now(),
+)
 data class Samtykkeperiode(val fraOgMed:LocalDate, val tilOgMed:LocalDate)
 class SamtykkeIkkeGittException: Exception("Samtykke ikke gitt")
 
@@ -23,7 +30,7 @@ fun hentConsumerId(call:ApplicationCall):String{
     return call.principal<JWTPrincipal>()?.payload?.getClaim("consumer")?.asMap()?.get("ID").toString().split(":").last()
 }
 
-fun verifyJwt(token: String, call:ApplicationCall, config: Config):Samtykkeperiode{
+fun verifyJwt(token: String, call:ApplicationCall, config: Config):SamtykkeData{
     val samtykkeJwks = SamtykkeJwks(config.oauth.samtykke.wellknownUrl)
     val jwkProvider = UrlJwkProvider(samtykkeJwks.jwksUri)
 
@@ -52,7 +59,7 @@ fun verifyJwt(token: String, call:ApplicationCall, config: Config):Samtykkeperio
 
     return try {
         verifier.verify(token)
-        parseDates(jwt)
+        SamtykkeData(samtykketoken = token, consumerId = consumerId, personIdent = personIdent, samtykkeperiode = parseDates(jwt))
     } catch (e: Exception) {
         logger.info("Token not verified: $e")
         throw SamtykkeIkkeGittException()
