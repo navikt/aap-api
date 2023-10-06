@@ -16,7 +16,7 @@ spec:
     max: 1
     min: 1
   kafka:
-    pool: {{kafka-pool}}
+    pool: {{kafka.pool}}
     streams: true
   resources:
     limits:
