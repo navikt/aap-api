@@ -51,7 +51,7 @@ For å bruke et Maskinporten-token må konsumenten ta kontakt med NAV og få reg
 
 Deretter må konsument registrere seg hos Digdir med det scope de har fått tilgang til. Detaljert beskrivelse om maskinporten finnes [på denne lenken](https://samarbeid.digdir.no/maskinporten/ta-i-bruk-maskinporten/97).
 
-NAV har laget et [kodeeksempel](NAV har laget et kodeeksempel for å utstede et test-token for Maskinporten.) for å utstede et test-token for Maskinporten.
+NAV har laget et [kodeeksempel](https://github.com/navikt/aap-test-token-provider/blob/main/app/main/tokenprovider/makinporten/MaskinportenTokenProvider.kt) for å utstede et test-token for Maskinporten.
 
 ### Tilgang med samtykke
 Konsumenter som ikke har hjemmel til å hente AAP-data trenger samtykke fra personen man ønsker å hente data for. Dette tokenet må brukes sammen med Maskinporten-token. Samtykke-token må derfor legges inn i header på request som NAV-Samtykke-Token.
