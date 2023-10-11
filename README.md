@@ -15,14 +15,10 @@ flowchart LR
     
     K01 --> |Søkekriterier| A01
     A01 --> |Data etter behov| K01
-    subgraph Autentisering
     A01 <--> |Med og uten hjemmel| A02
     A01 <--> |Uten hjemmel| A03
-    end
-    subgraph Dataoppslag
     A01 <--> |Historiske data når Kelvin tar over| D01
     A01 <--> |Nye data når Kelvin tar over| D02
-    end
 
     classDef app fill:#3498db, color:#000000, stroke:#000000;
     classDef database fill:#f1c40f, color:#000000, stroke:#000000;
