@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.0"
-    id("io.ktor.plugin") version "2.3.3"
+    id("io.ktor.plugin") version "2.3.5"
 }
 
 application {
@@ -8,40 +8,39 @@ application {
 }
 
 val aapLibVersion = "3.7.56"
-val ktorVersion = "2.3.3"
+val ktorVersion = "2.3.5"
 
 dependencies {
+    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-auth-azuread:$aapLibVersion")
 
+    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
-    implementation("io.github.smiley4:ktor-swagger-ui:2.3.1")
-    implementation("com.auth0:java-jwt:3.3.0")
-
-    implementation("io.ktor:ktor-server-swagger:$ktorVersion")
-    implementation("ch.qos.logback:logback-classic:1.4.11")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.11.3")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
-    implementation("com.nimbusds:nimbus-jose-jwt:9.31")
 
     implementation("io.ktor:ktor-client-auth:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-jackson:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-logging-jvm:2.3.3")
 
-    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
+    implementation("ch.qos.logback:logback-classic:1.4.11")
+    implementation("com.auth0:java-jwt:3.3.0")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
+    implementation("com.nimbusds:nimbus-jose-jwt:9.31")
+    implementation("dev.forst:ktor-openapi-generator:0.6.1")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.3")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("org.apache.kafka:kafka-streams:3.5.1")
 
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")

@@ -3,14 +3,14 @@ package api
 import api.arena.ArenaoppslagRestClient
 import api.auth.SamtykkeIkkeGittException
 import api.auth.maskinporten
+import api.routes.JwtProvider
 import api.routes.actuatorRoutes
 import api.routes.vedtak
 import api.sporingslogg.SporingsloggKafkaClient
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import io.github.smiley4.ktorswaggerui.SwaggerUI
-import io.github.smiley4.ktorswaggerui.dsl.AuthScheme
-import io.github.smiley4.ktorswaggerui.dsl.AuthType
+import com.papsign.ktor.openapigen.OpenAPIGen
+import com.papsign.ktor.openapigen.route.apiRouting
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
@@ -75,24 +75,17 @@ fun Application.api() {
         }
     }
 
-    install(SwaggerUI) {
-        swagger {
-            swaggerUrl = "swagger-ui"
-            forwardRoot = true
-        }
+    val authProvider = JwtProvider();
+
+    install(OpenAPIGen) {
+        serveOpenApiJson = true
+        serveSwaggerUi = true // this servers Swagger UI on /swagger-ui/index.html
         info {
-            title = "AAP - Api"
-            version = "latest"
-            description = ""
+            version = "1.0.0"
+            title = "AAP - API"
+            description = "API for å dele AAP-data med eksterne konsumenter"
         }
-        server {
-            url = "http://localhost:8080"
-            description = ""
-        }
-        securityScheme("Maskinporten") {
-            type = AuthType.HTTP
-            scheme = AuthScheme.BEARER
-        }
+        addModules(authProvider)
     }
 
     install(Authentication) {
@@ -101,9 +94,11 @@ fun Application.api() {
 
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
-    routing {
-        actuatorRoutes(prometheus)
+    apiRouting {
         vedtak(arenaRestClient, config, sporingsloggKafkaClient)
+        routing {
+            actuatorRoutes(prometheus)
+        }
     }
 }
 
