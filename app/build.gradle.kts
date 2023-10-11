@@ -39,7 +39,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
     implementation("com.nimbusds:nimbus-jose-jwt:9.31")
     implementation("dev.forst:ktor-openapi-generator:0.6.1")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.11.3")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("org.apache.kafka:kafka-streams:3.5.1")
 
