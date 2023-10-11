@@ -5,6 +5,7 @@ import api.arena.ArenaoppslagRequest
 import api.arena.ArenaoppslagResponse
 import api.arena.ArenaoppslagRestClient
 import api.sporingslogg.SporingsloggKafkaClient
+import com.papsign.ktor.openapigen.APITag
 import com.papsign.ktor.openapigen.model.Described
 import com.papsign.ktor.openapigen.model.security.HttpSecurityScheme
 import com.papsign.ktor.openapigen.model.security.SecuritySchemeModel
@@ -16,19 +17,23 @@ import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import com.papsign.ktor.openapigen.route.path.normal.post
 import com.papsign.ktor.openapigen.route.response.respond
 import com.papsign.ktor.openapigen.route.route
+import com.papsign.ktor.openapigen.route.tag
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.util.pipeline.*
 import org.slf4j.LoggerFactory
 import java.lang.Exception
 
-
 private val logger = LoggerFactory.getLogger("VedtakRoutes")
 
+private val FELLESORDNING = Tags("Fellesordningen", "Uttrekk for fellesordningen")
+
+class Tags(override val name: String, override val description: String) : APITag
+
 fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
-        route("/fellesordning/vedtak") {
+        route("/fellesordning/vedtak").tag(FELLESORDNING) {
             post<Unit, List<ArenaoppslagResponse>, ArenaoppslagRequest>(
-                info(summary = "fellesordning/vedtak", description = "Hent ut en fil basert på filreferanse")
+                info(summary = "Fellesordningen - vedtak", description = "Hent ut AAP-vedtak")
             ) { _, body ->
                 try {
                     logger.info("Incomming")
@@ -51,17 +56,6 @@ fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, co
         */
 }
 
-val authProvider = JwtProvider();
-
-inline fun NormalOpenAPIRoute.auth(route: OpenAPIAuthenticatedRoute<Principal>.() -> Unit): OpenAPIAuthenticatedRoute<Principal> {
-    val authenticatedKtorRoute = this.ktorRoute.authenticate { }
-    val openAPIAuthenticatedRoute =
-        OpenAPIAuthenticatedRoute(authenticatedKtorRoute, this.provider.child(), authProvider = authProvider);
-    return openAPIAuthenticatedRoute.apply {
-        route()
-    }
-}
-
 class JwtProvider : AuthProvider<Principal> {
     override val security: Iterable<Iterable<AuthProvider.Security<*>>> =
         listOf(
@@ -72,7 +66,7 @@ class JwtProvider : AuthProvider<Principal> {
                         scheme = HttpSecurityScheme.bearer,
                         bearerFormat = "JWT",
                         referenceName = "Maskinporten",
-                    ), listOf(Scopes.Profile)
+                    ), emptyList<Scopes>()
                 )
             )
         )

@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.papsign.ktor.openapigen.OpenAPIGen
 import com.papsign.ktor.openapigen.route.apiRouting
+import com.papsign.ktor.openapigen.route.path.auth.OpenAPIAuthenticatedRoute
+import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
@@ -31,6 +33,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 
 private val logger = LoggerFactory.getLogger("App")
+private val authProvider = JwtProvider()
 
 fun main() {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> logger.error("Uhåndtert feil", e) }
@@ -75,8 +78,6 @@ fun Application.api() {
         }
     }
 
-    val authProvider = JwtProvider()
-
     install(OpenAPIGen) {
         serveOpenApiJson = true
         serveSwaggerUi = true
@@ -95,7 +96,7 @@ fun Application.api() {
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     apiRouting {
-        authentication {
+        auth {
             vedtak(arenaRestClient, config, sporingsloggKafkaClient)
         }
         routing {
@@ -104,3 +105,11 @@ fun Application.api() {
     }
 }
 
+private fun NormalOpenAPIRoute.auth(route: OpenAPIAuthenticatedRoute<Principal>.() -> Unit): OpenAPIAuthenticatedRoute<Principal> {
+    val authenticatedKtorRoute = this.ktorRoute.authenticate { }
+    val openAPIAuthenticatedRoute =
+        OpenAPIAuthenticatedRoute(authenticatedKtorRoute, this.provider.child(), authProvider = authProvider);
+    return openAPIAuthenticatedRoute.apply {
+        route()
+    }
+}
