@@ -16,8 +16,6 @@ import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import com.papsign.ktor.openapigen.route.path.normal.post
 import com.papsign.ktor.openapigen.route.response.respond
 import com.papsign.ktor.openapigen.route.route
-import com.papsign.ktor.openapigen.route.throws
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.util.pipeline.*
@@ -28,10 +26,9 @@ import java.lang.Exception
 private val logger = LoggerFactory.getLogger("VedtakRoutes")
 
 fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
-    //auth {
         route("/fellesordning/vedtak") {
             post<Unit, List<ArenaoppslagResponse>, ArenaoppslagRequest>(
-                info(summary = "Vedtak til fellesordning", description = "Hent ut en fil basert på filreferanse")
+                info(summary = "fellesordning/vedtak", description = "Hent ut en fil basert på filreferanse")
             ) { _, body ->
                 try {
                     logger.info("Incomming")
@@ -52,10 +49,6 @@ fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, co
             call.respond("OK")
         }
         */
-    //}
-
-
-
 }
 
 val authProvider = JwtProvider();

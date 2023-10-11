@@ -75,11 +75,11 @@ fun Application.api() {
         }
     }
 
-    val authProvider = JwtProvider();
+    val authProvider = JwtProvider()
 
     install(OpenAPIGen) {
         serveOpenApiJson = true
-        serveSwaggerUi = true // this servers Swagger UI on /swagger-ui/index.html
+        serveSwaggerUi = true
         info {
             version = "1.0.0"
             title = "AAP - API"
@@ -95,7 +95,9 @@ fun Application.api() {
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     apiRouting {
-        vedtak(arenaRestClient, config, sporingsloggKafkaClient)
+        authentication {
+            vedtak(arenaRestClient, config, sporingsloggKafkaClient)
+        }
         routing {
             actuatorRoutes(prometheus)
         }
