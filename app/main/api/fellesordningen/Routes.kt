@@ -19,7 +19,7 @@ private val fellesordningen_tag = OpenApiTag("Fellesordningen", "Uttrekk for fel
 
 fun NormalOpenAPIRoute.fellesordningen(arenaoppslagRestClient: ArenaoppslagRestClient, config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
     route("/fellesordning/vedtak").tag(fellesordningen_tag) {
-        post<Unit, List<VedtakResponse>, VedtakRequest>(
+        post<Unit, VedtakResponse, VedtakRequest>(
             info(summary = "Fellesordningen - vedtak", description = "Hent ut AAP-vedtak")
         ) { _, body ->
             try {
