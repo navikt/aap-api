@@ -14,15 +14,13 @@ import java.util.concurrent.TimeUnit
 
 private val logger = LoggerFactory.getLogger("MaskinportenAuth")
 
-const val MASKINPORTEN_AUTH_NAME = "maskinporten"
-
 fun AuthenticationConfig.maskinporten(config: Config) {
     val maskinportenJwkProvider: JwkProvider = JwkProviderBuilder(config.oauth.maskinporten.jwksUri)
         .cached(10, 24, TimeUnit.HOURS)
         .rateLimited(10, 1, TimeUnit.MINUTES)
         .build()
 
-    jwt(MASKINPORTEN_AUTH_NAME) {
+    jwt {
         verifier(maskinportenJwkProvider, config.oauth.maskinporten.issuer.name)
         challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang til maskinporten") }
         validate { cred ->

@@ -81,7 +81,7 @@ class JwtProvider : AuthProvider<Principal> {
                         SecuritySchemeType.http,
                         scheme = HttpSecurityScheme.bearer,
                         bearerFormat = "JWT",
-                        referenceName = "jwtAuth",
+                        referenceName = "Maskinporten",
                     ), emptyList<Scopes>()
                 )
             )
