@@ -28,10 +28,10 @@ import java.lang.Exception
 private val logger = LoggerFactory.getLogger("VedtakRoutes")
 
 fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
-    auth {
+    //auth {
         route("/fellesordning/vedtak") {
             post<Unit, List<ArenaoppslagResponse>, ArenaoppslagRequest>(
-                info(summary = "fellesordning/vedtak", description = "Hent ut en fil basert på filreferanse")
+                info(summary = "Vedtak til fellesordning", description = "Hent ut en fil basert på filreferanse")
             ) { _, body ->
                 try {
                     logger.info("Incomming")
@@ -52,7 +52,7 @@ fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, co
             call.respond("OK")
         }
         */
-    }
+    //}
 
 
 
