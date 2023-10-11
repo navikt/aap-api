@@ -1,6 +1,8 @@
 package api.arena
 
 import api.ArenaoppslagConfig
+import api.fellesordningen.VedtakRequest
+import api.fellesordningen.VedtakResponse
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -20,8 +22,6 @@ import kotlinx.coroutines.runBlocking
 import no.nav.aap.ktor.client.AzureAdTokenProvider
 import no.nav.aap.ktor.client.AzureConfig
 import org.slf4j.LoggerFactory
-import java.net.http.HttpClient
-import java.time.LocalDate
 import java.util.*
 
 
@@ -45,7 +45,7 @@ class ArenaoppslagRestClient(
 ) {
     private val tokenProvider = AzureAdTokenProvider(azureConfig, arenaoppslagConfig.scope)
 
-    fun hentVedtak(arenaoppslagRequest: ArenaoppslagRequest):List<ArenaoppslagResponse> =
+    fun hentVedtak(vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/vedtak"){
@@ -53,15 +53,13 @@ class ArenaoppslagRestClient(
                     header("Nav-Call-Id", UUID.randomUUID())
                     bearerAuth(tokenProvider.getClientCredentialToken())
                     contentType(ContentType.Application.Json)
-                    setBody(arenaoppslagRequest)
+                    setBody(vedtakRequest)
                 }
                     .bodyAsText()
                     .also { svar -> sikkerLogg.info("Svar fra inntektskomponenten:\n$svar") }
                     .let(objectMapper::readValue)
-
             }
         }
-
 
     private val httpClient = HttpClient(CIO) {
         install(HttpTimeout)
