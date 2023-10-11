@@ -30,19 +30,18 @@ private val logger = LoggerFactory.getLogger("VedtakRoutes")
 fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
     auth {
         route("/fellesordning/vedtak") {
-            throws(HttpStatusCode.InternalServerError, Error("bad.request", mapOf<String, String>()), {ex: Exception -> Error(ex.message, ex.cause)}) {
-                post<Unit, List<ArenaoppslagResponse>, ArenaoppslagRequest>(
-                    info(summary = "Hent fil", description = "Hent ut en fil basert på filreferanse")
-                ) { _, body ->
-                    try {
-                        logger.info("Incomming")
-                        respond(arenaoppslagRestClient.hentVedtak(body))
-                    } catch (e: Exception) {
-                        logger.error("Feil i kall", e)
-                        throw e
-                    }
+            post<Unit, List<ArenaoppslagResponse>, ArenaoppslagRequest>(
+                info(summary = "fellesordning/vedtak", description = "Hent ut en fil basert på filreferanse")
+            ) { _, body ->
+                try {
+                    logger.info("Incomming")
+                    respond(arenaoppslagRestClient.hentVedtak(body))
+                } catch (e: Exception) {
+                    logger.error("Feil i kall", e)
+                    throw e
                 }
             }
+
         }
         /*
         get("/dsop/test") {
@@ -58,8 +57,6 @@ fun NormalOpenAPIRoute.vedtak(arenaoppslagRestClient: ArenaoppslagRestClient, co
 
 
 }
-
-data class Error<P>(val id: String, val payload: P)
 
 val authProvider = JwtProvider();
 
@@ -82,7 +79,7 @@ class JwtProvider : AuthProvider<Principal> {
                         scheme = HttpSecurityScheme.bearer,
                         bearerFormat = "JWT",
                         referenceName = "Maskinporten",
-                    ), emptyList<Scopes>()
+                    ), listOf(Scopes.Profile)
                 )
             )
         )
