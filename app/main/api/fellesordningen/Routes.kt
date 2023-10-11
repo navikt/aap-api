@@ -22,12 +22,11 @@ private val fellesordningen_tag = OpenApiTag("Fellesordningen", "Uttrekk for fel
 fun NormalOpenAPIRoute.fellesordningen(arenaoppslagRestClient: ArenaoppslagRestClient, config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
     route("/fellesordning/vedtak").tag(fellesordningen_tag) {
         throws(HttpStatusCode.InternalServerError, Exception::class) {
-            post<Unit, VedtakResponse, VedtakRequest>(
+            post<VedtakParams, VedtakResponse, VedtakRequest>(
                 info(summary = "Fellesordningen - vedtak", description = "Hent ut AAP-vedtak")
-            ) { _, body ->
+            ) { params, body ->
                 try {
-                    logger.info("Incomming")
-                    respond(arenaoppslagRestClient.hentVedtak(body))
+                    respond(arenaoppslagRestClient.hentVedtak(params.callId, body))
                 } catch (e: Exception) {
                     logger.error("Feil i kall", e)
                     throw e

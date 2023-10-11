@@ -45,18 +45,18 @@ class ArenaoppslagRestClient(
 ) {
     private val tokenProvider = AzureAdTokenProvider(azureConfig, arenaoppslagConfig.scope)
 
-    fun hentVedtak(vedtakRequest: VedtakRequest): VedtakResponse =
+    fun hentVedtak(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/vedtak"){
                     accept(ContentType.Application.Json)
-                    header("Nav-Call-Id", UUID.randomUUID())
+                    header("Nav-Call-Id", callId)
                     bearerAuth(tokenProvider.getClientCredentialToken())
                     contentType(ContentType.Application.Json)
                     setBody(vedtakRequest)
                 }
                     .bodyAsText()
-                    .also { svar -> sikkerLogg.info("Svar fra inntektskomponenten:\n$svar") }
+                    .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
                     .let(objectMapper::readValue)
             }
         }
@@ -72,7 +72,7 @@ class ArenaoppslagRestClient(
                     when {
                         message == "BODY START" -> logBody = true
                         message == "BODY END" -> logBody = false
-                        logBody -> sikkerLogg.debug("respons fra Inntektskomponenten: $message")
+                        logBody -> sikkerLogg.debug("respons fra Arenaoppslag: $message")
                     }
                 }
             }
