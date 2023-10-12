@@ -4,16 +4,15 @@ on:
   push:
     branches: [ main ]
 
+permissions: write-all
+
 env:
   IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/aap/${{ github.repository }}:${{ github.sha }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      id-token: write
-      contents: write
+
     steps:
       - uses: styfle/cancel-workflow-action@0.12.0
       - uses: actions/checkout@v4
