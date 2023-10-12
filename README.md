@@ -1,29 +1,7 @@
 # API for AAP-data
 AAP-API tilbyr AAP-data til eksterne konsumenter som enten har hjemmel til å hente AAP-data eller et samtykke fra bruker. Denne versjonen av API’et vil kun eksponere et REST-endepunkt der konsumentene kan hente data. Hvert endepunkt vil være tilpasset det behovet den enkelte konsument har.
 
-```mermaid
-flowchart LR
-
-    A01[API]:::app
-    A02[Maskinporten]:::app
-    A03[Samtykke]:::app
-    
-    D01[(Arena)]:::database
-    D02[(Kelvin)]:::database
-    
-    K01((Konsument)):::konsument
-    
-    K01 --> |Søkekriterier| A01
-    A01 --> |Data etter behov| K01
-    A01 <--> |Med og uten hjemmel| A02
-    A01 <--> |Uten hjemmel| A03
-    A01 <--> |Historiske data når Kelvin tar over| D01
-    A01 <--> |Nye data når Kelvin tar over| D02
-
-    classDef app fill:#3498db, color:#000000, stroke:#000000;
-    classDef database fill:#f1c40f, color:#000000, stroke:#000000;
-    classDef konsument fill:#2ecc71, color:#000000, stroke:#000000;
-```
+![img](diagram.png)
 
 API’et vil hente data fra 2 kilder
 - Arena – det eksisterende saksbehandlingsverktøyet NAV bruker til å behandle AAP-saker
