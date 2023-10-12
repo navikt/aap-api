@@ -19,17 +19,19 @@ private val logger = LoggerFactory.getLogger("FellesordningenRoutes")
 
 private val fellesordningen_tag = OpenApiTag("Fellesordningen", "Uttrekk for fellesordningen")
 
-fun NormalOpenAPIRoute.fellesordningen(arenaoppslagRestClient: ArenaoppslagRestClient, config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
+fun NormalOpenAPIRoute.fellesordningen(arenaoppslagRestClient: ArenaoppslagRestClient) {
     route("/fellesordning/vedtak").tag(fellesordningen_tag) {
         throws(HttpStatusCode.InternalServerError, Exception::class) {
             post<VedtakParams, VedtakResponse, VedtakRequest>(
                 info(summary = "Fellesordningen - vedtak", description = "Hent ut AAP-vedtak")
             ) { params, body ->
-                try {
-                    respond(arenaoppslagRestClient.hentVedtak(params.callId, body))
-                } catch (e: Exception) {
-                    logger.error("Feil i kall", e)
-                    throw e
+                runCatching {
+                    arenaoppslagRestClient.hentVedtak(params.`X-CallId`, body)
+                }.onFailure { ex ->
+                    logger.error("Feil i kall mot hentVedtak", ex)
+                    throw ex
+                }.onSuccess { res ->
+                    respond(res)
                 }
             }
         }
