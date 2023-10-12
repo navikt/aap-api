@@ -13,7 +13,7 @@ jobs:
     permissions:
       packages: write
       id-token: write
-      contents: read
+      contents: write
     steps:
       - uses: styfle/cancel-workflow-action@0.12.0
       - uses: actions/checkout@v4
