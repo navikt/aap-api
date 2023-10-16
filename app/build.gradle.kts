@@ -37,7 +37,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("com.auth0:java-jwt:3.3.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2")
-    implementation("com.nimbusds:nimbus-jose-jwt:9.36")
+    implementation("com.nimbusds:nimbus-jose-jwt:9.37")
     implementation("dev.forst:ktor-openapi-generator:0.6.1")
     implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
