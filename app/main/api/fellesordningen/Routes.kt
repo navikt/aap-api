@@ -1,9 +1,7 @@
 package api.fellesordningen
 
-import api.Config
 import api.openapi.OpenApiTag
 import api.arena.ArenaoppslagRestClient
-import api.sporingslogg.SporingsloggKafkaClient
 import com.papsign.ktor.openapigen.route.info
 import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import com.papsign.ktor.openapigen.route.path.normal.post
@@ -26,7 +24,7 @@ fun NormalOpenAPIRoute.fellesordningen(arenaoppslagRestClient: ArenaoppslagRestC
                 info(summary = "Fellesordningen - vedtak", description = "Hent ut AAP-vedtak")
             ) { params, body ->
                 runCatching {
-                    arenaoppslagRestClient.hentVedtak(params.`X-CallId`, body)
+                    arenaoppslagRestClient.hentVedtak(params.`x-callid`, body)
                 }.onFailure { ex ->
                     logger.error("Feil i kall mot hentVedtak", ex)
                     throw ex
