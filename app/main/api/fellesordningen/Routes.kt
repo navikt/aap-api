@@ -2,6 +2,7 @@ package api.fellesordningen
 
 import api.openapi.OpenApiTag
 import api.arena.ArenaoppslagRestClient
+import api.sporingslogg.SporingsloggKafkaClient
 import com.papsign.ktor.openapigen.route.info
 import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import com.papsign.ktor.openapigen.route.path.normal.post
@@ -17,7 +18,7 @@ private val logger = LoggerFactory.getLogger("FellesordningenRoutes")
 
 private val fellesordningen_tag = OpenApiTag("Fellesordningen", "Uttrekk for fellesordningen")
 
-fun NormalOpenAPIRoute.fellesordningen(arenaoppslagRestClient: ArenaoppslagRestClient) {
+fun NormalOpenAPIRoute.fellesordningen(arenaoppslagRestClient: ArenaoppslagRestClient, sporingsloggKafkaClient: SporingsloggKafkaClient) {
     route("/fellesordning/vedtak").tag(fellesordningen_tag) {
         throws(HttpStatusCode.InternalServerError, Exception::class) {
             post<VedtakParams, VedtakResponse, VedtakRequest>(
