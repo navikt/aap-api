@@ -25,7 +25,7 @@ jobs:
         with:
           arguments: test app:buildFatJar --continue --no-daemon --configuration-cache
 
-      - uses: dorny/test-reporter@v1.6.0
+      - uses: dorny/test-reporter@v1.7.0
         if: success() || failure()
         with:
           name: test
@@ -41,7 +41,7 @@ jobs:
           team: aap
 
       - name: Build and push Docker
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
             context: .
             file: Dockerfile
