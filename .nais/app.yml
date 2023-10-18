@@ -31,12 +31,14 @@ spec:
     enabled: true
     scopes:
       exposes:
-        - name: "vedtak.read"
+        - name: "afpprivat.read"
           enabled: true
           product: "aap"
           consumers:
             - name: "NAV"
               orgno: "889640782"
+            - name: "Fellesordningen for AFP"
+              orgno: "987414502"
   liveness:
     path: /actuator/live
     initialDelay: 1

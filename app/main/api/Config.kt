@@ -29,7 +29,7 @@ data class MaskinportenConfig(
     )
 
     data class ScopeConfig(
-        val vedtak: String
+        val afpprivat: String
     )
 }
 

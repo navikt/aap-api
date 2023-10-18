@@ -4,10 +4,8 @@ import api.Config
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import io.ktor.http.*
-import io.ktor.http.auth.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
@@ -24,7 +22,7 @@ fun AuthenticationConfig.maskinporten(config: Config) {
         verifier(maskinportenJwkProvider, config.oauth.maskinporten.issuer.name)
         challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang til maskinporten") }
         validate { cred ->
-            if (cred.getClaim("scope", String::class) != config.oauth.maskinporten.scope.vedtak) {
+            if (cred.getClaim("scope", String::class) != config.oauth.maskinporten.scope.afpprivat) {
                 logger.warn("Wrong scope in claim")
                 return@validate null
             }

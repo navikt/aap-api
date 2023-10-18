@@ -1,0 +1,20 @@
+name: Deploy alerts to prod and dev
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  deploy-to-dev-and-prod:
+    name: Deploy to ${{ matrix.cluster }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cluster: [dev-gcp]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_API_KEY }}
+          CLUSTER: ${{ matrix.cluster }}
+          RESOURCE: .github/alerts/${{ matrix.cluster }}-alerts.yml

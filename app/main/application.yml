@@ -7,7 +7,7 @@ oauth:
       audience: ${AAP_AUDIENCE} # same as ingress "https://aap-api.dev.nav.no" and https://aap-api.nav.no
       optionalClaims: "sub,nbf"
     scope:
-      vedtak: "nav:aap:vedtak.read"
+      afpprivat: "nav:aap:afpprivat.read"
   samtykke:
     wellknownUrl: ${ALTINN_WELLKNOWN}
     audience: ${ALTINN_AUDIENCE}
