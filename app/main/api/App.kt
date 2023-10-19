@@ -4,8 +4,6 @@ import api.arena.ArenaoppslagRestClient
 import api.auth.SamtykkeIkkeGittException
 import api.auth.maskinporten
 import api.fellesordningen.fellesordningen
-import api.openapi.openAPIAuthenticatedRoute
-import api.openapi.openApiJwtProvider
 import api.sporingslogg.SporingsloggKafkaClient
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -81,9 +79,11 @@ fun Application.api() {
         info {
             version = "1.0.0"
             title = "AAP - API"
-            description = "API for å dele AAP-data med eksterne konsumenter"
+            description = """
+                API for å dele AAP-data med eksterne konsumenter. Kun ment som dokumentasjon, vil ikke fungere
+                på grunn av behov for å autentisere via Maskinporten.
+            """.trimIndent()
         }
-        addModules(openApiJwtProvider)
     }
 
     install(Authentication) {
