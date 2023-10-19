@@ -87,7 +87,7 @@ fun Application.api() {
     }
 
     install(Authentication) {
-        maskinporten(config)
+        maskinporten("sdfasdf",config.oauth.maskinporten.scope.afpprivat, config)
     }
 
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
