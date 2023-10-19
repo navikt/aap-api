@@ -9,7 +9,14 @@ import api.sporingslogg.SporingsloggKafkaClient
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.papsign.ktor.openapigen.OpenAPIGen
+import com.papsign.ktor.openapigen.model.Described
+import com.papsign.ktor.openapigen.model.security.HttpSecurityScheme
+import com.papsign.ktor.openapigen.model.security.SecuritySchemeModel
+import com.papsign.ktor.openapigen.model.security.SecuritySchemeType
+import com.papsign.ktor.openapigen.modules.providers.AuthProvider
 import com.papsign.ktor.openapigen.route.apiRouting
+import com.papsign.ktor.openapigen.route.path.auth.OpenAPIAuthenticatedRoute
+import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
@@ -23,6 +30,7 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.pipeline.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.ktor.config.loadConfig
@@ -87,13 +95,14 @@ fun Application.api() {
         }
     }
 
-    install(Authentication)
+    install(Authentication) {
+        maskinporten(MASKINPORTEN_FELLESORDNING, config.oauth.maskinporten.scope.afpprivat, config)
+    }
 
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     apiRouting {
-        authentication {
-            this.maskinporten(MASKINPORTEN_FELLESORDNING, config.oauth.maskinporten.scope.afpprivat, config)
+        auth {
             fellesordningen(arenaRestClient, sporingsloggKafkaClient)
         }
         routing {
@@ -111,4 +120,46 @@ fun Application.api() {
             }
         }
     }
+}
+
+val authProvider = JwtProvider();
+
+inline fun NormalOpenAPIRoute.auth(route: OpenAPIAuthenticatedRoute<UserPrincipal>.() -> Unit): OpenAPIAuthenticatedRoute<UserPrincipal> {
+    val authenticatedKtorRoute = this.ktorRoute.authenticate(MASKINPORTEN_FELLESORDNING) { }
+    var openAPIAuthenticatedRoute =
+        OpenAPIAuthenticatedRoute(authenticatedKtorRoute, this.provider.child(), authProvider = authProvider)
+    return openAPIAuthenticatedRoute.apply {
+        route()
+    }
+}
+
+data class UserPrincipal(val userId: String, val name: String?) : Principal
+
+class JwtProvider : AuthProvider<UserPrincipal> {
+    override val security: Iterable<Iterable<AuthProvider.Security<*>>> =
+        listOf(
+            listOf(
+                AuthProvider.Security(
+                    SecuritySchemeModel(
+                        SecuritySchemeType.http,
+                        scheme = HttpSecurityScheme.bearer,
+                        bearerFormat = "JWT",
+                        referenceName = "jwtAuth",
+                    ), emptyList<Scopes>()
+                )
+            )
+        )
+
+    override suspend fun getAuth(pipeline: PipelineContext<Unit, ApplicationCall>): UserPrincipal {
+        return pipeline.context.authentication.principal() ?: throw RuntimeException("No JWTPrincipal")
+    }
+
+    override fun apply(route: NormalOpenAPIRoute): OpenAPIAuthenticatedRoute<UserPrincipal> {
+        val authenticatedKtorRoute = route.ktorRoute.authenticate { }
+        return OpenAPIAuthenticatedRoute(authenticatedKtorRoute, route.provider.child(), this)
+    }
+}
+
+enum class Scopes(override val description: String) : Described {
+    Profile("Some scope")
 }
