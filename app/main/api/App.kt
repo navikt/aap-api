@@ -4,8 +4,6 @@ import api.arena.ArenaoppslagRestClient
 import api.auth.SamtykkeIkkeGittException
 import api.auth.maskinporten
 import api.fellesordningen.fellesordningen
-import api.openapi.openAPIAuthenticatedRoute
-import api.openapi.openApiJwtProvider
 import api.sporingslogg.SporingsloggKafkaClient
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -48,7 +46,7 @@ fun Application.api() {
             val status = call.response.status()
             val httpMethod = call.request.httpMethod.value
             val userAgent = call.request.headers["User-Agent"]
-            val callId = call.request.header("x-callId") ?: call.request.header("nav-callId") ?: "ukjent"
+            val callId = call.request.header("x-callid") ?: call.request.header("nav-callId") ?: "ukjent"
             "Status: $status, HTTP method: $httpMethod, User agent: $userAgent, callId: $callId"
         }
         filter { call -> call.request.path().startsWith("/actuator").not() }
@@ -81,9 +79,11 @@ fun Application.api() {
         info {
             version = "1.0.0"
             title = "AAP - API"
-            description = "API for å dele AAP-data med eksterne konsumenter"
+            description = """
+                API for å dele AAP-data med eksterne konsumenter. Kun ment som dokumentasjon, vil ikke fungere
+                på grunn av behov for å autentisere via Maskinporten.
+            """.trimIndent()
         }
-        addModules(openApiJwtProvider)
     }
 
     install(Authentication) {
@@ -93,7 +93,7 @@ fun Application.api() {
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     apiRouting {
-        openAPIAuthenticatedRoute {
+        authentication {
             fellesordningen(arenaRestClient, sporingsloggKafkaClient)
         }
         routing {
