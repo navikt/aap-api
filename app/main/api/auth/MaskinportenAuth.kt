@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
 private val logger = LoggerFactory.getLogger("MaskinportenAuth")
+const val MASKINPORTEN_FELLESORDNING = "fellesordning"
 
 fun AuthenticationConfig.maskinporten(name: String, scope: String, config: Config) {
     val maskinportenJwkProvider: JwkProvider = JwkProviderBuilder(config.oauth.maskinporten.jwksUri)

@@ -1,6 +1,7 @@
 package api
 
 import api.arena.ArenaoppslagRestClient
+import api.auth.MASKINPORTEN_FELLESORDNING
 import api.auth.SamtykkeIkkeGittException
 import api.auth.maskinporten
 import api.fellesordningen.fellesordningen
@@ -86,14 +87,13 @@ fun Application.api() {
         }
     }
 
-    install(Authentication) {
-        maskinporten("sdfasdf",config.oauth.maskinporten.scope.afpprivat, config)
-    }
+    install(Authentication)
 
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     apiRouting {
         authentication {
+            this.maskinporten(MASKINPORTEN_FELLESORDNING, config.oauth.maskinporten.scope.afpprivat, config)
             fellesordningen(arenaRestClient, sporingsloggKafkaClient)
         }
         routing {
