@@ -20,6 +20,16 @@ paths:
       tags:
         - fellesordningen
       description: Henter vedtak for en person gitt tidspunkt for ønsket uttak av AFP.
+      security:
+        - maskinporten: [afpprivat.read]
+      parameters:
+        - in: header
+          name: x-callid
+          description: En UUID konsumenten sender inn som brukes til videre logging og feilsøking.
+          schema:
+            type: string
+            format: uuid
+          required: true
       requestBody:
         content:
           application/json:
@@ -81,3 +91,12 @@ components:
           format: date
           description: Dato for ønsket uttak for AFP
           example: 2021-01-01
+  securitySchemes:
+    maskinporten:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://test.maskinporten.no/jwk
+          tokenUrl: https://test.maskinporten.no/token
+          scopes:
+            afpprivat.read: Lesetilgang for fellesordningen
