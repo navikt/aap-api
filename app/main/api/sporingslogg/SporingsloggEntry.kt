@@ -9,7 +9,7 @@ data class SporingsloggEntry(
     val behandlingsGrunnlag: String,
     val uthentingsTidspunkt: LocalDateTime,
     val leverteData: String,
-    val samtykkeToken: String,
-    val dataForespoersel: String,
-    val leverandoer: String
+    val samtykkeToken: String? = null,
+    val dataForespoersel: String? = null,
+    val leverandoer: String? = null
 )
