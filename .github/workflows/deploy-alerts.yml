@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - 'main'
+    paths:
+      - "*-gcp-alerts.yml"
 
 jobs:
   deploy-to-dev-and-prod:
