@@ -2,9 +2,9 @@ package api.dsop
 
 import api.Config
 import api.sporingslogg.SporingsloggKafkaClient
-import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
+import io.ktor.server.routing.*
 
-fun NormalOpenAPIRoute.dsop(config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
+fun Routing.dsop(config: Config, sporingsloggKafkaClient: SporingsloggKafkaClient) {
 
     /*
     get("/dsop/test") {
