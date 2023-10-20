@@ -7,6 +7,9 @@ info:
     url: https://github.com/navikt/aap-api
     email: richard.borge@nav.no
   version: 1.0.1
+tags:
+  - name: fellesordningen
+    description: Fellesordningen for AFP (afp.no)
 servers:
   - url: https://aap-api.ekstern.dev.nav.no
     description: Test server
@@ -14,6 +17,8 @@ paths:
   /fellesordning/vedtak:
     post:
       summary: Hent vedtak
+      tags:
+        - fellesordningen
       description: Henter vedtak for en person gitt tidspunkt for ønsket uttak av AFP.
       requestBody:
         content:
