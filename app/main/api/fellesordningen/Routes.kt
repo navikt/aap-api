@@ -20,9 +20,9 @@ fun Route.fellesordningen(
     post("/fellesordning/vedtak") {
         fellesordningenCallCounter.inc()
         val body = call.receive<VedtakRequest>()
-        val callId = UUID.fromString(call.request.queryParameters["x-callid"])
+        val callId = requireNotNull(call.request.header("x-callid")){"x-callid ikke satt"}
         runCatching {
-            arenaoppslagRestClient.hentVedtak(callId, body)
+            arenaoppslagRestClient.hentVedtak(UUID.fromString(callId), body)
         }.onFailure { ex ->
             fellesordningenCallFailedCounter.inc()
             logger.error("Feil i kall mot hentVedtak", ex)
