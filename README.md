@@ -15,7 +15,7 @@ Base-URL for AAP-API er:
 - For prod: Ikke i prod enda
 
 ## Beskrivelse av uttrekk
-Beskrivelse av uttrekk kan finnes på vår [Swagger dokumentasjon](https://aap-api.ekstern.dev.nav.no/swagger-ui).
+Beskrivelse av uttrekk kan finnes på vår [Swagger dokumentasjon](https://aap-api.ekstern.dev.nav.no/swagger).
 
 ## Tilgang
 Tilgangen til AAP-API oppnås på to måter:
