@@ -1,0 +1,79 @@
+openapi: "3.1.0"
+info:
+  title: AAP-api
+  summary: Eksternt Api for AAP informasjon.
+  description: AAP-API tilbyr AAP informasjon til eksterne konsumenter som enten har hjemmel til å hente AAP informasjon eller et samtykke fra bruker. Konsumenter må logge seg inn med token fra Maskinporten (alle konsumenter) og et Samtykke-token (konsumenter som ikke har hjemmel).
+  contact:
+    name: Richard Borge
+    url: https://github.com/navikt/aap-api
+    email: richard.borge@nav.no
+  version: 1.0.1
+servers:
+  - url: https://aap-api.ekstern.dev.nav.no
+    description: Test server
+paths:
+  /fellesordning/vedtak:
+    post:
+      summary: Hent vedtak
+      description: Henter vedtak for en person gitt tidspunkt for ønsket uttak av AFP.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VedtakRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VedtakResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    VedtakResponse:
+      type: object
+      properties:
+        personId:
+          type: string
+          description: Personnummeret til brukeren
+          example: 12345678901
+        perioder:
+          type: array
+          description: Perioder med vedtak
+          items:
+            $ref: '#/components/schemas/VedtakPeriode'
+    VedtakPeriode:
+      type: object
+      properties:
+        fraDato:
+          type: string
+          format: date
+          description: Fra dato for perioden
+          example: 2021-01-01
+        tilDato:
+          type: string
+          format: date
+          description: Til dato for perioden
+          example: 2021-01-31
+    VedtakRequest:
+      type: object
+      properties:
+        personId:
+          type: string
+          description: Personnummeret til brukeren
+          example: 12345678901
+        datoForOnsketUttakForAFP:
+          type: string
+          format: date
+          description: Dato for ønsket uttak for AFP
+          example: 2021-01-01
