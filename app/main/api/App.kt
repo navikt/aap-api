@@ -87,7 +87,7 @@ fun Application.api() {
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     routing {
-        swaggerUI(path = "swagger", swaggerFile = "openapi.yml")
+        swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
         authenticate(MASKINPORTEN_FELLESORDNING) {
             fellesordningen(arenaRestClient, sporingsloggKafkaClient)
         }
