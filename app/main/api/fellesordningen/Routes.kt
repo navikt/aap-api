@@ -13,6 +13,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
+import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
 
@@ -37,7 +38,14 @@ fun Route.fellesordningen(
             logger.error("Feil i kall mot hentVedtak", ex)
             throw ex
         }.onSuccess { res ->
-            // sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
+            // TODO Gjør dette akkurat nå for at denne skal overleve i testfase.
+            //      Når vi er klare så skal vi ikke returnere data dersom vi ikke
+            //      klarer å poste til Kafka
+            try {
+                sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
+            } catch (e: Exception) {
+                logger.error("Feilet å poste til Kafka", e)
+            }
             call.respond(res)
         }
     }
