@@ -1,0 +1,82 @@
+title: AAP-api
+summary: Eksternt Api for AAP informasjon.
+description: This is a sample server for a pet store.
+contact:
+  name: Richard Borge
+  url: https://github.com/navikt/aap-api
+  email: richard.borge@nav.no
+version: 1.0.1
+servers:
+  - url: https://aap-api.ekstern.dev.nav.no
+    description: Test server
+/fellesordning/vedtak:
+  tags:
+    - Fellesordning
+  post:
+    description: Henter vedtak for en person
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VedtakRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VedtakResponse'
+      '400':
+        description: Bad request
+
+      '401':
+        description: Unauthorized
+
+      '403':
+        description: Forbidden
+
+      '404':
+        description: Not found
+
+      '500':
+        description: Internal server error
+
+components:
+  schemas:
+    VedtakResponse:
+      type: object
+      properties:
+        personId:
+          type: string
+          description: Personnummeret til brukeren
+          example: 12345678901
+        perioder:
+          type: array
+          description: Perioder med vedtak
+          items:
+            $ref: '#/components/schemas/VedtakPeriode'
+    VedtakPeriode:
+      type: object
+      properties:
+        fraDato:
+          type: string
+          format: date
+          description: Fra dato for perioden
+          example: 2021-01-01
+        tilDato:
+          type: string
+          format: date
+          description: Til dato for perioden
+          example: 2021-01-31
+    VedtakRequest:
+      type: object
+      properties:
+        personId:
+          type: string
+          description: Personnummeret til brukeren
+          example: 12345678901
+        datoForOnsketUttakForAFP:
+          type: string
+          format: date
+          description: Dato for ønsket uttak for AFP
+          example: 2021-01-01
