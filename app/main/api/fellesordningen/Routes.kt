@@ -1,8 +1,8 @@
 package api.fellesordningen
 
 import api.arena.ArenaoppslagRestClient
-import api.fellesordningenCallCounter
-import api.fellesordningenCallFailedCounter
+import api.util.fellesordningenCallCounter
+import api.util.fellesordningenCallFailedCounter
 import api.sporingslogg.SporingsloggEntry
 import api.sporingslogg.SporingsloggKafkaClient
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -30,7 +30,7 @@ fun Route.fellesordningen(
     post("/fellesordning/vedtak") {
         fellesordningenCallCounter.inc()
         val body = call.receive<VedtakRequest>()
-        val callId = requireNotNull(call.request.header("x-callid")){"x-callid ikke satt"}
+        val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
         runCatching {
             arenaoppslagRestClient.hentVedtak(UUID.fromString(callId), body)
         }.onFailure { ex ->

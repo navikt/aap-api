@@ -1,6 +1,6 @@
 package api.arena
 
-import api.ArenaoppslagConfig
+import api.util.ArenaoppslagConfig
 import api.fellesordningen.VedtakRequest
 import api.fellesordningen.VedtakResponse
 import com.fasterxml.jackson.databind.DeserializationFeature

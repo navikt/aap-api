@@ -1,6 +1,6 @@
 package api.auth
 
-import api.Config
+import api.util.Config
 import com.auth0.jwk.UrlJwkProvider
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

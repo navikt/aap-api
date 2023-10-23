@@ -1,4 +1,4 @@
-package api
+package api.util
 
 import io.prometheus.client.Counter
 

@@ -1,6 +1,6 @@
 package api.dsop
 
-import api.Config
+import api.util.Config
 import api.sporingslogg.SporingsloggKafkaClient
 import io.ktor.server.routing.*
 

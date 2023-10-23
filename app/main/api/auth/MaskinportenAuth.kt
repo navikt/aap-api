@@ -1,6 +1,6 @@
 package api.auth
 
-import api.Config
+import api.util.Config
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import io.ktor.http.*

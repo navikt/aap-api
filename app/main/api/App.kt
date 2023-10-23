@@ -2,10 +2,13 @@ package api
 
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_FELLESORDNING
-import api.auth.SamtykkeIkkeGittException
 import api.auth.maskinporten
 import api.fellesordningen.fellesordningen
 import api.sporingslogg.SporingsloggKafkaClient
+import api.util.Config
+import api.util.actuator
+import api.util.feilhåndtering
+import api.util.logging
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.http.*
@@ -21,14 +24,11 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
-import org.slf4j.event.Level
 
 private val logger = LoggerFactory.getLogger("App")
 
@@ -43,29 +43,15 @@ fun Application.api() {
     val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka)
 
     install(CallLogging) {
-        level = Level.INFO
-        format { call ->
-            val status = call.response.status()
-            val httpMethod = call.request.httpMethod.value
-            val userAgent = call.request.headers["User-Agent"]
-            val callId = call.request.header("x-callid") ?: call.request.header("nav-callId") ?: "ukjent"
-            "Status: $status, HTTP method: $httpMethod, User agent: $userAgent, callId: $callId"
-        }
-        filter { call -> call.request.path().startsWith("/actuator").not() }
+        logging()
     }
 
-    install(MicrometerMetrics) { registry = prometheus }
+    install(MicrometerMetrics) {
+        registry = prometheus
+    }
 
     install(StatusPages) {
-        exception<SamtykkeIkkeGittException> { call, cause ->
-            logger.warn("Samtykke ikke gitt", cause)
-            call.respondText(text = "Samtykke ikke gitt", status = HttpStatusCode.Forbidden)
-        }
-        exception<Throwable> { call, cause ->
-            logger.error("Uhåndtert feil", cause)
-            call.respondText(text = "Feil i tjeneste: ${cause.message}", status = HttpStatusCode.InternalServerError)
-        }
-
+        feilhåndtering(logger)
     }
 
     install(ContentNegotiation) {
@@ -87,21 +73,10 @@ fun Application.api() {
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     routing {
+        actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
         authenticate(MASKINPORTEN_FELLESORDNING) {
             fellesordningen(arenaRestClient, sporingsloggKafkaClient)
-        }
-        route("/actuator") {
-            get("/metrics") {
-                call.respondText(prometheus.scrape())
-            }
-
-            get("/live") {
-                call.respond(HttpStatusCode.OK, "api")
-            }
-            get("/ready") {
-                call.respond(HttpStatusCode.OK, "api")
-            }
         }
     }
 }
