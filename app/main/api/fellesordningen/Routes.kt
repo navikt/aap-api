@@ -8,6 +8,7 @@ import api.sporingslogg.SporingsloggKafkaClient
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -35,18 +36,16 @@ fun Route.fellesordningen(
             arenaoppslagRestClient.hentVedtak(UUID.fromString(callId), body)
         }.onFailure { ex ->
             fellesordningenCallFailedCounter.inc()
-            logger.error("Feil i kall mot hentVedtak", ex)
+            logger.error("Klarte ikke hente vedtak fra Arena", ex)
             throw ex
         }.onSuccess { res ->
-            // TODO Gjør dette akkurat nå for at denne skal overleve i testfase.
-            //      Når vi er klare så skal vi ikke returnere data dersom vi ikke
-            //      klarer å poste til Kafka
             try {
                 sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
+                call.respond(res)
             } catch (e: Exception) {
-                logger.error("Feilet å poste til Kafka", e)
+                logger.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
+                call.respond(HttpStatusCode.ServiceUnavailable, "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.")
             }
-            call.respond(res)
         }
     }
 }
@@ -58,7 +57,7 @@ private fun lagSporingsloggEntry(
     person = person,
     mottaker = ORGNR,
     tema = "AAP",
-    behandlingsGrunnlag = "Hjemmel?",
+    behandlingsGrunnlag = "GDPR Art. 6(1)e. AFP-tilskottsloven §17 første ledd, §29 andre ledd, første punktum. GDPR Art. 9(2)b",
     uthentingsTidspunkt = LocalDateTime.now(),
     leverteData = Base64.getEncoder().encodeToString(objectMapper.writeValueAsString(leverteData).encodeToByteArray())
 )
