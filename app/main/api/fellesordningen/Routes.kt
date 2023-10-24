@@ -18,7 +18,7 @@ import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
 
-private val logger = LoggerFactory.getLogger("FellesordningenRoutes")
+private val secureLog = LoggerFactory.getLogger("secureLog")
 private const val ORGNR = "987414502"
 private val objectMapper = jacksonObjectMapper()
     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
@@ -36,14 +36,14 @@ fun Route.fellesordningen(
             arenaoppslagRestClient.hentVedtak(UUID.fromString(callId), body)
         }.onFailure { ex ->
             fellesordningenCallFailedCounter.inc()
-            logger.error("Klarte ikke hente vedtak fra Arena", ex)
+            secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
             throw ex
         }.onSuccess { res ->
             try {
                 sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
                 call.respond(res)
             } catch (e: Exception) {
-                logger.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
+                secureLog.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
                 call.respond(HttpStatusCode.ServiceUnavailable, "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.")
             }
         }
