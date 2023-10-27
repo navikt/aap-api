@@ -39,13 +39,6 @@ fun Route.fellesordningen(
             secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
             throw ex
         }.onSuccess { res ->
-            try {
-                sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
-                call.respond(res)
-            } catch (e: Exception) {
-                secureLog.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
-                call.respond(HttpStatusCode.ServiceUnavailable, "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.")
-            }
             call.respond(res)
         }
     }
