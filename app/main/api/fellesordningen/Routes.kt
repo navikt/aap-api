@@ -46,6 +46,7 @@ fun Route.fellesordningen(
                 secureLog.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
                 call.respond(HttpStatusCode.ServiceUnavailable, "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.")
             }
+            call.respond(res)
         }
     }
 }
