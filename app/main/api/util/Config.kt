@@ -18,10 +18,10 @@ data class OauthConfig(
 
 data class MaskinportenConfig(
     val jwksUri: URL,
-    val issuer: IssuerCionfig,
+    val issuer: IssuerConfig,
     val scope: ScopeConfig
 ) {
-    data class IssuerCionfig(
+    data class IssuerConfig(
         val name: String,
         val discoveryUrl: String,
         val audience: String,
