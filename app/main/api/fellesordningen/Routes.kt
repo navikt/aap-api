@@ -42,7 +42,7 @@ fun Route.fellesordningen(
             secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
             throw ex
         }.onSuccess { res ->
-            if (config.sporingsloggConfig.enabled) {
+            if (config.sporingslogg.enabled) {
                 try {
                     sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
                     call.respond(res)

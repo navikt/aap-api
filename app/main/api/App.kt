@@ -40,7 +40,7 @@ fun main() {
 fun Application.api() {
     val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
-    val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka, config.sporingsloggConfig)
+    val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka, config.sporingslogg)
 
     install(CallLogging) {
         logging()
