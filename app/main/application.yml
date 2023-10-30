@@ -13,7 +13,7 @@ oauth:
     audience: ${ALTINN_AUDIENCE}
 
 sporingslogg:
-  enabled: true
+  enabled: ${SPORINGSLOGG_ENABLED:-true}
   topic: ${SPORINGSLOGG_TOPIC}
 
 arenaoppslag:

@@ -10,7 +10,7 @@ data class Config(
     val arenaoppslag: ArenaoppslagConfig,
     val azure: AzureConfig,
     val kafka: StreamsConfig,
-    val sporingsloggConfig: SporingsloggConfig
+    val sporingslogg: SporingsloggConfig
 )
 
 data class OauthConfig(

@@ -71,3 +71,7 @@ spec:
       value: {{altinn.wellknown}}
     - name: ALTINN_AUDIENCE
       value: {{altinn.audience}}
+    - name: SPORINGSLOGG_TOPIC
+      value: {{sporingslogg.topic}}
+    - name: SPORINGSLOGG_ENABLED
+      value: {{sporingslogg.enabled}}
