@@ -12,6 +12,10 @@ oauth:
     wellknownUrl: ${ALTINN_WELLKNOWN}
     audience: ${ALTINN_AUDIENCE}
 
+sporingslogg:
+  enabled: true
+  topic: ${SPORINGSLOGG_TOPIC}
+
 arenaoppslag:
   proxyBaseUrl: ${ARENAOPPSLAG_PROXY_BASE_URL}
   scope: ${ARENAOPPSLAG_SCOPE}

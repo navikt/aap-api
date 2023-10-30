@@ -4,3 +4,7 @@ kafka:
 ingress: https://aap-api.intern.nav.no
 
 audience: "https://aap-api.nav.no"
+
+sporingslogg:
+  enabled: true
+  topic: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt

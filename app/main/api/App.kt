@@ -40,7 +40,7 @@ fun main() {
 fun Application.api() {
     val config = loadConfig<Config>()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
-    val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka)
+    val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka, config.sporingsloggConfig)
 
     install(CallLogging) {
         logging()
@@ -76,7 +76,7 @@ fun Application.api() {
         actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
         authenticate(MASKINPORTEN_FELLESORDNING) {
-            fellesordningen(arenaRestClient, sporingsloggKafkaClient)
+            fellesordningen(config, arenaRestClient, sporingsloggKafkaClient)
         }
     }
 }

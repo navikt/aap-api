@@ -5,6 +5,7 @@ import api.util.fellesordningenCallCounter
 import api.util.fellesordningenCallFailedCounter
 import api.sporingslogg.SporingsloggEntry
 import api.sporingslogg.SporingsloggKafkaClient
+import api.util.Config
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -26,6 +27,7 @@ private val objectMapper = jacksonObjectMapper()
     .registerModule(JavaTimeModule())
 
 fun Route.fellesordningen(
+    config: Config,
     arenaoppslagRestClient: ArenaoppslagRestClient,
     sporingsloggKafkaClient: SporingsloggKafkaClient
 ) {
@@ -40,12 +42,19 @@ fun Route.fellesordningen(
             secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
             throw ex
         }.onSuccess { res ->
-            try {
-                sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
+            if (config.sporingsloggConfig.enabled) {
+                try {
+                    sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
+                    call.respond(res)
+                } catch (e: Exception) {
+                    secureLog.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
+                    call.respond(
+                        HttpStatusCode.ServiceUnavailable,
+                        "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere."
+                    )
+                }
+            } else {
                 call.respond(res)
-            } catch (e: Exception) {
-                secureLog.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
-                call.respond(HttpStatusCode.ServiceUnavailable, "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.")
             }
         }
     }

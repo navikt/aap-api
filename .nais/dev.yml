@@ -6,11 +6,15 @@ ingresses:
 
 audience: https://aap-api.ekstern.dev.nav.no
 
+sporingslogg:
+  enabled: true
+  topic: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt-q2
+
 arenaoppslag:
   proxyBaseUrl: https://arenaoppslag.dev-fss-pub.nais.io
   scope: api://dev-fss.aap.arenaoppslag/.default
   host: arenaoppslag.dev-fss-pub.nais.io
 
 altinn:
-  wellknown: https://test.maskinporten.no/.well-known/oauth-authorization-server
-  audience: https://test.maskinporten.no
+  wellknown: http://test-token-provider/samtykke/.well-known/oauth-authorization-server
+  audience: https://aap-test-token-provider.intern.dev.nav.no
