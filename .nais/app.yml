@@ -74,4 +74,4 @@ spec:
     - name: SPORINGSLOGG_TOPIC
       value: {{sporingslogg.topic}}
     - name: SPORINGSLOGG_ENABLED
-      value: {{sporingslogg.enabled}}
+      value: "{{sporingslogg.enabled}}"

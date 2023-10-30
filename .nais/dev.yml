@@ -7,7 +7,7 @@ ingresses:
 audience: https://aap-api.ekstern.dev.nav.no
 
 sporingslogg:
-  enabled: true
+  enabled: "true"
   topic: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt-q2
 
 arenaoppslag:
