@@ -6,6 +6,7 @@ import no.nav.aap.kafka.streams.v2.config.StreamsConfig
 import no.nav.aap.kafka.streams.v2.producer.ProducerConfig
 import no.nav.aap.kafka.streams.v2.serde.JsonSerde
 import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerConfig.COMPRESSION_TYPE_CONFIG
 import org.apache.kafka.clients.producer.ProducerRecord
 
 
@@ -15,8 +16,10 @@ class SporingsloggKafkaClient(streamsConfig: StreamsConfig, sporingsloggConfig: 
 
     init {
         val properties = ProducerConfig(streamsConfig).toProperties(
-            clientId = "aap-api-producer-${sporingsloggConfig.topic}"
+            clientId = "aap-api-producer-${sporingsloggConfig.topic}",
         )
+        properties[COMPRESSION_TYPE_CONFIG] = "none"
+
         producer = KafkaProducer(properties, sporingloggTopic.keySerde.serializer(), sporingloggTopic.valueSerde.serializer())
     }
 
