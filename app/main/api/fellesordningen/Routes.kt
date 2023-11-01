@@ -54,6 +54,7 @@ fun Route.fellesordningen(
                     )
                 }
             } else {
+                logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til kafka")
                 call.respond(res)
             }
         }
