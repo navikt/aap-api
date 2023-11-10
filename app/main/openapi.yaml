@@ -1,12 +1,22 @@
 openapi: "3.0.0"
 info:
   title: AAP-api
-  description: AAP-API tilbyr AAP informasjon til eksterne konsumenter som enten har hjemmel til å hente AAP informasjon eller et samtykke fra bruker. Konsumenter må logge seg inn med token fra Maskinporten (alle konsumenter) og et Samtykke-token (konsumenter som ikke har hjemmel).
+  description: |-
+    AAP-API tilbyr AAP informasjon til eksterne konsumenter som enten har hjemmel til å hente 
+    AAP informasjon eller et samtykke fra bruker. Konsumenter må logge seg inn med token fra 
+    Maskinporten (alle konsumenter) og et Samtykke-token (konsumenter som ikke har hjemmel).
+    
+    Linker til autentiseringsløsninger
+    - [Maskinporten](https://www.digdir.no/felleslosninger/maskinporten/869)
+    - [Samtykke](https://www.altinndigital.no/produkter/samtykke/)
   contact:
     name: Richard Borge
     url: https://github.com/navikt/aap-api
     email: richard.borge@nav.no
   version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
 tags:
   - name: fellesordningen
     description: Fellesordningen for AFP (afp.no)
