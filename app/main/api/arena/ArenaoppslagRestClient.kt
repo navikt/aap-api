@@ -1,5 +1,6 @@
 package api.arena
 
+import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
 import api.fellesordningen.VedtakRequest
 import api.fellesordningen.VedtakResponse
@@ -45,7 +46,7 @@ class ArenaoppslagRestClient(
 ) {
     private val tokenProvider = AzureAdTokenProvider(azureConfig, arenaoppslagConfig.scope)
 
-    fun hentVedtak(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
+    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/fellesordningen/vedtak"){
@@ -60,6 +61,40 @@ class ArenaoppslagRestClient(
                     .let(objectMapper::readValue)
             }
         }
+
+    fun hentVedtakDsop(callId: UUID, dsopRequest: DsopRequest): VedtakResponse =
+        clientLatencyStats.startTimer().use {
+            runBlocking {
+                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/vedtak"){
+                    accept(ContentType.Application.Json)
+                    header("Nav-Call-Id", callId)
+                    bearerAuth(tokenProvider.getClientCredentialToken())
+                    contentType(ContentType.Application.Json)
+                    setBody(dsopRequest)
+                }
+                    .bodyAsText()
+                    .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+                    .let(objectMapper::readValue)
+            }
+        }
+
+    fun hentMeldepliktDsop(callId: UUID, dsopRequest: DsopRequest): VedtakResponse =
+        clientLatencyStats.startTimer().use {
+            runBlocking {
+                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/meldeplikt"){
+                    accept(ContentType.Application.Json)
+                    header("Nav-Call-Id", callId)
+                    bearerAuth(tokenProvider.getClientCredentialToken())
+                    contentType(ContentType.Application.Json)
+                    setBody(dsopRequest)
+                }
+                    .bodyAsText()
+                    .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+                    .let(objectMapper::readValue)
+            }
+        }
+
+
 
     private val httpClient = HttpClient(CIO) {
         install(HttpTimeout)

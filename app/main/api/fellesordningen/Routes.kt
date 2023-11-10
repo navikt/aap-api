@@ -36,7 +36,7 @@ fun Route.fellesordningen(
         val body = call.receive<VedtakRequest>()
         val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
         runCatching {
-            arenaoppslagRestClient.hentVedtak(UUID.fromString(callId), body)
+            arenaoppslagRestClient.hentVedtakFellesordning(UUID.fromString(callId), body)
         }.onFailure { ex ->
             fellesordningenCallFailedCounter.inc()
             secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
