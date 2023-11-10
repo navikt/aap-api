@@ -9,15 +9,12 @@ metadata:
 spec:
   image: {{image}}
   ingresses:
-    {{#each ingresses as |url|}}
-    - {{url}}
-    {{/each}}
+       - https://aap-api.nav.no
   replicas:
     max: 1
     min: 1
   kafka:
-    pool: {{kafka.pool}}
-    streams: true
+    pool: nav-prod
   resources:
     limits:
       memory: 8Gi
@@ -62,16 +59,16 @@ spec:
         - host: {{arenaoppslag.host}}
   env:
     - name: AAP_AUDIENCE
-      value: {{audience}}
+      value: https://aap-api.nav.no
     - name: ARENAOPPSLAG_PROXY_BASE_URL
-      value: {{arenaoppslag.proxyBaseUrl}}
+      value: https://arenaoppslag.prod-fss-pub.nais.io
     - name: ARENAOPPSLAG_SCOPE
-      value: {{arenaoppslag.scope}}
+      value: api://prod-fss.aap.arenaoppslag/.default
     - name: ALTINN_WELLKNOWN
-      value: {{altinn.wellknown}}
+      value: http://test-token-provider/samtykke/.well-known/oauth-authorization-server
     - name: ALTINN_AUDIENCE
-      value: {{altinn.audience}}
+      value: https://aap-test-token-provider.intern.dev.nav.no
     - name: SPORINGSLOGG_TOPIC
-      value: {{sporingslogg.topic}}
+      value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt
     - name: SPORINGSLOGG_ENABLED
-      value: "{{sporingslogg.enabled}}"
+      value: "true"

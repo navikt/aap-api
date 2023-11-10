@@ -1,0 +1,74 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: api
+  namespace: aap
+  labels:
+    team: aap
+    sub: vedtak
+spec:
+  image: {{image}}
+  ingresses:
+    - https://aap-api.ekstern.dev.nav.no
+  replicas:
+    max: 1
+    min: 1
+  kafka:
+    pool: nav-dev
+  resources:
+    limits:
+      memory: 8Gi
+    requests:
+      cpu: 500m
+      memory: 4Gi
+  azure:
+    application:
+      enabled: true
+  maskinporten:
+    enabled: true
+    scopes:
+      exposes:
+        - name: "afpprivat.read"
+          enabled: true
+          product: "aap"
+          consumers:
+            - name: "NAV"
+              orgno: "889640782"
+            - name: "Fellesordningen for AFP"
+              orgno: "987414502"
+  liveness:
+    path: /actuator/live
+    initialDelay: 1
+    periodSeconds: 1
+    failureThreshold: 60
+  readiness:
+    path: /actuator/ready
+    initialDelay: 1
+    periodSeconds: 1
+    failureThreshold: 60
+  prometheus:
+    enabled: true
+    path: /actuator/metrics
+  secureLogs:
+    enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: test-token-provider
+      external:
+        - host: arenaoppslag.dev-fss-pub.nais.io
+  env:
+    - name: AAP_AUDIENCE
+      value: https://aap-api.ekstern.dev.nav.no
+    - name: ARENAOPPSLAG_PROXY_BASE_URL
+      value: https://arenaoppslag.dev-fss-pub.nais.io
+    - name: ARENAOPPSLAG_SCOPE
+      value: api://dev-fss.aap.arenaoppslag/.default
+    - name: ALTINN_WELLKNOWN
+      value: http://test-token-provider/samtykke/.well-known/oauth-authorization-server
+    - name: ALTINN_AUDIENCE
+      value: https://aap-test-token-provider.intern.dev.nav.no
+    - name: SPORINGSLOGG_TOPIC
+      value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt-q2
+    - name: SPORINGSLOGG_ENABLED
+      value: "true"

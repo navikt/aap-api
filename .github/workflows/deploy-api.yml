@@ -50,28 +50,17 @@ jobs:
             cache-from: type=gha
             cache-to: type=gha,mode=max
 
-  deploy:
+  deploy-dev:
     needs: [ build ]
-    strategy:
-      matrix:
-        name: [ app.yml ]
-        cluster:
-          - dev-gcp
-#          - prod-gcp
-        include:
-          - cluster: dev-gcp
-            vars: dev.yml
-#          - cluster: prod-gcp
-#            vars: prod.yml
-
-    name: Deploy (${{ matrix.cluster }})
+    name: Deploy (dev-gcp)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: ${{ matrix.cluster }}
-          RESOURCE: .nais/${{ matrix.name }}
-          VARS: .nais/${{ matrix.vars }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/app-dev.yml
+          VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
+
