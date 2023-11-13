@@ -13,7 +13,7 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
 import java.util.*
 
-class KafkaConfig(
+data class KafkaConfig(
     val brokers: String,
     val truststorePath: String,
     val keystorePath: String,
