@@ -41,7 +41,7 @@ dependencies {
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3")
     implementation("com.nimbusds:nimbus-jose-jwt:9.37.1")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.11.5")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.12.0")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("org.apache.kafka:kafka-streams:3.6.0")
 
