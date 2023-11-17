@@ -13,6 +13,6 @@ class SporingsloggKafkaClient(kafkaProducerConfig: KafkaConfig, sporingsloggConf
     private val producer = KafkaFactory.createProducer<SporingsloggEntry>("aap-api-producer-${sporingsloggConfig.topic}", kafkaProducerConfig)
 
     fun sendMelding(entry: SporingsloggEntry) {
-        producer.send(ProducerRecord(sporingloggTopic.name,entry))
+        producer.send(ProducerRecord(sporingloggTopic.name,entry)).get()
     }
 }
