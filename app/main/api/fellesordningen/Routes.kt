@@ -1,14 +1,11 @@
 package api.fellesordningen
 
 import api.arena.ArenaoppslagRestClient
+import api.sporingslogg.Spor
 import api.util.fellesordningenCallCounter
 import api.util.fellesordningenCallFailedCounter
-import api.sporingslogg.SporingsloggEntry
 import api.sporingslogg.SporingsloggKafkaClient
 import api.util.Config
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -16,20 +13,16 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
 import java.lang.Exception
-import java.time.LocalDateTime
 import java.util.*
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 private val logger = LoggerFactory.getLogger("App")
-private const val ORGNR = "987414502"
-private val objectMapper = jacksonObjectMapper()
-    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-    .registerModule(JavaTimeModule())
+
 
 fun Route.fellesordningen(
     config: Config,
     arenaoppslagRestClient: ArenaoppslagRestClient,
-    sporingsloggKafkaClient: SporingsloggKafkaClient
+    sporingsloggClient: SporingsloggKafkaClient
 ) {
     post("/fellesordning/vedtak") {
         fellesordningenCallCounter.inc()
@@ -44,7 +37,7 @@ fun Route.fellesordningen(
         }.onSuccess { res ->
             if (config.sporingslogg.enabled) {
                 try {
-                    sporingsloggKafkaClient.sendMelding(lagSporingsloggEntry(body.personId, res))
+                    sporingsloggClient.send(Spor.opprett(body.personIdent, res))
                     call.respond(res)
                 } catch (e: Exception) {
                     secureLog.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
@@ -61,15 +54,4 @@ fun Route.fellesordningen(
     }
 }
 
-private fun lagSporingsloggEntry(
-    person: String,
-    leverteData: Any
-) = SporingsloggEntry(
-    person = person,
-    mottaker = ORGNR,
-    tema = "AAP",
-    behandlingsGrunnlag = "GDPR Art. 6(1)e. AFP-tilskottsloven §17 første ledd, §29 andre ledd, første punktum. GDPR Art. 9(2)b",
-    uthentingsTidspunkt = LocalDateTime.now(),
-    leverteData = Base64.getEncoder().encodeToString(objectMapper.writeValueAsString(leverteData).encodeToByteArray())
-)
 

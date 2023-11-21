@@ -2,7 +2,7 @@ package api.dsop
 
 import api.arena.ArenaoppslagRestClient
 import api.auth.verifiserOgPakkUtSamtykkeToken
-import api.sporingslogg.SporingsloggEntry
+import api.sporingslogg.Spor
 import api.util.Config
 import api.sporingslogg.SporingsloggKafkaClient
 import io.ktor.http.*
@@ -30,8 +30,8 @@ fun Routing.dsop(
         logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
         try {
             arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
-            sporingsloggKafkaClient.sendMelding(
-                SporingsloggEntry(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
+            sporingsloggKafkaClient.send(
+                Spor(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
                     LocalDateTime.now(),"leverteData",samtykke.samtykketoken,"dataForespoersel", "leverandoer")
             )
             call.respond("OK")
@@ -50,8 +50,8 @@ fun Routing.dsop(
         logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
         try {
             arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
-            sporingsloggKafkaClient.sendMelding(
-                SporingsloggEntry(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
+            sporingsloggKafkaClient.send(
+                Spor(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
                     LocalDateTime.now(),"leverteData",samtykke.samtykketoken,"dataForespoersel", "leverandoer")
             )
             call.respond("OK")
