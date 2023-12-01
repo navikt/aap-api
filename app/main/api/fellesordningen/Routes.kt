@@ -24,7 +24,7 @@ fun Route.fellesordningen(
     arenaoppslagRestClient: ArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient
 ) {
-    post("/fellesordning/vedtak") {
+    post("/fellesordning-for-afp") {
         fellesordningenCallCounter.inc()
         val body = call.receive<VedtakRequest>()
         val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
@@ -37,7 +37,7 @@ fun Route.fellesordningen(
         }.onSuccess { res ->
             if (config.sporingslogg.enabled) {
                 try {
-                    sporingsloggClient.send(Spor.opprett(body.personIdent, res))
+                    sporingsloggClient.send(Spor.opprett(body.personidentifikator, res))
                     call.respond(res)
                 } catch (e: Exception) {
                     secureLog.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", e)
@@ -47,7 +47,7 @@ fun Route.fellesordningen(
                     )
                 }
             } else {
-                logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til kafka")
+                logger.warn("Sporingslogg er skrudd av, returnerer data uten å sende til kafka")
                 call.respond(res)
             }
         }

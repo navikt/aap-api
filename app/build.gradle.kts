@@ -52,7 +52,7 @@ dependencies {
 
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "20"
+        kotlinOptions.jvmTarget = "21"
     }
 
     withType<Test> {

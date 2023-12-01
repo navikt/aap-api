@@ -3,6 +3,7 @@ package api.fellesordningen
 import java.time.LocalDate
 
 data class VedtakRequest(
-    val personIdent: String,
-    val datoForOnsketUttakForAFP: LocalDate,
+    val personidentifikator: String,
+    val fraOgMedDato: LocalDate,
+    val tilOgMedDato: LocalDate
 )

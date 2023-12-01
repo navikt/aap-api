@@ -24,12 +24,15 @@ servers:
   - url: https://aap-api.ekstern.dev.nav.no
     description: Test server
 paths:
-  /fellesordning/vedtak:
+  /fellesordning-for-afp:
     post:
-      summary: Hent vedtak
+      summary: Hent perioder med AAP
       tags:
         - fellesordningen
-      description: Henter vedtak for en person gitt tidspunkt for ønsket uttak av AFP.
+      description: |-
+        Henter perioder med vedtak for en person innen gitte datointerval.
+        
+        Scope: `nav:aap:afpprivat.read`
       security:
         - maskinporten: []
       parameters:
@@ -44,14 +47,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VedtakRequest'
+              $ref: '#/components/schemas/FellesordningRequest'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VedtakResponse'
+                $ref: '#/components/schemas/FellesordningResponse'
         '400':
           description: Feil i request
         '401':
@@ -64,43 +67,44 @@ paths:
           description: Feil på tjeneste, meld fra og send med call-id
 components:
   schemas:
-    VedtakResponse:
+    FellesordningResponse:
       type: object
       properties:
-        personId:
-          type: string
-          description: Personnummeret til brukeren
-          example: 12345678901
         perioder:
           type: array
           description: Perioder med vedtak
           items:
-            $ref: '#/components/schemas/VedtakPeriode'
-    VedtakPeriode:
+            $ref: '#/components/schemas/FellesordningPeriode'
+    FellesordningPeriode:
       type: object
       properties:
-        fraDato:
+        fraOgMedDato:
           type: string
           format: date
           description: Fra dato for perioden
           example: 2021-01-01
-        tilDato:
+        tilOgMedDato:
           type: string
           format: date
           nullable: true
           description: Til dato for perioden
           example: 2021-01-31
-    VedtakRequest:
+    FellesordningRequest:
       type: object
       properties:
-        personId:
+        personidentifikator:
           type: string
           description: Personnummeret til brukeren
           example: 12345678901
-        datoForOnsketUttakForAFP:
+        fraOgMedDato:
           type: string
           format: date
-          description: Dato for ønsket uttak for AFP
+          description: Start-dato for ønsket uttak av AAP-perioder
+          example: 2021-01-01
+        tilOgMedDato:
+          type: string
+          format: date
+          description: Slutt-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
   securitySchemes:
     maskinporten:

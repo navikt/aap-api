@@ -1,5 +1,5 @@
 # Docker multistage layer with a fatty jar stripped of unused rocskdb-instances
-FROM alpine:3.18.2 as app
+FROM alpine:3.18.5 as app
 RUN apk --update --no-cache add zip
 COPY /app/build/libs/app-all.jar app.jar
 RUN zip -d app.jar librocksdbjni-linux32.so librocksdbjni-linux32-musl.so librocksdbjni-linux64.so \
@@ -8,8 +8,7 @@ RUN zip -d app.jar librocksdbjni-linux32.so librocksdbjni-linux32-musl.so libroc
     librocksdbjni-osx-arm64.jnilib librocksdbjni-osx-x86_64.jnilib librocksdbjni-win64.dll
 
 
-# Docker image on Alpine Linux with JRE 19 Temurin and C++ standard lib (for rocksdb)
-FROM eclipse-temurin:20.0.2_9-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 ENV LANG="nb_NO.UTF-8"
 ENV LC_ALL="nb_NO.UTF-8"
 ENV TZ="Europe/Oslo"
