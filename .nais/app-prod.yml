@@ -5,7 +5,7 @@ metadata:
   namespace: aap
   labels:
     team: aap
-    sub: vedtak
+    komponent: datadeling
 spec:
   image: {{image}}
   ingresses:
@@ -17,10 +17,10 @@ spec:
     pool: nav-prod
   resources:
     limits:
-      memory: 8Gi
+      memory: 2Gi
     requests:
       cpu: 500m
-      memory: 4Gi
+      memory: 1Gi
   azure:
     application:
       enabled: true
@@ -32,8 +32,6 @@ spec:
           enabled: true
           product: "aap"
           consumers:
-            - name: "NAV"
-              orgno: "889640782"
             - name: "Fellesordningen for AFP"
               orgno: "987414502"
   liveness:
@@ -53,10 +51,8 @@ spec:
     enabled: true
   accessPolicy:
     outbound:
-      rules:
-        - application: test-token-provider
       external:
-        - host: {{arenaoppslag.host}}
+        - host: arenaoppslag.prod-fss-pub.nais.io
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.nav.no

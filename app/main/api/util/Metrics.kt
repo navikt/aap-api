@@ -1,13 +1,20 @@
 package api.util
 
-import io.prometheus.client.Counter
+import io.micrometer.core.instrument.Counter
+import io.micrometer.core.instrument.Tag
+import io.micrometer.prometheus.PrometheusMeterRegistry
 
-val fellesordningenCallCounter: Counter = Counter.build(
-    "fellesordningen_http_call",
-    "Teller HTTP-kall for fellesordningen"
-).register()
+fun PrometheusMeterRegistry.httpCallCounter(consumer: String, path: String): Counter = this.counter(
+    "http_call",
+    listOf(Tag.of("consumer", consumer), Tag.of("path", path))
+)
 
-val fellesordningenCallFailedCounter: Counter = Counter.build(
-    "fellesordningen_http_call_failed",
-    "Teller feilede HTTP-kall for fellesordningen"
-).register()
+fun PrometheusMeterRegistry.httpFailedCallCounter(consumer: String, path: String): Counter = this.counter(
+    "http_call_failed",
+    listOf(Tag.of("consumer", consumer), Tag.of("path", path))
+)
+
+fun PrometheusMeterRegistry.sporingsloggFailCounter(consumer: String): Counter = this.counter(
+    "sporingslogg_failed",
+    listOf(Tag.of("consumer", consumer))
+)

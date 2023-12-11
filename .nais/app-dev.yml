@@ -5,7 +5,7 @@ metadata:
   namespace: aap
   labels:
     team: aap
-    sub: vedtak
+    komponent: datadeling
 spec:
   image: {{image}}
   ingresses:

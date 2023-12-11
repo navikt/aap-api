@@ -5,10 +5,7 @@ import api.auth.MASKINPORTEN_FELLESORDNING
 import api.auth.maskinporten
 import api.fellesordningen.fellesordningen
 import api.sporingslogg.SporingsloggKafkaClient
-import api.util.Config
-import api.util.actuator
-import api.util.feilhåndtering
-import api.util.logging
+import api.util.*
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.http.*
@@ -76,7 +73,7 @@ fun Application.api() {
         actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
         authenticate(MASKINPORTEN_FELLESORDNING) {
-            fellesordningen(config, arenaRestClient, sporingsloggKafkaClient)
+            fellesordningen(config, arenaRestClient, sporingsloggKafkaClient, prometheus)
         }
     }
 }
