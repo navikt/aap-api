@@ -61,9 +61,9 @@ spec:
     - name: ARENAOPPSLAG_SCOPE
       value: api://prod-fss.aap.arenaoppslag/.default
     - name: ALTINN_WELLKNOWN
-      value: http://test-token-provider/samtykke/.well-known/oauth-authorization-server
+      value: https://idporten.no/.well-known/openid-configuration
     - name: ALTINN_AUDIENCE
-      value: https://aap-test-token-provider.intern.dev.nav.no
+      value: https://idporten.no
     - name: SPORINGSLOGG_TOPIC
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt
     - name: SPORINGSLOGG_ENABLED

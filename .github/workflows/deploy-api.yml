@@ -63,3 +63,16 @@ jobs:
           RESOURCE: .nais/app-dev.yml
           PRINT_PAYLOAD: true
 
+  deploy-prod:
+    needs: [ build ]
+    name: Deploy (prod-gcp)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/app-prod.yml
+          PRINT_PAYLOAD: true
+
