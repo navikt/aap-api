@@ -24,7 +24,6 @@ import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("App")
@@ -35,7 +34,7 @@ fun main() {
 }
 
 fun Application.api() {
-    val config = loadConfig<Config>()
+    val config = Config()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka, config.sporingslogg)
 

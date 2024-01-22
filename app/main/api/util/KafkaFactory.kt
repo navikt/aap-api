@@ -13,13 +13,6 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
 import java.util.*
 
-data class KafkaConfig(
-    val brokers: String,
-    val truststorePath: String,
-    val keystorePath: String,
-    val credstorePsw: String,
-)
-
 class KafkaFactory private constructor() {
     companion object {
         fun<T:Any> createProducer(clientId: String, config: KafkaConfig): KafkaProducer<String, T> {
