@@ -23,7 +23,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2.8.0
         with:
-          arguments: test app:buildFatJar cyclonedxBom --continue --no-daemon
+          arguments: test app:buildFatJar --continue --no-daemon
 
       - uses: dorny/test-reporter@v1.7.0
         if: success() || failure()
@@ -39,7 +39,7 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           tag: ${{ github.sha }}
-          byosbom: app/build/reports/bom.json
+          salsa: true
 
   deploy-dev:
     needs: [ build ]
