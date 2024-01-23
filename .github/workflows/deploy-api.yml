@@ -1,69 +1,44 @@
-name: Deploy API
+name: release
 
 on:
   push:
     branches: [ main ]
-
-permissions: write-all
-
-env:
-  IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/aap/${{ github.repository }}:${{ github.sha }}
+    paths-ignore:
+      - '.github/**'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  gradle:
+    ## push til main eller etter branch (e.g. dependabot) er merget
+    if: github.event.pull_request.merged || github.event_name == 'push'
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+      id-token: write
+    uses: navikt/aap-workflows/.github/workflows/gradle-build.yml@main
+    secrets: inherit
 
-    steps:
-      - uses: styfle/cancel-workflow-action@0.12.0
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
+  dev:
+    ## push til main eller etter branch (e.g. dependabot) er merget
+    if: github.event.pull_request.merged || github.event_name == 'push'
+    permissions:
+      contents: read
+      id-token: write
+    needs: gradle
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    secrets: inherit
+    with:
+      cluster: dev-gcp
+      manifest: .nais/app-dev.yml
 
-      - uses: gradle/gradle-build-action@v2.11.1
-        with:
-          arguments: test app:buildFatJar --continue --no-daemon
-
-      - uses: dorny/test-reporter@v1.7.0
-        if: success() || failure()
-        with:
-          name: test
-          path: "**/build/test-results/test/TEST-*.xml"
-          reporter: java-junit
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: nais/docker-build-push@v0
-        with:
-          team: aap
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-          tag: ${{ github.sha }}
-          salsa: true
-
-  deploy-dev:
-    needs: [ build ]
-    name: Deploy (dev-gcp)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/app-dev.yml
-          PRINT_PAYLOAD: true
-
-  deploy-prod:
-    needs: [ build ]
-    name: Deploy (prod-gcp)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-gcp
-          RESOURCE: .nais/app-prod.yml
-          PRINT_PAYLOAD: true
-
+  prod:
+    if: github.event.pull_request.merged || github.event_name == 'push'
+    permissions:
+      contents: read
+      id-token: write
+    needs: gradle
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    secrets: inherit
+    with:
+      cluster: prod-gcp
+      manifest: .nais/app-prod.yml
