@@ -13,6 +13,8 @@ on:
           - prod-gcp
   push:
     branches: [ main ]
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   gradle:
