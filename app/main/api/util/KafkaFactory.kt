@@ -13,6 +13,8 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
 import java.util.*
 
+
+
 class KafkaFactory private constructor() {
     companion object {
         fun<T:Any> createProducer(clientId: String, config: KafkaConfig): KafkaProducer<String, T> {

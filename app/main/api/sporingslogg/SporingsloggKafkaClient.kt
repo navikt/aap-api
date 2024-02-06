@@ -32,12 +32,12 @@ data class Spor(
     val leverandoer: String? = null
 ) {
     companion object {
-        private const val AFP_ORGNR = "987414502"
+
 
         fun opprett(
             personIdent: String,
             utlevertData: Any,
-            konsumentOrgNr: String = AFP_ORGNR,
+            konsumentOrgNr: String
         ) = Spor(
             person = personIdent,
             mottaker = konsumentOrgNr,
