@@ -42,7 +42,7 @@ data class MaskinportenConfig(
 ) {
     data class IssuerConfig(
         val name: String= getEnvVar("MASKINPORTEN_ISSUER"),
-        val discoveryUrl: String= getEnvVar("MASKINPORTEN_WELLKNOWN_URL"),
+        val discoveryUrl: String= getEnvVar("MASKINPORTEN_WELL_KNOWN_URL"),
         val audience: String = getEnvVar("AAP_AUDIENCE"),
         val optionalClaims: String = "sub,nbf",
     )
