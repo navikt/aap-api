@@ -36,7 +36,7 @@ data class SporingsloggConfig(
 )
 
 data class MaskinportenConfig(
-    val jwksUri: URL= URI(getEnvVar("MASKINPORTEN_JWKS_URL")).toURL(),
+    val jwksUri: URL= URI(getEnvVar("MASKINPORTEN_JWKS_URI")).toURL(),
     val issuer: IssuerConfig=IssuerConfig(),
     val scope: ScopeConfig= ScopeConfig()
 ) {
