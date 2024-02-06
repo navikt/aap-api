@@ -1,49 +1,64 @@
 package api.util
 
 import no.nav.aap.ktor.client.AzureConfig
+import java.net.URI
 import java.net.URL
 
+private fun getEnvVar(envar: String) = System.getenv(envar) ?: error("missing envvar $envar")
+
 data class Config(
-    val oauth: OauthConfig,
-    val arenaoppslag: ArenaoppslagConfig,
-    val azure: AzureConfig,
-    val kafka: KafkaConfig,
-    val sporingslogg: SporingsloggConfig
+    val oauth: OauthConfig = OauthConfig(),
+    val arenaoppslag: ArenaoppslagConfig = ArenaoppslagConfig(),
+    val azure: AzureConfig = AzureConfig(
+        tokenEndpoint = URI(getEnvVar("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT")).toURL(),
+        clientId = getEnvVar("AZURE_APP_CLIENT_ID"),
+        clientSecret = getEnvVar("AZURE_APP_CLIENT_SECRET")
+    ),
+    val kafka: KafkaConfig= KafkaConfig(),
+    val sporingslogg: SporingsloggConfig= SporingsloggConfig()
+)
+
+data class KafkaConfig(
+    val brokers: String = getEnvVar("KAFKA_BROKERS"),
+    val truststorePath: String = getEnvVar("KAFKA_TRUSTSTORE_PATH"),
+    val keystorePath: String = getEnvVar("KAFKA_KEYSTORE_PATH"),
+    val credstorePsw: String= getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
 )
 
 data class OauthConfig(
-    val maskinporten: MaskinportenConfig,
-    val samtykke: SamtykkeConfig
+    val maskinporten: MaskinportenConfig= MaskinportenConfig(),
+    val samtykke: SamtykkeConfig= SamtykkeConfig()
 )
 
 data class SporingsloggConfig(
-    val enabled: Boolean,
-    val topic: String
+    val enabled: Boolean = getEnvVar("SPORINGSLOGG_ENABLED").toBoolean(),
+    val topic: String= getEnvVar("SPORINGSLOGG_TOPIC")
 )
 
 data class MaskinportenConfig(
-    val jwksUri: URL,
-    val issuer: IssuerConfig,
-    val scope: ScopeConfig
+    val jwksUri: URL= URI(getEnvVar("MASKINPORTEN_JWKS_URL")).toURL(),
+    val issuer: IssuerConfig=IssuerConfig(),
+    val scope: ScopeConfig= ScopeConfig()
 ) {
     data class IssuerConfig(
-        val name: String,
-        val discoveryUrl: String,
-        val audience: String,
-        val optionalClaims: String,
+        val name: String= getEnvVar("MASKINPORTEN_ISSUER"),
+        val discoveryUrl: String= getEnvVar("MASKINPORTEN_WELLKNOWN_URL"),
+        val audience: String = getEnvVar("AAP_AUDIENCE"),
+        val optionalClaims: String = "sub,nbf",
     )
 
     data class ScopeConfig(
-        val afpprivat: String
+        val afpprivat: String= "nav:aap:afpprivat.read",
+        val afpoffentlig: String = "nav:aap:afpoffentlig.read"
     )
 }
 
 data class ArenaoppslagConfig(
-    val proxyBaseUrl:String,
-    val scope: String
+    val proxyBaseUrl:String = getEnvVar("ARENAOPPSLAG_PROXY_BASE_URL"),
+    val scope: String= getEnvVar("ARENAOPPSLAG_SCOPE")
 )
 
 data class SamtykkeConfig(
-    val wellknownUrl: String,
-    val audience: String
+    val wellknownUrl: String= getEnvVar("ALTINN_WELLKNOWN"),
+    val audience: String= getEnvVar("ALTINN_AUDIENCE")
 )

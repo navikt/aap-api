@@ -2,8 +2,8 @@ package api.arena
 
 import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
-import api.fellesordningen.VedtakRequest
-import api.fellesordningen.VedtakResponse
+import api.afp.fellesordningen.VedtakRequest
+import api.afp.fellesordningen.VedtakResponse
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

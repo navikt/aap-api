@@ -1,9 +1,10 @@
 package api
 
+import api.afp.fellesordningen.afp
 import api.arena.ArenaoppslagRestClient
-import api.auth.MASKINPORTEN_FELLESORDNING
+import api.auth.MASKINPORTEN_AFP_OFFENTLIG
+import api.auth.MASKINPORTEN_AFP_PRIVAT
 import api.auth.maskinporten
-import api.fellesordningen.fellesordningen
 import api.sporingslogg.SporingsloggKafkaClient
 import api.util.*
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -12,7 +13,6 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.authenticate
 import io.ktor.server.engine.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.netty.*
@@ -24,7 +24,6 @@ import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import no.nav.aap.ktor.config.loadConfig
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("App")
@@ -35,7 +34,7 @@ fun main() {
 }
 
 fun Application.api() {
-    val config = loadConfig<Config>()
+    val config = Config()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka, config.sporingslogg)
 
@@ -59,7 +58,8 @@ fun Application.api() {
     }
 
     install(Authentication) {
-        maskinporten(MASKINPORTEN_FELLESORDNING, config.oauth.maskinporten.scope.afpprivat, config)
+        maskinporten(MASKINPORTEN_AFP_PRIVAT, config.oauth.maskinporten.scope.afpprivat, config)
+        maskinporten(MASKINPORTEN_AFP_OFFENTLIG, config.oauth.maskinporten.scope.afpoffentlig, config)
     }
 
     install(CORS) {
@@ -72,8 +72,8 @@ fun Application.api() {
     routing {
         actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
-        authenticate(MASKINPORTEN_FELLESORDNING) {
-            fellesordningen(config, arenaRestClient, sporingsloggKafkaClient, prometheus)
-        }
+
+        afp(config, arenaRestClient, sporingsloggKafkaClient, prometheus)
+
     }
 }
