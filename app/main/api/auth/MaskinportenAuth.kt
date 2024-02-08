@@ -3,6 +3,7 @@ package api.auth
 import api.util.Config
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
+import io.ktor.server.application.*
 import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -13,6 +14,23 @@ import java.util.concurrent.TimeUnit
 private val logger = LoggerFactory.getLogger("MaskinportenAuth")
 const val MASKINPORTEN_AFP_PRIVAT = "fellesordning"
 const val MASKINPORTEN_AFP_OFFENTLIG = "afp-offentlig"
+
+internal fun ApplicationCall.consumer(): Consumer {
+    return requireNotNull(principal<JWTPrincipal>()) {
+        "principal mangler i ktor auth"
+    }.getClaim("consumer", Consumer::class)
+        ?: error("pid mangler i tokenx claims")
+}
+
+data class Consumer(
+    val authority: String,
+    val ID: String,
+){
+    fun getOrgNrFromId(): String {
+        return ID.split(":").last()
+    }
+}
+
 
 fun AuthenticationConfig.maskinporten(name: String, scope: String, config: Config) {
     val maskinportenJwkProvider: JwkProvider = JwkProviderBuilder(config.oauth.maskinporten.jwksUri)

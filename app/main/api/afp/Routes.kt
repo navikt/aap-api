@@ -9,6 +9,7 @@ import api.util.Config
 import api.util.httpCallCounter
 import api.util.httpFailedCallCounter
 import api.util.sporingsloggFailCounter
+import api.auth.consumer
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -44,7 +45,7 @@ fun Route.afp(
                     arenaoppslagRestClient,
                     sporingsloggClient,
                     prometheus,
-                    orgnr = call.parameters["orgnr"]!!
+                    orgnr = call.consumer().getOrgNrFromId()
                 ) //TODO: hent orgnr fra token
             }
         }
