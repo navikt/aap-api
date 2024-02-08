@@ -15,20 +15,11 @@ private val logger = LoggerFactory.getLogger("MaskinportenAuth")
 const val MASKINPORTEN_AFP_PRIVAT = "fellesordning"
 const val MASKINPORTEN_AFP_OFFENTLIG = "afp-offentlig"
 
-internal fun ApplicationCall.consumer(): Consumer {
-    return requireNotNull(principal<JWTPrincipal>()) {
-        "principal mangler i ktor auth"
-    }.getClaim("consumer", Consumer::class)
-        ?: error("pid mangler i tokenx claims")
-}
 
-data class Consumer(
-    val authority: String,
-    val ID: String,
-){
-    fun getOrgNrFromId(): String {
-        return ID.split(":").last()
-    }
+internal fun ApplicationCall.hentConsumerId(): String {
+    val principal = requireNotNull(this.principal<JWTPrincipal>())
+    val consumer = requireNotNull(principal.payload.getClaim("consumer"))
+    return consumer.asMap()["ID"].toString().split(":").last()
 }
 
 
