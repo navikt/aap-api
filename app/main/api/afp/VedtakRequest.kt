@@ -1,4 +1,4 @@
-package api.afp.fellesordningen
+package api.afp
 
 import java.time.LocalDate
 
