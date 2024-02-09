@@ -1,6 +1,6 @@
 package api.util
 
-import no.nav.aap.ktor.client.AzureConfig
+import no.nav.aap.ktor.client.auth.azure.AzureConfig
 import java.net.URI
 import java.net.URL
 
@@ -10,7 +10,7 @@ data class Config(
     val oauth: OauthConfig = OauthConfig(),
     val arenaoppslag: ArenaoppslagConfig = ArenaoppslagConfig(),
     val azure: AzureConfig = AzureConfig(
-        tokenEndpoint = URI(getEnvVar("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT")).toURL(),
+        tokenEndpoint = getEnvVar("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT"),
         clientId = getEnvVar("AZURE_APP_CLIENT_ID"),
         clientSecret = getEnvVar("AZURE_APP_CLIENT_SECRET")
     ),

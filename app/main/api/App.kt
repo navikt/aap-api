@@ -1,6 +1,6 @@
 package api
 
-import api.afp.fellesordningen.afp
+import api.afp.afp
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
@@ -37,6 +37,7 @@ fun Application.api() {
     val config = Config()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka, config.sporingslogg)
+    val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     install(CallLogging) {
         logging()
@@ -67,13 +68,10 @@ fun Application.api() {
         allowHeader(HttpHeaders.ContentType)
     }
 
-    val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
-
     routing {
         actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
 
         afp(config, arenaRestClient, sporingsloggKafkaClient, prometheus)
-
     }
 }

@@ -2,8 +2,8 @@ package api.arena
 
 import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
-import api.afp.fellesordningen.VedtakRequest
-import api.afp.fellesordningen.VedtakResponse
+import api.afp.VedtakRequest
+import api.afp.VedtakResponse
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -20,11 +20,10 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.prometheus.client.Summary
 import kotlinx.coroutines.runBlocking
-import no.nav.aap.ktor.client.AzureAdTokenProvider
-import no.nav.aap.ktor.client.AzureConfig
+import no.nav.aap.ktor.client.auth.azure.AzureAdTokenProvider
+import no.nav.aap.ktor.client.auth.azure.AzureConfig
 import org.slf4j.LoggerFactory
 import java.util.*
-
 
 private const val ARENAOPPSLAG_CLIENT_SECONDS_METRICNAME = "arenaoppslag_client_seconds"
 private val sikkerLogg = LoggerFactory.getLogger("secureLog")
@@ -39,12 +38,11 @@ private val objectMapper = jacksonObjectMapper()
     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
     .registerModule(JavaTimeModule())
 
-
 class ArenaoppslagRestClient(
     private val arenaoppslagConfig: ArenaoppslagConfig,
     azureConfig: AzureConfig
 ) {
-    private val tokenProvider = AzureAdTokenProvider(azureConfig, arenaoppslagConfig.scope)
+    private val tokenProvider = AzureAdTokenProvider(azureConfig)
 
     fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
@@ -52,7 +50,7 @@ class ArenaoppslagRestClient(
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/fellesordningen/vedtak"){
                     accept(ContentType.Application.Json)
                     header("Nav-Call-Id", callId)
-                    bearerAuth(tokenProvider.getClientCredentialToken())
+                    bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
                     contentType(ContentType.Application.Json)
                     setBody(vedtakRequest)
                 }
@@ -68,7 +66,7 @@ class ArenaoppslagRestClient(
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/vedtak"){
                     accept(ContentType.Application.Json)
                     header("Nav-Call-Id", callId)
-                    bearerAuth(tokenProvider.getClientCredentialToken())
+                    bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
                     contentType(ContentType.Application.Json)
                     setBody(dsopRequest)
                 }
@@ -84,7 +82,7 @@ class ArenaoppslagRestClient(
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/meldeplikt"){
                     accept(ContentType.Application.Json)
                     header("Nav-Call-Id", callId)
-                    bearerAuth(tokenProvider.getClientCredentialToken())
+                    bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
                     contentType(ContentType.Application.Json)
                     setBody(dsopRequest)
                 }
@@ -93,8 +91,6 @@ class ArenaoppslagRestClient(
                     .let(objectMapper::readValue)
             }
         }
-
-
 
     private val httpClient = HttpClient(CIO) {
         install(HttpTimeout)

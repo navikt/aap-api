@@ -8,13 +8,12 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val aapLibVersion = "3.7.162"
+val aapLibVersion = "4.0.0"
 val ktorVersion = "2.3.8"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
-    implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
-    implementation("com.github.navikt.aap-libs:ktor-auth-azuread:$aapLibVersion")
+    implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
 
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
 
