@@ -20,19 +20,14 @@ info:
 tags:
   - name: afp
     description: AFP (avtalefestet pensjon)
-  - name: fellesordningen
-    description: Fellesordningen for AFP (afp.no)
-  - name: afpoffentlig
-    description: AFP i offentlig sektor
 servers:
   - url: https://aap-api.ekstern.dev.nav.no
     description: Test server
 paths:
   /afp/fellesordningen:
     post:
-      summary: Hent perioder med AAP
+      summary: Hent perioder med AAP, scopet for privat sektor
       tags:
-        - fellesordningen
         - afp
       description: |-
         Henter perioder med vedtak for en person innen gitte datointerval. 
@@ -72,9 +67,8 @@ paths:
           description: Feil på tjeneste, meld fra og send med call-id
   /afp/offentlig:
     post:
-      summary: Hent perioder med AAP
+      summary: Hent perioder med AAP, scopet for offentlig sektor
       tags:
-        - afpoffentlig
         - afp
       description: |-
         Henter perioder med vedtak for en person innen gitte datointerval.
