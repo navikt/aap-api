@@ -7,10 +7,12 @@ private val secureLog = LoggerFactory.getLogger("secureLog")
 object Consumers {
     private const val NAV_ORGNR = "889640782"
     private const val AFP_FELLERORDNINGEN_ORGNR = "987414502"
+    private const val SPK_ORGNR = "982583462"
 
     private val consumerTags = mapOf(
         NAV_ORGNR to "NAV",
-        AFP_FELLERORDNINGEN_ORGNR to "fellesordningen"
+        AFP_FELLERORDNINGEN_ORGNR to "fellesordningen",
+        SPK_ORGNR to "SPK"
     )
 
     fun getConsumerTag(orgnr: String) = consumerTags[orgnr] ?: orgnr.also {

@@ -42,6 +42,8 @@ spec:
           consumers:
             - name: "NAV"
               orgno: "889640782"
+            - name: "Statens pensjonskasse"
+              orgno: "982583462"
   liveness:
     path: /actuator/live
     initialDelay: 1
