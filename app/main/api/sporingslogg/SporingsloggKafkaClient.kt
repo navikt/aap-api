@@ -11,6 +11,8 @@ import org.apache.kafka.clients.producer.RecordMetadata
 import java.time.LocalDateTime
 import java.util.*
 
+class SporingsloggException(cause: Throwable) : Exception(cause)
+
 class SporingsloggKafkaClient(kafkaConf: KafkaConfig, private val sporingConf: SporingsloggConfig) {
     private val producer = KafkaFactory.createProducer<Spor>("aap-api-producer-${sporingConf.topic}", kafkaConf)
 

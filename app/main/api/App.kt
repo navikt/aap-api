@@ -72,6 +72,6 @@ fun Application.api() {
         actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
 
-        afp(config, arenaRestClient, sporingsloggKafkaClient, prometheus)
+        afp(config.sporingslogg.enabled, arenaRestClient, sporingsloggKafkaClient, prometheus)
     }
 }

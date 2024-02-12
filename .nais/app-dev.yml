@@ -26,7 +26,7 @@ spec:
       enabled: true
   maskinporten:
     enabled: true
-    scopes:
+    scopes: # Når du legger til en konsument her, husk å legge inn i Consumers-object
       exposes:
         - name: "afpprivat.read"
           enabled: true

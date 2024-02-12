@@ -12,7 +12,7 @@ Når Kelvin er ferdig vil data begynne å flyte derfra, men tanken er at dette i
 ## URL som benyttes
 Base-URL for AAP-API er:
 - For test: https://aap-api.ekstern.dev.nav.no/
-- For prod: Ikke i prod enda
+- For prod: https://aap-api.nav.no/
 
 ## Beskrivelse av uttrekk
 Beskrivelse av uttrekk kan finnes på vår [Swagger dokumentasjon](https://aap-api.ekstern.dev.nav.no/swagger).
