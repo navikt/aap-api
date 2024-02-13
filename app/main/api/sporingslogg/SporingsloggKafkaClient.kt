@@ -1,7 +1,7 @@
 package api.sporingslogg
 
+import api.util.Consumers
 import api.util.KafkaConfig
-import api.util.KafkaFactory
 import api.util.SporingsloggConfig
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -34,8 +34,6 @@ data class Spor(
     val leverandoer: String? = null
 ) {
     companion object {
-
-
         fun opprett(
             personIdent: String,
             utlevertData: Any,
@@ -44,7 +42,7 @@ data class Spor(
             person = personIdent,
             mottaker = konsumentOrgNr,
             tema = "AAP",
-            behandlingsGrunnlag = "GDPR Art. 6(1)e. AFP-tilskottsloven §17 første ledd, §29 andre ledd, første punktum. GDPR Art. 9(2)b",
+            behandlingsGrunnlag = Consumers.getBehandlingsgrunnlag(konsumentOrgNr),
             uthentingsTidspunkt = LocalDateTime.now(),
             leverteData = Base64.getEncoder()
                 .encodeToString(objectMapper.writeValueAsString(utlevertData).encodeToByteArray())

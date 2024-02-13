@@ -11,7 +11,6 @@ import api.util.Consumers.getConsumerTag
 import api.util.httpCallCounter
 import api.util.httpFailedCallCounter
 import api.util.sporingsloggFailCounter
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*

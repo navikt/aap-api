@@ -9,6 +9,11 @@ info:
     Linker til autentiseringsløsninger
     - [Maskinporten](https://www.digdir.no/felleslosninger/maskinporten/869)
     - [Samtykke](https://www.altinndigital.no/produkter/samtykke/)
+    
+    Merk at Maskinporten sitt test-token har en veldig kort levetid (29 sekunder), så det
+    egner seg dårlig til manuell test, med mindre man er kjapp til å taste. Det er best å
+    bruke denne Swagger-dokumentasjonen som en referanse til å lage en automatisert test,
+    ikke teste selve oppslaget.
   contact:
     name: Richard Borge
     url: https://github.com/navikt/aap-api

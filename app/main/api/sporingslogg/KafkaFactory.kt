@@ -1,5 +1,6 @@
-package api.util
+package api.sporingslogg
 
+import api.util.KafkaConfig
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -12,8 +13,6 @@ import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
 import java.util.*
-
-
 
 class KafkaFactory private constructor() {
     companion object {

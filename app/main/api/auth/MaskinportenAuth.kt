@@ -15,13 +15,11 @@ private val logger = LoggerFactory.getLogger("MaskinportenAuth")
 const val MASKINPORTEN_AFP_PRIVAT = "fellesordning"
 const val MASKINPORTEN_AFP_OFFENTLIG = "afp-offentlig"
 
-
-internal fun ApplicationCall.hentConsumerId(): String {
+fun ApplicationCall.hentConsumerId(): String {
     val principal = requireNotNull(this.principal<JWTPrincipal>())
     val consumer = requireNotNull(principal.payload.getClaim("consumer"))
     return consumer.asMap()["ID"].toString().split(":").last()
 }
-
 
 fun AuthenticationConfig.maskinporten(name: String, scope: String, config: Config) {
     val maskinportenJwkProvider: JwkProvider = JwkProviderBuilder(config.oauth.maskinporten.jwksUri)
@@ -42,5 +40,3 @@ fun AuthenticationConfig.maskinporten(name: String, scope: String, config: Confi
         }
     }
 }
-
-
