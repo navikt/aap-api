@@ -43,7 +43,7 @@ dependencies {
     implementation("com.nimbusds:nimbus-jose-jwt:9.37.3")
     implementation("io.micrometer:micrometer-registry-prometheus:1.12.3")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
-    implementation("org.apache.kafka:kafka-streams:3.6.1")
+    implementation("org.apache.kafka:kafka-streams:3.7.0")
 
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
