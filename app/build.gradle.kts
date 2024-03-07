@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.9.22"
-    id("io.ktor.plugin") version "2.3.8"
+    id("io.ktor.plugin") version "2.3.9"
     application
 }
 
@@ -9,7 +9,7 @@ application {
 }
 
 val aapLibVersion = "4.0.3"
-val ktorVersion = "2.3.8"
+val ktorVersion = "2.3.9"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
@@ -37,13 +37,13 @@ dependencies {
     implementation("io.ktor:ktor-client-jackson:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    implementation("ch.qos.logback:logback-classic:1.4.14")
+    implementation("ch.qos.logback:logback-classic:1.5.3")
     implementation("com.auth0:java-jwt:4.4.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1")
     implementation("com.nimbusds:nimbus-jose-jwt:9.37.3")
     implementation("io.micrometer:micrometer-registry-prometheus:1.12.3")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
-    implementation("org.apache.kafka:kafka-streams:3.6.1")
+    implementation("org.apache.kafka:kafka-streams:3.7.0")
 
     testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
