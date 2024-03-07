@@ -81,4 +81,4 @@ spec:
     - name: SPORINGSLOGG_TOPIC
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt-q2
     - name: SPORINGSLOGG_ENABLED
-      value: "true"
+      value: "false"
