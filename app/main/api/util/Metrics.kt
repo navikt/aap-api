@@ -2,7 +2,7 @@ package api.util
 
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.Tag
-import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 
 fun PrometheusMeterRegistry.httpCallCounter(consumer: String, path: String): Counter = this.counter(
     "http_call",
