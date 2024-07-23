@@ -8,7 +8,7 @@ data class VedtakResponse(val perioder: List<VedtakPeriode>)
 data class VedtakPeriode(val fraOgMedDato:LocalDate, val tilOgMedDato:LocalDate?)
 
 data class VedtakMaks(
-    val utbetaling: List<Utbetaling>,
+    val utbetaling: List<Utbetaling?>?,
     val dagsats: Int,
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String, //hypotese sak_id
