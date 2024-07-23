@@ -1,5 +1,6 @@
 package api.arena
 
+import api.afp.VedtakMaks
 import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
 import api.afp.VedtakRequest
@@ -43,6 +44,18 @@ class ArenaoppslagRestClient(
     azureConfig: AzureConfig
 ) {
     private val tokenProvider = AzureAdTokenProvider(azureConfig)
+
+    fun hentMaksimumTest(vedtakRequest: VedtakRequest): VedtakMaks = runBlocking{
+        httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/fellesordningen/vedtak"){
+            accept(ContentType.Application.Json)
+            bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
+            contentType(ContentType.Application.Json)
+            setBody(vedtakRequest)
+        }
+            .bodyAsText()
+            .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+            .let(objectMapper::readValue)
+    }
 
     fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {

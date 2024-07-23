@@ -43,7 +43,15 @@ fun Route.afp(
                 hentPerioder(call, brukSporingslogg, arenaoppslagRestClient, sporingsloggClient, prometheus)
             }
         }
+
+        post("/test"){
+            hentMaksimumTest(vedtakRequest = call.receive(), arenaoppslagRestClient = arenaoppslagRestClient)
+        }
     }
+}
+
+fun hentMaksimumTest(vedtakRequest: VedtakRequest, arenaoppslagRestClient: ArenaoppslagRestClient): VedtakMaks {
+    return arenaoppslagRestClient.hentMaksimumTest(vedtakRequest)
 }
 
 private suspend fun hentPerioder(
