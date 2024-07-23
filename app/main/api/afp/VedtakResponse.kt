@@ -16,6 +16,7 @@ data class VedtakMaks(
     val periode: Periode,
     val rettighetType: String, ////aktivitetsfase //Aktfasekode
 )
+//test
 
 data class Utbetaling(
     val utbetalingsgrad: Utbetalingsgrad,
