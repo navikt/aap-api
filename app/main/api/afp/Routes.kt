@@ -51,7 +51,7 @@ fun Route.afp(
     }
 }
 
-fun hentMaksimumTest(vedtakRequest: VedtakRequest, arenaoppslagRestClient: ArenaoppslagRestClient): VedtakMaks {
+fun hentMaksimumTest(vedtakRequest: VedtakRequest, arenaoppslagRestClient: ArenaoppslagRestClient): String {
     return arenaoppslagRestClient.hentMaksimumTest(vedtakRequest)
 }
 
