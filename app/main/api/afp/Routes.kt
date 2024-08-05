@@ -46,7 +46,7 @@ fun Route.afp(
 
         post("/test"){
             logger.info("mottatt test kall til api")
-            hentMaksimumTest(vedtakRequest = call.receive(), arenaoppslagRestClient = arenaoppslagRestClient)
+            call.respond(hentMaksimumTest(vedtakRequest = call.receive(), arenaoppslagRestClient = arenaoppslagRestClient))
         }
     }
 }
