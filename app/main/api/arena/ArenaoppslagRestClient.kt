@@ -57,6 +57,17 @@ class ArenaoppslagRestClient(
 
     }
 
+    fun hentAktfasekoder(): String = runBlocking{
+        httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/intern/test/aktfasekoder"){
+            accept(ContentType.Application.Json)
+            bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
+            contentType(ContentType.Application.Json)
+        }
+            .bodyAsText()
+            .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+
+    }
+
     fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {

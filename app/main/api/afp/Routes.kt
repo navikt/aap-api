@@ -48,11 +48,19 @@ fun Route.afp(
             logger.info("mottatt test kall til api")
             call.respond(hentMaksimumTest(vedtakRequest = call.receive(), arenaoppslagRestClient = arenaoppslagRestClient))
         }
+
+        post("/aktfasekoder"){
+            call.respond(hentAktfasekoder(arenaoppslagRestClient = arenaoppslagRestClient))
+        }
     }
 }
 
 fun hentMaksimumTest(vedtakRequest: VedtakRequest, arenaoppslagRestClient: ArenaoppslagRestClient): String {
     return arenaoppslagRestClient.hentMaksimumTest(vedtakRequest)
+}
+
+fun hentAktfasekoder(arenaoppslagRestClient: ArenaoppslagRestClient):String{
+    return arenaoppslagRestClient.hentAktfasekoder()
 }
 
 private suspend fun hentPerioder(
