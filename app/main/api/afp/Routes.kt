@@ -31,6 +31,7 @@ fun Route.afp(
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
+
     route("/afp") {
         authenticate(MASKINPORTEN_AFP_PRIVAT) {
             post("/fellesordningen") {
@@ -44,10 +45,6 @@ fun Route.afp(
             }
         }
 
-        post("/test"){
-            logger.info("mottatt test kall til api")
-            call.respond(hentMaksimumTest(vedtakRequest = call.receive(), arenaoppslagRestClient = arenaoppslagRestClient))
-        }
     }
 }
 
