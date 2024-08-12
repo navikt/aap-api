@@ -45,6 +45,10 @@ fun Route.afp(
             }
         }
 
+        post("/test"){
+            hentMaksimumTest(call.receive(), arenaoppslagRestClient)
+        }
+
     }
 }
 
