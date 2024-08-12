@@ -19,6 +19,10 @@ src/generated
 
 # Ignore Gradle project-specific cache directory
 .gradle
+/gradle/caches/
+/gradle/daemon/
+/gradle/native/
+/gradle/wrapper/dists/
 
 # Ignore Gradle build output directory
 build
