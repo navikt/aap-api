@@ -47,14 +47,18 @@ fun Route.afp(
         }
 
         post("/test"){
-            hentMaksimumTest(call.receive(), arenaoppslagRestClient)
+            val res = hentMaksimumTest(call.receive(), arenaoppslagRestClient)
+            logger.info("svar på kall til api${res}")
+            call.respond(res)
         }
 
     }
 }
 
 fun hentMaksimumTest(vedtakRequest: VedtakRequest, arenaoppslagRestClient: ArenaoppslagRestClient): Maksimum2 {
-    return arenaoppslagRestClient.hentMaksimumTest(vedtakRequest)
+    val res = arenaoppslagRestClient.hentMaksimumTest(vedtakRequest)
+    logger.info("svar i routes $res")
+    return res
 }
 
 private suspend fun hentPerioder(
