@@ -45,7 +45,7 @@ class ArenaoppslagRestClient(
     private val tokenProvider = AzureAdTokenProvider(azureConfig)
 
     fun hentMaksimumTest(vedtakRequest: VedtakRequest): String = runBlocking{
-        httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum"){
+        httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/intern/maksimum"){
             accept(ContentType.Application.Json)
             bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
             contentType(ContentType.Application.Json)
