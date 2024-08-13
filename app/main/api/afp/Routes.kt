@@ -1,5 +1,6 @@
 package api.afp
 
+import api.Maksimum2
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
@@ -52,7 +53,7 @@ fun Route.afp(
     }
 }
 
-fun hentMaksimumTest(vedtakRequest: VedtakRequest, arenaoppslagRestClient: ArenaoppslagRestClient): String {
+fun hentMaksimumTest(vedtakRequest: VedtakRequest, arenaoppslagRestClient: ArenaoppslagRestClient): Maksimum2 {
     return arenaoppslagRestClient.hentMaksimumTest(vedtakRequest)
 }
 
