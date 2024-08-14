@@ -45,11 +45,6 @@ fun Route.afp(
                 hentPerioder(call, brukSporingslogg, arenaoppslagRestClient, sporingsloggClient, prometheus)
             }
         }
-
-        post("/test"){
-            call.respond(hentMaksimumTest(call.receive(), arenaoppslagRestClient))
-        }
-
     }
 }
 
