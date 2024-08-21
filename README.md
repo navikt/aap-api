@@ -9,6 +9,8 @@ API’et vil hente data fra 2 kilder
 
 Når Kelvin er ferdig vil data begynne å flyte derfra, men tanken er at dette ikke skal merkes av konsumentene.
 
+Interndokumentasjon for datadeling fra aap kan finnes på [aap-sysdoc](https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Datadeling/funksjonell).
+
 ## URL som benyttes
 Base-URL for AAP-API er:
 - For test: https://aap-api.ekstern.dev.nav.no/
