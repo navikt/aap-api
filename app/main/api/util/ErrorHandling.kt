@@ -10,7 +10,7 @@ import org.slf4j.Logger
 
 fun StatusPagesConfig.feilhåndtering(logger: Logger) {
     exception<SporingsloggException> { call, cause ->
-        logger.error("Klarte ikke produsere til kafka sporingslogg og kan derfor ikke returnere data", cause)
+        logger.error("Klarte ikke produsere til Kafka sporingslogg og kan derfor ikke returnere data", cause)
         call.respondText(
             text = "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.",
             status = HttpStatusCode.ServiceUnavailable

@@ -12,7 +12,4 @@ data class DsopRequest(
 data class Periode(
     val fraDato: LocalDate,
     val tilDato: LocalDate
-) {
-    fun erDatoIPeriode(dato: LocalDate) = dato in fraDato..tilDato
-
-}
+)

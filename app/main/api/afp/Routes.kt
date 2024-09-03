@@ -81,7 +81,7 @@ private suspend fun hentPerioder(
                 throw SporingsloggException(e)
             }
         } else {
-            logger.warn("Sporingslogg er skrudd av, returnerer data uten å sende til kafka")
+            logger.warn("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
             call.respond(res)
         }
     }
