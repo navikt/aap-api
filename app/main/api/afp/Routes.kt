@@ -70,6 +70,7 @@ private suspend fun hentPerioder(
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
+        logger.error("Klarte ikke hente vedtak fra Arena. Se sikker logg for stacktrace.")
         throw ex
     }.onSuccess { res ->
         if (brukSporingslogg) {
