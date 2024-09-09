@@ -1,9 +1,9 @@
 package api
 
-import api.afp.afp
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
+import api.auth.MASKINPORTEN_TP_ORDNINGEN
 import api.auth.maskinporten
 import api.sporingslogg.SporingsloggKafkaClient
 import api.util.*
@@ -61,6 +61,7 @@ fun Application.api() {
     install(Authentication) {
         maskinporten(MASKINPORTEN_AFP_PRIVAT, config.oauth.maskinporten.scope.afpprivat, config)
         maskinporten(MASKINPORTEN_AFP_OFFENTLIG, config.oauth.maskinporten.scope.afpoffentlig, config)
+        maskinporten(MASKINPORTEN_TP_ORDNINGEN,config.oauth.maskinporten.scope.tpordningen, config)
     }
 
     install(CORS) {
@@ -72,6 +73,6 @@ fun Application.api() {
         actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
 
-        afp(config.sporingslogg.enabled, arenaRestClient, sporingsloggKafkaClient, prometheus)
+        api(config.sporingslogg.enabled, arenaRestClient, sporingsloggKafkaClient, prometheus)
     }
 }

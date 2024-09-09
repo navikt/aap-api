@@ -48,6 +48,12 @@ spec:
               orgno: "916833520"
             - name: "Storebrand pensjonstjenester"
               orgno: "931936492"
+        - name: "tpordningen.read"
+          enabled: true
+          product: "aap"
+          consumers:
+            - name: "NAV"
+              orgno: "889640782"
   liveness:
     path: /actuator/live
     initialDelay: 1

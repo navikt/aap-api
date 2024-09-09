@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 private val logger = LoggerFactory.getLogger("MaskinportenAuth")
 const val MASKINPORTEN_AFP_PRIVAT = "fellesordning"
 const val MASKINPORTEN_AFP_OFFENTLIG = "afp-offentlig"
+const val MASKINPORTEN_TP_ORDNINGEN = "tp-ordningen"
 
 fun ApplicationCall.hentConsumerId(): String {
     val principal = requireNotNull(this.principal<JWTPrincipal>())
