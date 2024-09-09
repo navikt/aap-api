@@ -48,6 +48,7 @@ fun Route.afp(
     post("/test"){
         call.respond(hentMaksimumTest(call.receive(), arenaoppslagRestClient))
     }
+
     }
 }
 
