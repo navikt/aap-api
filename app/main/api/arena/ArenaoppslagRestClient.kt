@@ -45,6 +45,19 @@ class ArenaoppslagRestClient(
 ) {
     private val tokenProvider = AzureAdTokenProvider(azureConfig)
 
+    fun hentFnrs(callId: UUID= UUID.randomUUID()): List<String> = runBlocking{
+        val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/fnr/test"){
+            accept(ContentType.Application.Json)
+            header("x-callid", callId)
+            bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
+            contentType(ContentType.Application.Json)
+        }
+            .bodyAsText()
+            .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+
+        return@runBlocking res.let { objectMapper.readValue(it) }
+    }
+
     fun hentMaksimum(callId: String, vedtakRequest: VedtakRequest): Maksimum2 = runBlocking{
         val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum"){
             accept(ContentType.Application.Json)

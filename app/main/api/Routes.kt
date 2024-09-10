@@ -47,6 +47,14 @@ fun Route.api(
             }
         }
     }
+    route("test"){
+        post("/maksimum"){
+            hentMaksimum(call, brukSporingslogg, arenaoppslagRestClient, sporingsloggClient, prometheus)
+        }
+        post("fnr"){
+            arenaoppslagRestClient.hentFnrs()
+        }
+    }
     route("/tp-samhandling"){
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
