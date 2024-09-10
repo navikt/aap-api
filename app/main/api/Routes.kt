@@ -47,12 +47,9 @@ fun Route.api(
             }
         }
     }
-    route("test"){
+    route("/test"){
         post("/maksimum"){
             hentMaksimum(call, brukSporingslogg, arenaoppslagRestClient, sporingsloggClient, prometheus)
-        }
-        post("fnr"){
-            arenaoppslagRestClient.hentFnrs()
         }
     }
     route("/tp-samhandling"){
