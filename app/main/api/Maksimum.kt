@@ -9,7 +9,6 @@ data class Maksimum1 (
 
 data class Maksimum2(
     val vedtak: List<Vedtak>,
-    val utbetalinger: List<UtbetalingMedMer>,
 )
 
 data class Vedtak(
@@ -19,20 +18,26 @@ data class Vedtak(
     val saksnummer: String, //hypotese sak_id
     val vedtaksdato: String, //reg_dato
     val periode: Periode,
-    val rettighetType: String, ////aktivitetsfase //Aktfasekode
+    val rettighetsType: String, ////aktivitetsfase //Aktfasekode
 )
 
 data class UtbetalingMedMer(
-    val utbetalingsgrad: Utbetalingsgrad? = null,
+    val reduksjon: Reduksjon? = null,
     val periode: Periode,
     val belop: Int,
     val dagsats: Int,
     val barnetilegg: Int,
 )
 
-data class Utbetalingsgrad(
-    val kode: String,
-    val termnavn: String //TODO: Denne må renskes sammen med øyvind
+data class Reduksjon(
+    val timerArbeidet: Double,
+    val annenReduksjon: AnnenReduksjon
+)
+
+data class AnnenReduksjon(
+    val sykedager: Float?,
+    val sentMeldekort:Boolean?,
+    val fraver: Float?
 )
 
 data class Periode(
