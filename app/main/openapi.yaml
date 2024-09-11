@@ -15,9 +15,9 @@ info:
     bruke denne Swagger-dokumentasjonen som en referanse til å lage en automatisert test,
     ikke teste selve oppslaget.
   contact:
-    name: Richard Borge
+    name: Vetle Hollund
     url: https://github.com/navikt/aap-api
-    email: richard.borge@nav.no
+    email: vetle.hollund@nav.no
   version: 1.0.0
   license:
     name: MIT
