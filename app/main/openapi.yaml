@@ -257,7 +257,7 @@ components:
         rettighetsTyoe:
           type: string
           description: Rettighetstype for vedtaket
-          example: "AAP"
+          example: "FA"
     PeriodeRequest:
       type: object
       properties:
