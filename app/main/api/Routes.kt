@@ -13,6 +13,7 @@ import api.util.Consumers.getConsumerTag
 import api.util.httpCallCounter
 import api.util.httpFailedCallCounter
 import api.util.sporingsloggFailCounter
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
@@ -53,6 +54,13 @@ fun Route.api(
                 call.respond(hentMaksimum(call, brukSporingslogg, arenaoppslagRestClient, sporingsloggClient, prometheus))
             }
         }
+    }
+    //responds with the swagger yaml file
+    get("swaggeryaml") {
+        call.respondText(
+            this::class.java.classLoader.getResource("swagger.yaml")!!.readText(),
+            ContentType.parse("application/x-yaml")
+        )
     }
 }
 

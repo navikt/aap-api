@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory
 import java.util.*
 
 private const val ARENAOPPSLAG_CLIENT_SECONDS_METRICNAME = "arenaoppslag_client_seconds"
-private val sikkerLogg = LoggerFactory.getLogger("secureLog")
+private val sikkerLogg = LoggerFactory.getLogger("app")
 private val clientLatencyStats: Summary = Summary.builder()
     .name(ARENAOPPSLAG_CLIENT_SECONDS_METRICNAME)
     .quantile(0.5, 0.05) // Add 50th percentile (= median) with 5% tolerated error

@@ -19,11 +19,13 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.openapi.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
+import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("App")
@@ -71,8 +73,10 @@ fun Application.api() {
 
     routing {
         actuator(prometheus)
-        swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
-
+        swaggerUI(path = "swagger", swaggerFile = "openapi.bak.yaml")
+        openAPI(path="openapi", swaggerFile = "openapi/documentation.yaml") {
+            codegen = StaticHtmlCodegen()
+        }
         api(config.sporingslogg.enabled, arenaRestClient, sporingsloggKafkaClient, prometheus)
     }
 }
