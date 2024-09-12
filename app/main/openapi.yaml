@@ -206,7 +206,7 @@ components:
           example: false
         fraver:
             type: number
-            description: Antall fraværstimer
+            description: Antall fraværsdager
             example: 2
     UtbetalingMedMer:
       type: object
@@ -258,6 +258,10 @@ components:
           type: string
           description: Rettighetstype for vedtaket
           example: "FA"
+        beregningsgrunnlag:
+          type: number
+          description: Beregningsgrunnlag for vedtaket
+          example: 123456
     PeriodeRequest:
       type: object
       properties:
