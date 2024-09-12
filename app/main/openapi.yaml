@@ -257,6 +257,13 @@ components:
         rettighetsType:
           type: string
           description: Rettighetstype for vedtaket
+          enum:
+            - "FA"
+            - "AU"
+            - "UVUP"
+            - "IKKE"
+            - "SPE"
+            - "UA"
           example: "FA"
         beregningsgrunnlag:
           type: number
