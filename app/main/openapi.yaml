@@ -254,7 +254,7 @@ components:
           example: 2021-01-01
         periode:
           $ref: '#/components/schemas/Periode'
-        rettighetsTyoe:
+        rettighetsType:
           type: string
           description: Rettighetstype for vedtaket
           example: "FA"
