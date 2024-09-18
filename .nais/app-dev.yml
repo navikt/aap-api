@@ -54,6 +54,12 @@ spec:
           consumers:
             - name: "NAV"
               orgno: "889640782"
+            - name: "Statens pensjonskasse"
+              orgno: "982583462"
+            - name: "Gabler Pensjonstjenester AS"
+              orgno: "916833520"
+            - name: "Storebrand pensjonstjenester"
+              orgno: "931936492"
   liveness:
     path: /actuator/live
     initialDelay: 1
