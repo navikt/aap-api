@@ -121,7 +121,6 @@ paths:
 
         Scope: `nav:aap:tpordningen.read`
         
-        Dette endepunktet er kun tilgjengelig for NAV på tidspunktet. Konsumenter vil bli lagt til i scope etterhvert som de blir klare.
       security:
         - maskinporten: [ ]
       parameters:
