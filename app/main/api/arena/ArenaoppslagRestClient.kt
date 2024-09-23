@@ -2,6 +2,7 @@ package api.arena
 
 import api.Maksimum
 import api.Minimum
+import api.Periode
 import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
 import api.afp.VedtakRequest
@@ -60,7 +61,7 @@ class ArenaoppslagRestClient(
         return@runBlocking res.let { objectMapper.readValue(it) }
     }
 
-    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): List<Minimum> =
+    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): List<Periode> =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum"){

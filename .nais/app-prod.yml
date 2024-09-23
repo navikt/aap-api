@@ -11,8 +11,8 @@ spec:
   ingresses:
        - https://aap-api.nav.no
   replicas:
-    max: 1
-    min: 1
+    max: 2
+    min: 2
   kafka:
     pool: nav-prod
   resources:
@@ -34,6 +34,14 @@ spec:
           consumers:
             - name: "Fellesordningen for AFP"
               orgno: "987414502"
+        - name: "afpoffentlig.read"
+          enabled: true
+          product: "aap"
+          consumers:
+            - name: "NAV"
+              orgno: "889640782"
+            - name: "Statens pensjonskasse"
+              orgno: "982583462"
   liveness:
     path: /actuator/live
     initialDelay: 1
