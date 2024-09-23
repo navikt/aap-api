@@ -1,6 +1,7 @@
 package api.arena
 
-import api.Maksimum2
+import api.Maksimum
+import api.Minimum
 import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
 import api.afp.VedtakRequest
@@ -45,7 +46,7 @@ class ArenaoppslagRestClient(
 ) {
     private val tokenProvider = AzureAdTokenProvider(azureConfig)
 
-    fun hentMaksimum(callId: String, vedtakRequest: VedtakRequest): Maksimum2 = runBlocking{
+    fun hentMaksimum(callId: String, vedtakRequest: VedtakRequest): Maksimum = runBlocking{
         val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum"){
             accept(ContentType.Application.Json)
             header("x-callid", callId)
@@ -59,7 +60,7 @@ class ArenaoppslagRestClient(
         return@runBlocking res.let { objectMapper.readValue(it) }
     }
 
-    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
+    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): List<Minimum> =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum"){

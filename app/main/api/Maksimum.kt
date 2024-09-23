@@ -3,12 +3,12 @@ package api
 import java.time.LocalDate
 
 
-data class Maksimum1 (
-    val vedtak: List<Vedtak>
+data class Maksimum(
+    val vedtak: List<Vedtak>,
 )
 
-data class Maksimum2(
-    val vedtak: List<Vedtak>,
+data class Minimum(
+    val perioder: Periode
 )
 
 data class Vedtak(
