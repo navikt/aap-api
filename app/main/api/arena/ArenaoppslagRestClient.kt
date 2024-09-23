@@ -62,7 +62,7 @@ class ArenaoppslagRestClient(
     fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
-                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/fellesordningen/vedtak"){
+                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum"){
                     accept(ContentType.Application.Json)
                     header("x-callid", callId)
                     bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
