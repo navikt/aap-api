@@ -156,9 +156,13 @@ paths:
 components:
   schemas:
     PeriodeResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/Periode'
+      type: object
+      properties:
+        perioder:
+          type: array
+          description: Perioder med vedtak
+          items:
+            $ref: '#/components/schemas/Periode'
     Periode:
       type: object
       properties:

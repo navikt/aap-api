@@ -61,7 +61,7 @@ class ArenaoppslagRestClient(
         return@runBlocking res.let { objectMapper.readValue(it) }
     }
 
-    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): List<Periode> =
+    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum"){
