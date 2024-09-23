@@ -26,6 +26,7 @@ data class Utbetaling(
     val barnetilegg: Int,
 )
 
+
 data class Utbetalingsgrad(
     val kode: String,
     val termnavn: String //TODO: Denne må renskes sammen med øyvind
