@@ -3,7 +3,7 @@ package api.afp
 import api.dsop.Periode
 import java.time.LocalDate
 
-data class VedtakResponse(val perioder: List<VedtakPeriode>)
+data class VedtakResponse(val perioder: List<Periode>)
 
 data class VedtakPeriode(val fraOgMedDato:LocalDate, val tilOgMedDato:LocalDate?)
 
