@@ -51,7 +51,7 @@ spec:
             - name: "Storebrand pensjonstjenester"
               orgno: "931936492"
             - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
-              orgnp: "938708606"
+              orgno: "938708606"
         - name: "tpordningen.read"
           enabled: true
           product: "aap"
