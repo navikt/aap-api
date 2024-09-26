@@ -36,6 +36,8 @@ spec:
               orgno: "889640782"
             - name: "Fellesordningen for AFP"
               orgno: "987414502"
+            - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
+              Org: "938708606"
         - name: "afpoffentlig.read"
           enabled: true
           product: "aap"
@@ -48,6 +50,8 @@ spec:
               orgno: "916833520"
             - name: "Storebrand pensjonstjenester"
               orgno: "931936492"
+            - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
+              Org: "938708606"
         - name: "tpordningen.read"
           enabled: true
           product: "aap"
