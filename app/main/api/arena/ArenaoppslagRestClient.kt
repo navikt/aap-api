@@ -56,7 +56,6 @@ class ArenaoppslagRestClient(
             setBody(vedtakRequest)
         }
             .bodyAsText()
-            .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
 
         return@runBlocking res.let { objectMapper.readValue(it) }
     }
