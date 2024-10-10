@@ -1,5 +1,5 @@
 # Docker multistage layer with a fatty jar stripped of unused rocskdb-instances
-FROM alpine:3.18.5 as app
+FROM alpine:3.20.3 as app
 RUN apk --update --no-cache add zip
 COPY /app/build/libs/app-all.jar app.jar
 RUN zip -d app.jar librocksdbjni-linux32.so librocksdbjni-linux32-musl.so librocksdbjni-linux64.so \
