@@ -1,12 +1,10 @@
 package api.arena
 
 import api.Maksimum
-import api.Minimum
-import api.Periode
-import api.dsop.DsopRequest
-import api.util.ArenaoppslagConfig
 import api.afp.VedtakRequest
 import api.afp.VedtakResponse
+import api.dsop.DsopRequest
+import api.util.ArenaoppslagConfig
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule

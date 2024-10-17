@@ -12,7 +12,6 @@ val aapLibVersion = "4.0.32"
 val ktorVersion = "2.3.11"
 
 dependencies {
-    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
 
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
@@ -46,7 +45,6 @@ dependencies {
     implementation("org.apache.kafka:kafka-streams:3.8.0")
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.0")
 
-    testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))
 }
