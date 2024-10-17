@@ -6,7 +6,10 @@ import api.auth.MASKINPORTEN_AFP_PRIVAT
 import api.auth.MASKINPORTEN_TP_ORDNINGEN
 import api.auth.maskinporten
 import api.sporingslogg.SporingsloggKafkaClient
-import api.util.*
+import api.util.Config
+import api.util.actuator
+import api.util.feilhåndtering
+import api.util.logging
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.http.*
@@ -22,6 +25,7 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
+import io.micrometer.core.instrument.binder.logging.LogbackMetrics
 import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import org.slf4j.LoggerFactory
@@ -45,6 +49,7 @@ fun Application.api() {
 
     install(MicrometerMetrics) {
         registry = prometheus
+        meterBinders += LogbackMetrics()
     }
 
     install(StatusPages) {
