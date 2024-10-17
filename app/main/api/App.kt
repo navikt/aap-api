@@ -48,7 +48,7 @@ fun Application.api() {
     }
 
     install(StatusPages) {
-        feilhåndtering(logger)
+        feilhåndtering(logger, prometheus)
     }
 
     install(ContentNegotiation) {

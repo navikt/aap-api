@@ -19,3 +19,6 @@ fun PrometheusMeterRegistry.sporingsloggFailCounter(consumer: String): Counter =
     "sporingslogg_failed",
     listOf(Tag.of("consumer", consumer))
 )
+
+fun PrometheusMeterRegistry.uhåndtertExceptionCounter(name: String): Counter =
+    this.counter("uhåndtert_exception_total", "name", name)
