@@ -7,15 +7,15 @@ data class Maksimum(
     val vedtak: List<Vedtak>,
 )
 
-data class Minimum(
-    val perioder: Periode
-)
-
+/**
+ * @param status Hypotese, vedtaksstatuskode
+ * @param saksnummer hypotese sak_id
+ */
 data class Vedtak(
     val utbetaling: List<UtbetalingMedMer>,
     val dagsats: Int,
     val status: String, //Hypotese, vedtaksstatuskode
-    val saksnummer: String, //hypotese sak_id
+    val saksnummer: String,
     val vedtaksdato: String, //reg_dato
     val periode: Periode,
     val rettighetsType: String, ////aktivitetsfase //Aktfasekode
