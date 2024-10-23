@@ -14,6 +14,5 @@ data class VedtakRequestMedSaksRef(
 data class VedtakRequest(
     val personidentifikator: String,
     val fraOgMedDato: LocalDate,
-    val tilOgMedDato: LocalDate,
-    val saksId: String?
+    val tilOgMedDato: LocalDate
 )
