@@ -1,5 +1,6 @@
 package api.sporingslogg
 
+import api.afp.VedtakRequestMedSaksRef
 import api.util.Consumers
 import api.util.KafkaConfig
 import api.util.SporingsloggConfig
@@ -31,13 +32,15 @@ data class Spor(
     val leverteData: String,
     val samtykkeToken: String? = null,
     val dataForespoersel: String? = null,
-    val leverandoer: String? = null
+    val leverandoer: String? = null,
+    val saksId: String? = null
 ) {
     companion object {
         fun opprett(
             personIdent: String,
             utlevertData: Any,
-            konsumentOrgNr: String
+            konsumentOrgNr: String,
+            saksId: String? = null
         ) = Spor(
             person = personIdent,
             mottaker = konsumentOrgNr,
@@ -45,7 +48,8 @@ data class Spor(
             behandlingsGrunnlag = Consumers.getBehandlingsgrunnlag(konsumentOrgNr),
             uthentingsTidspunkt = LocalDateTime.now(),
             leverteData = Base64.getEncoder()
-                .encodeToString(objectMapper.writeValueAsString(utlevertData).encodeToByteArray())
+                .encodeToString(objectMapper.writeValueAsString(utlevertData).encodeToByteArray()),
+            saksId = saksId
         )
 
         private val objectMapper = jacksonObjectMapper()
