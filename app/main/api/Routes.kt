@@ -1,6 +1,7 @@
 package api
 
 import api.afp.VedtakRequest
+import api.afp.VedtakRequestMedSaksRef
 import api.arena.ArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
@@ -67,10 +68,10 @@ private suspend fun hentPerioder(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val body = call.receive<VedtakRequest>()
+    val body = call.receive<VedtakRequestMedSaksRef>()
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
-        arenaoppslagRestClient.hentVedtakFellesordning(UUID.fromString(callId), body)
+        arenaoppslagRestClient.hentVedtakFellesordning(UUID.fromString(callId), body.toVedtakRequest())
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
@@ -79,7 +80,7 @@ private suspend fun hentPerioder(
     }.onSuccess { res ->
         if (brukSporingslogg) {
             try {
-                sporingsloggClient.send(Spor.opprett(body.personidentifikator, res, orgnr))
+                sporingsloggClient.send(Spor.opprett(body.personidentifikator, res, orgnr, body.saksId))
                 call.respond(res)
             } catch (e: Exception) {
                 prometheus.sporingsloggFailCounter(consumerTag).increment()

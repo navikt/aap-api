@@ -95,7 +95,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PeriodeRequest'
+              $ref: '#/components/schemas/PeriodeRequestMedSaksId'
       responses:
         '200':
           description: OK
@@ -288,6 +288,29 @@ components:
           format: date
           description: Slutt-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
+    PeriodeRequestMedSaksId:
+      type: object
+      properties:
+        personidentifikator:
+          type: string
+          description: Personnummeret til brukeren
+          example: 12345678901
+        fraOgMedDato:
+          type: string
+          format: date
+          description: Start-dato for ønsket uttak av AAP-perioder
+          example: 2021-01-01
+        tilOgMedDato:
+          type: string
+          format: date
+          description: Slutt-dato for ønsket uttak av AAP-perioder
+          example: 2021-01-01
+        saksId:
+          type:
+            - 'null'
+            - string
+          description: ekstern saksId for sporing
+          example: "086BE575-25E1-4425-8970-A16A9D7953E9"
   securitySchemes:
     maskinporten:
       type: http
