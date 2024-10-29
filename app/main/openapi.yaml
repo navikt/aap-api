@@ -29,7 +29,7 @@ info:
     | Dagsats               | Her har vi to verdier. Den som ligger på selve vedtaket er før samordning, mens det som ligger i utbetalingsobjektet er etter. |
     | Beløp                 | Fullt beløp, etter samhandling. Det bruker faktisk får utbetalt.                                                               |
     | Barnetillegg          |                                                                                                                                |
-    | Beregningsgrunnlag    | Utledet fra Arena. Via <FORMEL>                                                                                                |
+    | Beregningsgrunnlag    | Utledet fra Arena. Via FORMEL                                                                                                  |
     | Rettighetstype        | Også kalt aktivitetsfasekode.                                                                                                  |
     | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`.                                                                                            |
   contact:
