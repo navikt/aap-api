@@ -43,7 +43,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
     implementation("com.nimbusds:nimbus-jose-jwt:9.39")
     implementation("io.micrometer:micrometer-registry-prometheus:1.13.3")
-    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
     implementation("org.apache.kafka:kafka-streams:3.8.0")
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.0")
 
