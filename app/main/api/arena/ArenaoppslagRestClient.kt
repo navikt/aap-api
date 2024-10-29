@@ -1,8 +1,6 @@
 package api.arena
 
-import api.Maksimum
 import api.afp.VedtakRequest
-import api.afp.VedtakResponse
 import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -21,6 +19,7 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.prometheus.metrics.core.metrics.Summary
 import kotlinx.coroutines.runBlocking
+import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.ktor.client.auth.azure.AzureAdTokenProvider
 import no.nav.aap.ktor.client.auth.azure.AzureConfig
 import org.slf4j.LoggerFactory
@@ -45,7 +44,7 @@ class ArenaoppslagRestClient(
 ) {
     private val tokenProvider = AzureAdTokenProvider(azureConfig)
 
-    fun hentMaksimum(callId: String, vedtakRequest: VedtakRequest): Maksimum = runBlocking{
+    fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum = runBlocking{
         val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum"){
             accept(ContentType.Application.Json)
             header("x-callid", callId)
@@ -58,7 +57,7 @@ class ArenaoppslagRestClient(
         return@runBlocking res.let { objectMapper.readValue(it) }
     }
 
-    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
+    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum"){
@@ -74,7 +73,7 @@ class ArenaoppslagRestClient(
             }
         }
 
-    fun hentVedtakDsop(callId: UUID, dsopRequest: DsopRequest): VedtakResponse =
+    fun hentVedtakDsop(callId: UUID, dsopRequest: DsopRequest): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/vedtak"){
@@ -90,7 +89,7 @@ class ArenaoppslagRestClient(
             }
         }
 
-    fun hentMeldepliktDsop(callId: UUID, dsopRequest: DsopRequest): VedtakResponse =
+    fun hentMeldepliktDsop(callId: UUID, dsopRequest: DsopRequest): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/meldeplikt"){
