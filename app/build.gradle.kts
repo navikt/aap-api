@@ -8,8 +8,8 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val aapLibVersion = "4.0.32"
-val ktorVersion = "2.3.11"
+val aapLibVersion = "5.0.24"
+val ktorVersion = "3.0.0"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
