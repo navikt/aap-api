@@ -1,6 +1,6 @@
 package api.util
 
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.request.*
 import org.slf4j.event.Level
 
