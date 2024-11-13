@@ -26,7 +26,8 @@ data class Vedtak(
     val vedtaksdato: String, //reg_dato
     val periode: Periode,
     val rettighetsType: String, ////aktivitetsfase //Aktfasekode
-    val beregningsgrunnlag: Int
+    val beregningsgrunnlag: Int,
+    val barnMedStonad: Int,
 )
 
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
@@ -39,6 +40,7 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
         this.periode.fraKontrakt(),
         rettighetsType = this.rettighetsType,
         beregningsgrunnlag = this.beregningsgrunnlag,
+        barnMedStonad = this.barnMedStonad
     )
 }
 
