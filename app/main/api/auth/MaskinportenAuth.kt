@@ -32,8 +32,8 @@ fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config:
         verifier(maskinportenJwkProvider, config.oauth.maskinporten.issuer.name)
         challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang til maskinporten") }
         validate { cred ->
-            if (scope.contains(cred.getClaim("scope", String::class))) {
-                logger.warn("Wrong scope in claim")
+            if (!scope.contains(cred.getClaim("scope", String::class))) {
+                logger.warn("Wrong scope in claim. Ser etter $scope, fikk ${cred.getClaim("scope", String::class)}")
                 return@validate null
             }
 
