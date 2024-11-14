@@ -61,7 +61,7 @@ spec:
           consumers:
             - name: "aksio"
               orgno: "927613298"
-          seperator: "/"
+          separator: "/"
         - name: "tpordningen.read"
           enabled: true
           product: "aap"
