@@ -54,8 +54,14 @@ spec:
               orgno: "938708606"
             - name: "Oslo Pensjonsforsikring"
               orgno: "982759412"
+        - name: "delegert.altinn.ekstern.afpoffentlig.read"
+          enabled: true
+          product: "aap"
+          delegationSource: altinn
+          consumers:
             - name: "aksio"
               orgno: "927613298"
+          seperator: "/"
         - name: "tpordningen.read"
           enabled: true
           product: "aap"

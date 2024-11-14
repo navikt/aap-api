@@ -22,7 +22,7 @@ fun ApplicationCall.hentConsumerId(): String {
     return consumer.asMap()["ID"].toString().split(":").last()
 }
 
-fun AuthenticationConfig.maskinporten(name: String, scope: String, config: Config) {
+fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config: Config) {
     val maskinportenJwkProvider: JwkProvider = JwkProviderBuilder(config.oauth.maskinporten.jwksUri)
         .cached(10, 24, TimeUnit.HOURS)
         .rateLimited(10, 1, TimeUnit.MINUTES)
@@ -32,7 +32,7 @@ fun AuthenticationConfig.maskinporten(name: String, scope: String, config: Confi
         verifier(maskinportenJwkProvider, config.oauth.maskinporten.issuer.name)
         challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang til maskinporten") }
         validate { cred ->
-            if (cred.getClaim("scope", String::class) != scope) {
+            if (scope.contains(cred.getClaim("scope", String::class))) {
                 logger.warn("Wrong scope in claim")
                 return@validate null
             }

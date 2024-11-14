@@ -50,7 +50,8 @@ data class MaskinportenConfig(
     data class ScopeConfig(
         val afpprivat: String = "nav:aap:afpprivat.read",
         val afpoffentlig: String = "nav:aap:afpoffentlig.read",
-        val tpordningen: String = "nav:aap:tpordningen.read"
+        val tpordningen: String = "nav:aap:tpordningen.read",
+        val afpoffentligAksio: String = "nav:aap/delegert.altinn.ekstern.afpoffentlig.read"
     )
 }
 
