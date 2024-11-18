@@ -23,6 +23,6 @@ src/generated
 /gradle/daemon/
 /gradle/native/
 /gradle/wrapper/dists/
-
+gradle/.tmp
 # Ignore Gradle build output directory
 build
