@@ -29,7 +29,8 @@ data class Vedtak(
     val beregningsgrunnlag: Int,
     val barnMedStonad: Int,
     val kildesystem: String? = "ARENA",
-    val samordnigsId: String? = ""
+    val samordnigsId: String? = "",
+    val OpphørsAarsak: String? = ""
 )
 
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
@@ -48,6 +49,7 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
 
 data class UtbetalingMedMer(
     val reduksjon: Reduksjon? = null,
+    val utbetalingsgrad: Int? = null,
     val periode: Periode,
     val belop: Int,
     val dagsats: Int,
@@ -57,6 +59,7 @@ data class UtbetalingMedMer(
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.UtbetalingMedMer.fraKontrakt(): UtbetalingMedMer {
     return UtbetalingMedMer(
         this.reduksjon?.fraKontrakt(),
+        this.utbetalingsgrad,
         this.periode.fraKontrakt(),
         this.belop,
         this.dagsats,
