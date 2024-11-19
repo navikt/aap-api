@@ -19,6 +19,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.callid.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
@@ -44,6 +45,7 @@ fun Application.api() {
     val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
 
     install(CallLogging) {
+        callIdMdc("x-callid")
         logging()
     }
 
