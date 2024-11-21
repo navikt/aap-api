@@ -29,9 +29,18 @@ info:
     | Dagsats               | Her har vi to verdier. Den som ligger på selve vedtaket er før samordning, mens det som ligger i utbetalingsobjektet er etter. |
     | Beløp                 | Fullt beløp, etter samhandling. Det bruker faktisk får utbetalt.                                                               |
     | Barnetillegg          |                                                                                                                                |
-    | Beregningsgrunnlag    | Utledet fra Arena. Via FORMEL                                                                                                  |
+    | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
     | Rettighetstype        | Også kalt aktivitetsfasekode.                                                                                                  |
-    | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`.                                                                                            |
+    | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_.                                                                                           |
+    | Saksnummer | Referanse til saken. |
+    | Vedtaksdato | Dato fra da vedtaket er fattet. |
+    | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
+    | Barn med stønad | Antall barn som bruker får barnetillegg for.|
+    | Sykedager | Reduksjon som skyldes   |
+    | Sent meldekort | Om meldekortet ble sendt inn sent. |
+    | Fravær | Antall fraværsdager. | 
+    | Utbetalingsgrad | Kommer i Kelvin. Er `null` fra Arena. |
+    | Kilde | Om dataen kommer fra Arena eller Kelvin (henholdsvis gammel og ny løsning) |
   contact:
     url: https://github.com/navikt/aap-api
   version: 1.0.0
@@ -55,7 +64,7 @@ paths:
       tags:
         - afp
       description: |-
-        Henter perioder med vedtak for en person innen gitte datointerval. 
+        Henter perioder med vedtak for en person innen gitte datointervall. 
 
         Scope: `nav:aap:afpprivat.read`
       security:
@@ -96,7 +105,7 @@ paths:
       tags:
         - afp
       description: |-
-        Henter perioder med vedtak for en person innen gitte datointerval.
+        Henter perioder med vedtak for en person innen gitte datointervall.
         
         Scope: `nav:aap:afpoffentlig.read`
       security:
