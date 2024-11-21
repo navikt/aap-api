@@ -206,10 +206,10 @@ components:
           description: Til-dato for perioden
           example: 2021-01-31
     MaksimumRespons:
-      type: array
-      description: liste
-      items:
-        $ref: '#/components/schemas/Vedtak'
+      type: object
+      properties:
+        vedtak:
+          $ref: '#/components/schemas/Vedtak'
 
     Reduksjon:
       type: object
@@ -257,15 +257,15 @@ components:
     Vedtak:
       type: object
       properties:
-        utbetalinger:
+        utbetaling:
           type: array
           description: Utbetalinger for vedtaket.
           items:
             $ref: '#/components/schemas/UtbetalingMedMer'
         dagsats:
-          type: number
+          type: integer
           description: Dagsats for vedtaket
-          example: 123.45
+          example: 123
         status:
           type: string
           description: Status for vedtaket.
@@ -294,13 +294,24 @@ components:
             - "UA"
           example: "FA"
         beregningsgrunnlag:
-          type: number
+          type: integer
           description: Beregningsgrunnlag for vedtaket.
           example: 123456
-        barnmedstonad:
+        barnMedStonad:
           type: number
           description: Hvor mange barn gis det tilleg for i vedtaket.
           example: 1
+        kildesystem:
+          type: string
+          enum:
+            - "ARENA"
+            - "KELVIN"
+        samordingsId:
+          type: string
+          nullable: true
+        opphørsAarsak:
+          type: string
+          nullable: true
     PeriodeRequest:
       type: object
       properties:
@@ -337,6 +348,7 @@ components:
           example: 2021-01-01
         saksId:
           type: string
+          nullable: true
           description: ekstern saksId for sporing
           example: "086BE575-25E1-4425-8970-A16A9D7953E9"
   securitySchemes:
