@@ -54,9 +54,9 @@ tags:
     description: Tjenestepensjon
 servers:
   - url: https://aap-api.nav.no
-    description: prod server
+    description: Prodserver
   - url: https://aap-api.ekstern.dev.nav.no
-    description: dev server
+    description: Dev-server
 paths:
   /afp/fellesordningen:
     post:
@@ -197,13 +197,13 @@ components:
         fraOgMedDato:
           type: string
           format: date
-          description: Fra dato for perioden
+          description: Fra-dato for perioden
           example: 2021-01-01
         tilOgMedDato:
           type: string
           format: date
           nullable: true
-          description: Til dato for perioden
+          description: Til-dato for perioden
           example: 2021-01-31
     MaksimumRespons:
       type: array
@@ -216,7 +216,7 @@ components:
       properties:
         timerArbeidet:
           type: number
-          description: Kode for utbetalingsgrad
+          description: Antall timer arbeidet i meldekortperioden.
           example: 23.5
         annenReduksjon:
           $ref: '#/components/schemas/AnnenReduksjon'
@@ -225,15 +225,15 @@ components:
       properties:
         sykedager:
           type: number
-          description: Antall sykedager
+          description: Antall sykedager.
           example: 23
         sentMeldekort:
           type: boolean
-          description: Var utbetalingens koblede meldekort sendt sent?
+          description: Var utbetalingens koblede meldekort sendt for sent?
           example: false
         fraver:
           type: number
-          description: Antall fraværsdager
+          description: Antall fraværsdager.
           example: 2
     UtbetalingMedMer:
       type: object
@@ -244,22 +244,22 @@ components:
           $ref: '#/components/schemas/Reduksjon'
         belop:
           type: number
-          description: Utbetalingsbeløp
+          description: Faktisk utbetalingsbeløp.
           example: 1234.56
         dagsats:
           type: number
-          description: Dagsats for utbetalingen
+          description: Dagsats for utbetalingen.
           example: 123.45
         barnetilegg:
           type: number
-          description: Barnetillegg for utbetalingen
+          description: Barnetillegg for utbetalingen.
           example: 123.45
     Vedtak:
       type: object
       properties:
         utbetalinger:
           type: array
-          description: Utbetalinger for vedtaket
+          description: Utbetalinger for vedtaket.
           items:
             $ref: '#/components/schemas/UtbetalingMedMer'
         dagsats:
@@ -268,22 +268,23 @@ components:
           example: 123.45
         status:
           type: string
-          description: Status for vedtaket
-          example: "Innvilget"
+          description: Status for vedtaket.
+          example: "IVERK"
         saksnummer:
           type: string
-          description: Saksnummer for vedtaket
+          description: Saksnummer for vedtaket.
           example: "123456789"
         vedtaksdato:
           type: string
           format: date
-          description: Dato for vedtaket
+          description: Dato da vedtaket ble fattet.
           example: 2021-01-01
         periode:
           $ref: '#/components/schemas/Periode'
         rettighetsType:
           type: string
-          description: Rettighetstype for vedtaket
+          description: |
+            Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning").
           enum:
             - "FA"
             - "AU"
@@ -294,18 +295,18 @@ components:
           example: "FA"
         beregningsgrunnlag:
           type: number
-          description: Beregningsgrunnlag for vedtaket
+          description: Beregningsgrunnlag for vedtaket.
           example: 123456
         barnmedstonad:
           type: number
-          description: hvor mangen barn gis det stønad for i Vedtaket
+          description: Hvor mange barn gis det tilleg for i vedtaket.
           example: 1
     PeriodeRequest:
       type: object
       properties:
         personidentifikator:
           type: string
-          description: Personnummeret til brukeren
+          description: Personnummeret til brukeren.
           example: 12345678901
         fraOgMedDato:
           type: string
@@ -335,9 +336,7 @@ components:
           description: Slutt-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
         saksId:
-          type:
-            - 'null'
-            - string
+          type: string
           description: ekstern saksId for sporing
           example: "086BE575-25E1-4425-8970-A16A9D7953E9"
   securitySchemes:
