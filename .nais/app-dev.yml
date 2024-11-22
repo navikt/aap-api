@@ -61,6 +61,10 @@ spec:
           consumers:
             - name: "aksio"
               orgno: "927613298"
+            - name: "Drammen"
+              orgno: "980650383"
+            - name: "Arendal"
+              orgno: "940380014"
           separator: "/"
         - name: "tpordningen.read"
           enabled: true
