@@ -17,10 +17,10 @@ spec:
     pool: nav-dev
   resources:
     limits:
-      memory: 8Gi
+      memory: 1Gi
     requests:
       cpu: 500m
-      memory: 4Gi
+      memory: 500Mi
   azure:
     application:
       enabled: true
