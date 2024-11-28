@@ -118,7 +118,7 @@ private suspend fun hentPerioder(
                 throw SporingsloggException(e)
             }
         } else {
-            logger.warn("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
+            logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
             call.respond(res)
         }
     }
@@ -160,7 +160,7 @@ private suspend fun hentMaksimum(
                 throw SporingsloggException(e)
             }
         } else {
-            logger.warn("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
+            logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
             call.respond(res)
         }
     }
