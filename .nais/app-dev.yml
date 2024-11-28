@@ -78,6 +78,8 @@ spec:
               orgno: "916833520"
             - name: "Storebrand pensjonstjenester"
               orgno: "931936492"
+            - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
+              orgno: "938708606"
   liveness:
     path: /actuator/live
     initialDelay: 1
