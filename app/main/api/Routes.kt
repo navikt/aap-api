@@ -136,7 +136,7 @@ private suspend fun hentMaksimum(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val body = call.receive<VedtakRequest>()
+    val body = call.receive<VedtakRequestMedSaksRef>()
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
         val arenaOppslagRequestBody = EksternVedtakRequest(
