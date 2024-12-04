@@ -61,11 +61,27 @@ fun Route.api(
             }
         }
     }
-    route("/tp-samhandling") {
+    route("/tp-samhandling-med-utbetalinger") {
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 call.respond(
                     hentMaksimum(
+                        call,
+                        brukSporingslogg,
+                        arenaoppslagRestClient,
+                        sporingsloggClient,
+                        prometheus
+                    )
+                )
+            }
+        }
+    }
+
+    route("/tp-samhandling") {
+        authenticate(MASKINPORTEN_TP_ORDNINGEN) {
+            post {
+                call.respond(
+                    hentMedium(
                         call,
                         brukSporingslogg,
                         arenaoppslagRestClient,
@@ -112,6 +128,47 @@ private suspend fun hentPerioder(
                         body.saksId
                     )
                 )
+                call.respond(res)
+            } catch (e: Exception) {
+                prometheus.sporingsloggFailCounter(consumerTag).increment()
+                throw SporingsloggException(e)
+            }
+        } else {
+            logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
+            call.respond(res)
+        }
+    }
+}
+
+private suspend fun hentMedium(
+    call: ApplicationCall,
+    brukSporingslogg: Boolean,
+    arenaoppslagRestClient: ArenaoppslagRestClient,
+    sporingsloggClient: SporingsloggKafkaClient,
+    prometheus: PrometheusMeterRegistry
+) {
+    val orgnr = call.hentConsumerId()
+    val consumerTag = getConsumerTag(orgnr)
+
+    prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
+    val body = call.receive<VedtakRequestMedSaksRef>()
+    val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
+    runCatching {
+        val arenaOppslagRequestBody = EksternVedtakRequest(
+            personidentifikator = body.personidentifikator,
+            fraOgMedDato = body.fraOgMedDato,
+            tilOgMedDato = body.tilOgMedDato
+        )
+        arenaoppslagRestClient.hentMaksimum(callId, arenaOppslagRequestBody).fraKontraktUtenUtbetalinger()
+    }.onFailure { ex ->
+        prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
+        secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
+        logger.error("Klarte ikke hente vedtak fra Arena. Se sikker logg for stacktrace.")
+        throw ex
+    }.onSuccess { res ->
+        if (brukSporingslogg) {
+            try {
+                sporingsloggClient.send(Spor.opprett(body.personidentifikator, res, orgnr, saksId = body.saksId))
                 call.respond(res)
             } catch (e: Exception) {
                 prometheus.sporingsloggFailCounter(consumerTag).increment()

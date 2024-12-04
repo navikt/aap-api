@@ -8,10 +8,16 @@ data class Maksimum(
     val vedtak: List<Vedtak>,
 )
 
+data class Medium(val vedtak: List<VedtakUtenUtbetaling>)
+
 fun KontraktMaksimum.fraKontrakt(): Maksimum {
     return Maksimum(
         vedtak = this.vedtak.map { it.fraKontrakt() }
     )
+}
+
+fun KontraktMaksimum.fraKontraktUtenUtbetalinger(): Medium {
+    return Medium(vedtak = this.vedtak.map { it.fraKontraktUtenUtbetaling() })
 }
 
 /**
@@ -19,7 +25,6 @@ fun KontraktMaksimum.fraKontrakt(): Maksimum {
  * @param saksnummer hypotese sak_id
  */
 data class Vedtak(
-    val utbetaling: List<UtbetalingMedMer>,
     val dagsats: Int,
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String,
@@ -30,12 +35,40 @@ data class Vedtak(
     val barnMedStonad: Int,
     val kildesystem: String = "ARENA",
     val samordningsId: String? = "",
-    val opphørsAarsak: String? = ""
+    val opphørsAarsak: String? = "",
+    val utbetaling: List<UtbetalingMedMer>,
+)
+
+data class VedtakUtenUtbetaling(
+    val dagsats: Int,
+    val status: String, //Hypotese, vedtaksstatuskode
+    val saksnummer: String,
+    val vedtaksdato: String, //reg_dato
+    val periode: Periode,
+    val rettighetsType: String, ////aktivitetsfase //Aktfasekode
+    val beregningsgrunnlag: Int,
+    val barnMedStonad: Int,
+    val kildesystem: String = "ARENA",
+    val samordningsId: String? = "",
+    val opphørsAarsak: String? = "",
 )
 
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
     return Vedtak(
-        this.utbetaling.map { it.fraKontrakt() },
+        this.dagsats,
+        this.status,
+        this.saksnummer,
+        this.vedtaksdato,
+        this.periode.fraKontrakt(),
+        rettighetsType = this.rettighetsType,
+        beregningsgrunnlag = this.beregningsgrunnlag,
+        barnMedStonad = this.barnMedStonad,
+        utbetaling = this.utbetaling.map { it.fraKontrakt() },
+    )
+}
+
+fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontraktUtenUtbetaling(): VedtakUtenUtbetaling {
+    return VedtakUtenUtbetaling(
         this.dagsats,
         this.status,
         this.saksnummer,
@@ -46,6 +79,7 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
         barnMedStonad = this.barnMedStonad,
     )
 }
+
 
 data class UtbetalingMedMer(
     val reduksjon: Reduksjon? = null,

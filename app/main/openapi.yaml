@@ -140,9 +140,50 @@ paths:
           description: Manglende URL / Person ikke funnet
         '500':
           description: Feil på tjeneste, meld fra og send med call-id
-  /tp-samhandling:
+  /tp-samhandling-med-utbetalinger:
     post:
       summary: Hent innvilget vedtak og alle tilhørende utbetalinger for en person
+      tags:
+        - tp
+      description: |-
+        Hent innvilget vedtak og alle tilhørende utbetalinger for en person.
+
+        Scope: `nav:aap:tpordningen.read`.
+      security:
+        - maskinporten: [ ]
+      parameters:
+        - in: header
+          name: x-callid
+          description: En UUID konsumenten sender inn som brukes til videre logging og feilsøking.
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PeriodeRequestMedSaksId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaksimumRespons'
+        '400':
+          description: Feil i request
+        '401':
+          description: Mangler / feil maskinporten token eller samtykke-token
+        '403':
+          description: Feil scope i maskinporten token
+        '404':
+          description: Manglende URL / Person ikke funnet
+        '500':
+          description: Feil på tjeneste, meld fra og send med call-id
+  /tp-samhandling:
+    post:
+      summary: Hent innvilget vedtak
       tags:
         - tp
       description: |-
@@ -205,11 +246,18 @@ components:
           nullable: true
           description: Til-dato for perioden
           example: 2021-01-31
+
     MaksimumRespons:
       type: object
       properties:
         vedtak:
           $ref: '#/components/schemas/Vedtak'
+
+    MediumRespons:
+      type: object
+      properties:
+        vedtak:
+          $ref: '#/components/schemas/VedtakMedUtbetalinger'
 
     Reduksjon:
       type: object
@@ -254,14 +302,10 @@ components:
           type: number
           description: Barnetillegg for utbetalingen.
           example: 123.45
+
     Vedtak:
       type: object
       properties:
-        utbetaling:
-          type: array
-          description: Utbetalinger for vedtaket.
-          items:
-            $ref: '#/components/schemas/UtbetalingMedMer'
         dagsats:
           type: integer
           description: Dagsats for vedtaket
@@ -312,6 +356,65 @@ components:
         opphørsAarsak:
           type: string
           nullable: true
+
+    VedtakMedUtbetalinger:
+      type: object
+      properties:
+        dagsats:
+          type: integer
+          description: Dagsats for vedtaket
+          example: 123
+        status:
+          type: string
+          description: Status for vedtaket.
+          example: "IVERK"
+        saksnummer:
+          type: string
+          description: Saksnummer for vedtaket.
+          example: "123456789"
+        vedtaksdato:
+          type: string
+          format: date
+          description: Dato da vedtaket ble fattet.
+          example: 2021-01-01
+        periode:
+          $ref: '#/components/schemas/Periode'
+        rettighetsType:
+          type: string
+          description: |
+            Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning").
+          enum:
+            - "FA"
+            - "AU"
+            - "UVUP"
+            - "IKKE"
+            - "SPE"
+            - "UA"
+          example: "FA"
+        beregningsgrunnlag:
+          type: integer
+          description: Beregningsgrunnlag for vedtaket.
+          example: 123456
+        barnMedStonad:
+          type: number
+          description: Hvor mange barn gis det tilleg for i vedtaket.
+          example: 1
+        kildesystem:
+          type: string
+          enum:
+            - "ARENA"
+            - "KELVIN"
+        samordingsId:
+          type: string
+          nullable: true
+        opphørsAarsak:
+          type: string
+          nullable: true
+        utbetaling:
+          type: array
+          description: Utbetalinger for vedtaket.
+          items:
+            $ref: '#/components/schemas/UtbetalingMedMer'
     PeriodeRequest:
       type: object
       properties:
