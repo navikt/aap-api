@@ -211,7 +211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MaksimumRespons'
+                $ref: '#/components/schemas/MediumRespons'
         '400':
           description: Feil i request
         '401':
@@ -251,13 +251,13 @@ components:
       type: object
       properties:
         vedtak:
-          $ref: '#/components/schemas/Vedtak'
+          $ref: '#/components/schemas/VedtakMedUtbetalinger'
 
     MediumRespons:
       type: object
       properties:
         vedtak:
-          $ref: '#/components/schemas/VedtakMedUtbetalinger'
+          $ref: '#/components/schemas/Vedtak'
 
     Reduksjon:
       type: object
