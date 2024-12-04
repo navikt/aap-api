@@ -34,8 +34,8 @@ data class Vedtak(
     val beregningsgrunnlag: Int,
     val barnMedStonad: Int,
     val kildesystem: String = "ARENA",
-    val samordningsId: String? = "",
-    val opphørsAarsak: String? = "",
+    val samordningsId: String? = null,
+    val opphørsAarsak: String? = null,
     val vedtaksTypeKode: String,
     val vedtaksTypeNavn: String,
     val utbetaling: List<UtbetalingMedMer>,
@@ -53,8 +53,8 @@ data class VedtakUtenUtbetaling(
     val beregningsgrunnlag: Int,
     val barnMedStonad: Int,
     val kildesystem: String = "ARENA",
-    val samordningsId: String? = "",
-    val opphørsAarsak: String? = "",
+    val samordningsId: String? = null,
+    val opphørsAarsak: String? = null,
     )
 
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
