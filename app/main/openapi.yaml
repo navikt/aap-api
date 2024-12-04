@@ -30,10 +30,11 @@ info:
     | Beløp                 | Fullt beløp, etter samhandling. Det bruker faktisk får utbetalt.                                                               |
     | Barnetillegg          |                                                                                                                                |
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
-    | Rettighetstype        | Også kalt aktivitetsfasekode.                                                                                                  |
+    | Rettighetstype        | Også kalt aktivitetsfasekode.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving) og `SPE` (sykepengeerstatning) |                                                                                                |
     | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_.                                                                                           |
     | Saksnummer | Referanse til saken. |
     | Vedtaksdato | Dato fra da vedtaket er fattet. |
+    | Vedtaktype | Kan være E (Endring), G (Gjenpptak), O (Ny rettighet). |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
     | Barn med stønad | Antall barn som bruker får barnetillegg for.|
     | Sykedager | Reduksjon som skyldes   |
@@ -312,121 +313,125 @@ components:
           example: 123.45
 
     Vedtak:
-      type: object
-      properties:
-        dagsats:
-          type: integer
-          description: Dagsats for vedtaket
-          example: 123
-        status:
-          type: string
-          description: Status for vedtaket.
-          example: "IVERK"
-        saksnummer:
-          type: string
-          description: Saksnummer for vedtaket.
-          example: "123456789"
-        vedtaksdato:
-          type: string
-          format: date
-          description: Dato da vedtaket ble fattet.
-          example: 2021-01-01
-        periode:
-          $ref: '#/components/schemas/Periode'
-        rettighetsType:
-          type: string
-          description: |
-            Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning").
-          enum:
-            - "FA"
-            - "AU"
-            - "UVUP"
-            - "IKKE"
-            - "SPE"
-            - "UA"
-          example: "FA"
-        beregningsgrunnlag:
-          type: integer
-          description: Beregningsgrunnlag for vedtaket.
-          example: 123456
-        barnMedStonad:
-          type: number
-          description: Hvor mange barn gis det tilleg for i vedtaket.
-          example: 1
-        kildesystem:
-          type: string
-          enum:
-            - "ARENA"
-            - "KELVIN"
-        samordingsId:
-          type: string
-          nullable: true
-        opphørsAarsak:
-          type: string
-          nullable: true
+      type: array
+      items:
+        type: object
+        properties:
+          dagsats:
+            type: integer
+            description: Dagsats for vedtaket
+            example: 123
+          status:
+            type: string
+            description: Status for vedtaket.
+            example: "IVERK"
+          saksnummer:
+            type: string
+            description: Saksnummer for vedtaket.
+            example: "123456789"
+          vedtaksdato:
+            type: string
+            format: date
+            description: Dato da vedtaket ble fattet.
+            example: 2021-01-01
+          periode:
+            $ref: '#/components/schemas/Periode'
+          rettighetsType:
+            type: string
+            description: |
+              Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning").
+            enum:
+              - "FA"
+              - "AU"
+              - "UVUP"
+              - "IKKE"
+              - "SPE"
+              - "UA"
+            example: "FA"
+          beregningsgrunnlag:
+            type: integer
+            description: Beregningsgrunnlag for vedtaket.
+            example: 123456
+          barnMedStonad:
+            type: number
+            description: Hvor mange barn gis det tilleg for i vedtaket.
+            example: 1
+          kildesystem:
+            type: string
+            enum:
+              - "ARENA"
+              - "KELVIN"
+          samordingsId:
+            type: string
+            nullable: true
+          opphørsAarsak:
+            type: string
+            nullable: true
 
     VedtakMedUtbetalinger:
-      type: object
-      properties:
-        dagsats:
-          type: integer
-          description: Dagsats for vedtaket
-          example: 123
-        status:
-          type: string
-          description: Status for vedtaket.
-          example: "IVERK"
-        saksnummer:
-          type: string
-          description: Saksnummer for vedtaket.
-          example: "123456789"
-        vedtaksdato:
-          type: string
-          format: date
-          description: Dato da vedtaket ble fattet.
-          example: 2021-01-01
-        vedtaksTypeKode:
-          type: string
-        vedtaksTypeNavn:
-          type: string
-        periode:
-          $ref: '#/components/schemas/Periode'
-        rettighetsType:
-          type: string
-          description: |
-            Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning").
-          enum:
-            - "FA"
-            - "AU"
-            - "UVUP"
-            - "IKKE"
-            - "SPE"
-            - "UA"
-          example: "FA"
-        beregningsgrunnlag:
-          type: integer
-          description: Beregningsgrunnlag for vedtaket.
-          example: 123456
-        barnMedStonad:
-          type: number
-          description: Hvor mange barn gis det tilleg for i vedtaket.
-          example: 1
-        kildesystem:
-          type: string
-          enum:
-            - "ARENA"
-            - "KELVIN"
-        samordingsId:
-          type: string
-          nullable: true
-        opphørsAarsak:
-          type: string
-          nullable: true
-        utbetaling:
-          type: array
-          description: Utbetalinger for vedtaket.
-          items:
-            $ref: '#/components/schemas/UtbetalingMedMer'
+      type: array
+      items:
+        type: object
+        properties:
+          dagsats:
+            type: integer
+            description: Dagsats for vedtaket
+            example: 123
+          status:
+            type: string
+            description: Status for vedtaket.
+            example: "IVERK"
+          saksnummer:
+            type: string
+            description: Saksnummer for vedtaket.
+            example: "123456789"
+          vedtaksdato:
+            type: string
+            format: date
+            description: Dato da vedtaket ble fattet.
+            example: 2021-01-01
+          vedtaksTypeKode:
+            type: string
+          vedtaksTypeNavn:
+            type: string
+          periode:
+            $ref: '#/components/schemas/Periode'
+          rettighetsType:
+            type: string
+            description: |
+              Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning").
+            enum:
+              - "FA"
+              - "AU"
+              - "UVUP"
+              - "IKKE"
+              - "SPE"
+              - "UA"
+            example: "FA"
+          beregningsgrunnlag:
+            type: integer
+            description: Beregningsgrunnlag for vedtaket.
+            example: 123456
+          barnMedStonad:
+            type: number
+            description: Hvor mange barn gis det tilleg for i vedtaket.
+            example: 1
+          kildesystem:
+            type: string
+            enum:
+              - "ARENA"
+              - "KELVIN"
+          samordingsId:
+            type: string
+            nullable: true
+          opphørsAarsak:
+            type: string
+            nullable: true
+          utbetaling:
+            type: array
+            description: Utbetalinger for vedtaket.
+            items:
+              $ref: '#/components/schemas/UtbetalingMedMer'
     PeriodeRequest:
       type: object
       properties:
