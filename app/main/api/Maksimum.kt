@@ -117,14 +117,14 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Reduksjon.fraKontrakt(): Reduksjon
 
 data class AnnenReduksjon(
     val sykedager: Float?,
-    val sentMeldekort: Boolean?,
+    val sentMeldekort: Int?,
     val fraver: Float?
 )
 
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.AnnenReduksjon.fraKontrakt(): AnnenReduksjon {
     return AnnenReduksjon(
         this.sykedager,
-        this.sentMeldekort,
+        if (this.sentMeldekort == true) 1 else 0,
         this.fraver
     )
 }

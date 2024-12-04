@@ -272,15 +272,17 @@ components:
       type: object
       properties:
         sykedager:
-          type: number
+          type: integer
           description: Antall sykedager.
           example: 23
         sentMeldekort:
-          type: boolean
-          description: Var utbetalingens koblede meldekort sendt for sent?
+          type: integer
+          minimum: 0
+          maximum: 1
+          description: Var utbetalingens koblede meldekort sendt for sent? Hvis ja, er svaret 1.
           example: false
         fraver:
-          type: number
+          type: integer
           description: Antall fraværsdager.
           example: 2
     UtbetalingMedMer:
