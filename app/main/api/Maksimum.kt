@@ -103,7 +103,7 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.UtbetalingMedMer.fraKontrakt(): Ut
 
 data class Reduksjon(
     val timerArbeidet: Double,
-    val annenReduksjon: AnnenReduksjon
+    val annenReduksjon: Float
 )
 
 
@@ -111,13 +111,14 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Reduksjon.fraKontrakt(): Reduksjon
     return Reduksjon(
         this.timerArbeidet,
         this.annenReduksjon.fraKontrakt()
+            .let { (it.fraver ?: 0F) + (it.sykedager ?: 0F) + it.sentMeldekort }
     )
 }
 
 
 data class AnnenReduksjon(
     val sykedager: Float?,
-    val sentMeldekort: Int?,
+    val sentMeldekort: Int,
     val fraver: Float?
 )
 

@@ -267,7 +267,9 @@ components:
           description: Antall timer arbeidet i meldekortperioden.
           example: 23.5
         annenReduksjon:
-          $ref: '#/components/schemas/AnnenReduksjon'
+          type: number
+          description: Sum av fraværsdager av forskjellige årsaker.
+          example: 13
     AnnenReduksjon:
       type: object
       properties:
