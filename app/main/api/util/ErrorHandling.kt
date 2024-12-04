@@ -9,31 +9,48 @@ import io.ktor.server.response.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import org.slf4j.Logger
 
-fun StatusPagesConfig.feilhåndtering(logger: Logger, prometheusMeterRegistry: PrometheusMeterRegistry) {
+data class FeilRespons(
+    val melding: String,
+)
+
+fun StatusPagesConfig.feilhåndtering(
+    logger: Logger,
+    prometheusMeterRegistry: PrometheusMeterRegistry
+) {
     exception<Throwable> { call, cause ->
-        when(cause) {
+        when (cause) {
             is SporingsloggException -> {
-                logger.error("Klarte ikke produsere til Kafka sporingslogg og kan derfor ikke returnere data", cause)
-                call.respondText(
-                    text = "Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.",
-                    status = HttpStatusCode.ServiceUnavailable
+                logger.error(
+                    "Klarte ikke produsere til Kafka sporingslogg og kan derfor ikke returnere data",
+                    cause
+                )
+                call.respond(
+                    HttpStatusCode.ServiceUnavailable,
+                    FeilRespons("Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.")
                 )
             }
+
             is SamtykkeIkkeGittException -> {
                 logger.warn("Samtykke ikke gitt", cause)
-                call.respondText(text = "Samtykke ikke gitt", status = HttpStatusCode.Forbidden)
+                call.respond(HttpStatusCode.Forbidden, FeilRespons("Samtykke ikke gitt"))
             }
+
             is ContentTransformationException -> {
                 logger.warn("Feil i mottatte data", cause)
-                call.respondText(text = "Feil i mottatte data", status = HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
             }
+
             is IllegalArgumentException -> {
                 logger.warn("Feil i mottatte data", cause)
-                call.respondText(text = "Feil i mottatte data", status = HttpStatusCode.BadRequest)
+                call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
             }
+
             else -> {
                 logger.error("Uhåndtert feil", cause)
-                call.respondText(text = "Feil i tjeneste: ${cause.message}", status = HttpStatusCode.InternalServerError)
+                call.respond(
+                    HttpStatusCode.InternalServerError,
+                    "Feil i tjeneste: ${cause.message}"
+                )
             }
         }
         prometheusMeterRegistry.uhåndtertExceptionCounter(cause.javaClass.simpleName)

@@ -36,6 +36,8 @@ data class Vedtak(
     val kildesystem: String = "ARENA",
     val samordningsId: String? = "",
     val opphørsAarsak: String? = "",
+    val vedtaksTypeKode: String,
+    val vedtaksTypeNavn: String,
     val utbetaling: List<UtbetalingMedMer>,
 )
 
@@ -44,6 +46,8 @@ data class VedtakUtenUtbetaling(
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String,
     val vedtaksdato: String, //reg_dato
+    val vedtaksTypeKode: String,
+    val vedtaksTypeNavn: String,
     val periode: Periode,
     val rettighetsType: String, ////aktivitetsfase //Aktfasekode
     val beregningsgrunnlag: Int,
@@ -51,7 +55,7 @@ data class VedtakUtenUtbetaling(
     val kildesystem: String = "ARENA",
     val samordningsId: String? = "",
     val opphørsAarsak: String? = "",
-)
+    )
 
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
     return Vedtak(
@@ -63,6 +67,8 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
         rettighetsType = this.rettighetsType,
         beregningsgrunnlag = this.beregningsgrunnlag,
         barnMedStonad = this.barnMedStonad,
+        vedtaksTypeKode = this.vedtaksTypeKode,
+        vedtaksTypeNavn = this.vedtaksTypeNavn,
         utbetaling = this.utbetaling.map { it.fraKontrakt() },
     )
 }
@@ -73,10 +79,12 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontraktUtenUtbetaling()
         this.status,
         this.saksnummer,
         this.vedtaksdato,
-        this.periode.fraKontrakt(),
+        periode = this.periode.fraKontrakt(),
         rettighetsType = this.rettighetsType,
         beregningsgrunnlag = this.beregningsgrunnlag,
         barnMedStonad = this.barnMedStonad,
+        vedtaksTypeKode = this.vedtaksTypeKode,
+        vedtaksTypeNavn = this.vedtaksTypeNavn,
     )
 }
 

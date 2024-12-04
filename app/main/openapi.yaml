@@ -144,11 +144,11 @@ paths:
           description: Feil på tjeneste, meld fra og send med call-id
   /tp-samhandling-med-utbetalinger:
     post:
-      summary: Hent innvilget vedtak og alle tilhørende utbetalinger for en person
+      summary: Hent vedtak og alle tilhørende utbetalinger for en person
       tags:
         - tp
       description: |-
-        Hent innvilget vedtak og alle tilhørende utbetalinger for en person.
+        Hent vedtak og alle tilhørende utbetalinger for en person.
 
         Scope: `nav:aap:tpordningen.read`.
       security:
@@ -385,6 +385,10 @@ components:
           format: date
           description: Dato da vedtaket ble fattet.
           example: 2021-01-01
+        vedtaksTypeKode:
+          type: string
+        vedtaksTypeNavn:
+          type: string
         periode:
           $ref: '#/components/schemas/Periode'
         rettighetsType:
