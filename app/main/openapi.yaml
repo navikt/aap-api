@@ -311,6 +311,10 @@ components:
           type: number
           description: Barnetillegg for utbetalingen.
           example: 123.45
+        utbetalingsgrad:
+          type: number
+          description: Kommer i Kelvin. Er null fra Arena.
+          example: 90
 
     Vedtak:
       type: array
