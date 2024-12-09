@@ -374,7 +374,7 @@ components:
             enum:
               - "ARENA"
               - "KELVIN"
-          samordingsId:
+          samordningsId:
             type: string
             description: Her finnes kun data fra ny løsning. Ellers `null`.
             nullable: true
@@ -445,7 +445,7 @@ components:
             enum:
               - "ARENA"
               - "KELVIN"
-          samordingsId:
+          samordningsId:
             type: string
             description: Her finnes kun data fra ny løsning. Ellers `null`.
             nullable: true
