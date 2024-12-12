@@ -382,7 +382,7 @@ components:
             type: string
             description: Her finnes kun data fra ny løsning. Ellers `null`.
             nullable: true
-          opphørsAarsak:
+          opphorsAarsak:
             type: string
             nullable: true
             description: Her finnes kun data fra ny løsning. Ellers `null`.
@@ -426,7 +426,7 @@ components:
           rettighetsType:
             type: string
             description: |
-              Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning").
+              Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning"), IKKE ("Ikke spesif. aktivitetsfase").
             enum:
               - "FA"
               - "AU"
@@ -453,7 +453,7 @@ components:
             type: string
             description: Her finnes kun data fra ny løsning. Ellers `null`.
             nullable: true
-          opphørsAarsak:
+          opphorsAarsak:
             type: string
             nullable: true
             description: Her finnes kun data fra ny løsning. Ellers `null`.
