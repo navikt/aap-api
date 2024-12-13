@@ -243,6 +243,7 @@ components:
         fraOgMedDato:
           type: string
           format: date
+          nullable: true
           description: Fra-dato for perioden
           example: 2022-05-01
         tilOgMedDato:
