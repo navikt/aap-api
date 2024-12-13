@@ -140,7 +140,7 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.AnnenReduksjon.fraKontrakt(): Anne
 
 
 data class Periode(
-    val fraOgMedDato: LocalDate,
+    val fraOgMedDato: LocalDate?,
     val tilOgMedDato: LocalDate?
 )
 
