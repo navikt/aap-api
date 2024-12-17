@@ -49,8 +49,10 @@ info:
     name: MIT
     url: https://opensource.org/license/mit/
 tags:
-  - name: afp
+  - name: AFP-Privat
     description: AFP (avtalefestet pensjon)
+  - name: AFP-Offentlig
+    description: AFP-Offentlig
   - name: tp
     description: Tjenestepensjon
 servers:
@@ -63,7 +65,7 @@ paths:
     post:
       summary: Hent perioder med AAP, scopet for privat sektor
       tags:
-        - afp
+        - AFP-Privat
       description: |-
         Henter perioder med vedtak for en person innen gitte datointervall. 
 
@@ -105,7 +107,7 @@ paths:
     post:
       summary: Hent perioder med AAP, scopet for offentlig sektor
       tags:
-        - afp
+        - AFP-Offentlig
       description: |-
         Henter perioder med vedtak for en person innen gitte datointervall.
         
