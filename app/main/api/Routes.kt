@@ -12,12 +12,15 @@ import api.auth.hentConsumerId
 import api.sporingslogg.Spor
 import api.sporingslogg.SporingsloggException
 import api.sporingslogg.SporingsloggKafkaClient
+import api.tp.TpRegisterClient
 import api.util.Consumers.getConsumerTag
 import api.util.httpCallCounter
 import api.util.httpFailedCallCounter
 import api.util.sporingsloggFailCounter
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.plugins.callid.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -64,15 +67,25 @@ fun Route.api(
     route("/tp-samhandling-med-utbetalinger") {
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
-                call.respond(
-                    hentMaksimum(
-                        call,
-                        brukSporingslogg,
-                        arenaoppslagRestClient,
-                        sporingsloggClient,
-                        prometheus
+                val body = call.receive<VedtakRequestMedSaksRef>()
+                if (!TpRegisterClient.brukerHarTpForholdForOrgnr(
+                        body.personidentifikator,
+                        call.hentConsumerId(),
+                        call.callId ?: UUID.randomUUID().toString()
                     )
-                )
+                ) {
+                    call.respond(HttpStatusCode.NotFound, "Ingen forhold funnet mellom bruker og organisasjon")
+                } else {
+                    call.respond(
+                        hentMaksimum(
+                            call,
+                            brukSporingslogg,
+                            arenaoppslagRestClient,
+                            sporingsloggClient,
+                            prometheus
+                        )
+                    )
+                }
             }
         }
     }
@@ -80,15 +93,25 @@ fun Route.api(
     route("/tp-samhandling") {
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
-                call.respond(
-                    hentMedium(
-                        call,
-                        brukSporingslogg,
-                        arenaoppslagRestClient,
-                        sporingsloggClient,
-                        prometheus
+                val body = call.receive<VedtakRequestMedSaksRef>()
+                if (!TpRegisterClient.brukerHarTpForholdForOrgnr(
+                        body.personidentifikator,
+                        call.hentConsumerId(),
+                        call.callId ?: UUID.randomUUID().toString()
                     )
-                )
+                ) {
+                    call.respond(HttpStatusCode.NotFound, "Ingen forhold funnet mellom bruker og organisasjon")
+                } else {
+                    call.respond(
+                        hentMedium(
+                            call,
+                            brukSporingslogg,
+                            arenaoppslagRestClient,
+                            sporingsloggClient,
+                            prometheus
+                        )
+                    )
+                }
             }
         }
     }
@@ -108,10 +131,11 @@ private suspend fun hentPerioder(
     val body = call.receive<VedtakRequestMedSaksRef>()
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
-        VedtakResponse(perioder = arenaoppslagRestClient.hentVedtakFellesordning(
-            UUID.fromString(callId),
-            body.toVedtakRequest()
-        ).perioder.map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) })
+        VedtakResponse(
+            perioder = arenaoppslagRestClient.hentVedtakFellesordning(
+                UUID.fromString(callId),
+                body.toVedtakRequest()
+            ).perioder.map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) })
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
