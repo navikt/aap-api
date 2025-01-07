@@ -12,11 +12,15 @@ application {
 
 val aapLibVersion = "5.0.25"
 val ktorVersion = "3.0.3"
+val komponenterVersjon = "1.0.101"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
 
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+
+    implementation("no.nav.aap.kelvin:httpklient:$komponenterVersjon")
+    implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
 
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")

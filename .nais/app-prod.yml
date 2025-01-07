@@ -86,6 +86,8 @@ spec:
       value: https://idporten.no/.well-known/openid-configuration
     - name: ALTINN_AUDIENCE
       value: https://idporten.no
+    - name: TP_URL
+      value: https://tp-api.prod-fss-pub.nais.io
     - name: SPORINGSLOGG_TOPIC
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt
     - name: SPORINGSLOGG_ENABLED
