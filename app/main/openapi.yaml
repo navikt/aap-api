@@ -41,6 +41,7 @@ info:
     | Sent meldekort | Om meldekortet ble sendt inn sent. |
     | Fravær | Antall fraværsdager. | 
     | Utbetalingsgrad | Kommer i Kelvin. Er `null` fra Arena. |
+    | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. Fra Kelvin: `OVERGANG_UFORE`, `AVKLART_TIL_ARBEID`, `ANNET`. |
     | Kilde | Om dataen kommer fra Arena eller Kelvin (henholdsvis gammel og ny løsning) |
   contact:
     url: https://github.com/navikt/aap-api
