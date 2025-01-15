@@ -66,9 +66,24 @@ fun Application.api() {
     }
 
     install(Authentication) {
-        maskinporten(MASKINPORTEN_AFP_PRIVAT, listOf( config.oauth.maskinporten.scope.afpprivat), config)
-        maskinporten(MASKINPORTEN_AFP_OFFENTLIG, listOf(config.oauth.maskinporten.scope.afpoffentlig, config.oauth.maskinporten.scope.afpoffentligAksio), config)
-        maskinporten(MASKINPORTEN_TP_ORDNINGEN, listOf(config.oauth.maskinporten.scope.tpordningen), config)
+        maskinporten(
+            MASKINPORTEN_AFP_PRIVAT,
+            listOf(config.oauth.maskinporten.scope.afpprivat),
+            config
+        )
+        maskinporten(
+            MASKINPORTEN_AFP_OFFENTLIG,
+            listOf(
+                config.oauth.maskinporten.scope.afpoffentlig,
+                config.oauth.maskinporten.scope.afpoffentligAksio
+            ),
+            config
+        )
+        maskinporten(
+            MASKINPORTEN_TP_ORDNINGEN,
+            listOf(config.oauth.maskinporten.scope.tpordningen),
+            config
+        )
     }
 
     install(CORS) {
