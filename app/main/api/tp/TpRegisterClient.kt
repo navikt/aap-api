@@ -7,14 +7,12 @@ import no.nav.aap.komponenter.httpklient.httpclient.request.PostRequest
 import no.nav.aap.komponenter.httpklient.httpclient.Header
 import no.nav.aap.komponenter.httpklient.httpclient.post
 import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.ClientCredentialsTokenProvider
-import org.slf4j.LoggerFactory
 import java.net.URI
 
 object TpRegisterClient {
-    private val log = LoggerFactory.getLogger(TpRegisterClient::class.java)
 
     private val baseUri = URI.create(requiredConfigForKey("integrasjon.tpregister.url"))
-    val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tpregister.scope"))
+    private val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tpregister.scope"))
     private val client = RestClient.withDefaultResponseHandler(
         config = config,
         tokenProvider = ClientCredentialsTokenProvider
@@ -30,7 +28,7 @@ object TpRegisterClient {
             body = fnr,
             additionalHeaders = listOf(
                 Header("Content-Type", "text/plain"),
-                Header("Nav-Consumer-Id", "aap-dokumentinnhenting"),
+                Header("Nav-Consumer-Id", "aap-api"),
                 Header("Nav-Call-Id", requestId)
             )
         )
