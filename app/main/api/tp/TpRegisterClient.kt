@@ -18,12 +18,12 @@ object TpRegisterClient {
         tokenProvider = ClientCredentialsTokenProvider
     )
 
-    fun brukerHarTpForholdForOrgnr(
+    fun brukerHarTpForholdOgYtelse(
         fnr: String,
         orgnr: String,
         requestId: String
     ): Boolean {
-        val uri = baseUri.resolve("/api/tjenestepensjon/hasForhold?orgnr=$orgnr")
+        val uri = baseUri.resolve("/api/tjenestepensjon/hasYtelse?orgnr=$orgnr")
         val httpRestClient = PostRequest(
             body = fnr,
             additionalHeaders = listOf(
@@ -32,12 +32,6 @@ object TpRegisterClient {
                 Header("Nav-Call-Id", requestId)
             )
         )
-        return checkNotNull(client.post<String, TpRegisterResponse>(uri, httpRestClient)).forhold
-
+        return checkNotNull(client.post<String, Boolean>(uri, httpRestClient))
     }
-
-    private class TpRegisterResponse(
-        val forhold: Boolean
-    )
-
 }

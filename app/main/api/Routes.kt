@@ -1,7 +1,6 @@
 package api
 
 import api.afp.VedtakPeriode
-import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.afp.VedtakResponse
 import api.arena.ArenaoppslagRestClient
@@ -68,7 +67,7 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequestMedSaksRef>()
-                if (!TpRegisterClient.brukerHarTpForholdForOrgnr(
+                if (!TpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
@@ -94,7 +93,7 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequestMedSaksRef>()
-                if (!TpRegisterClient.brukerHarTpForholdForOrgnr(
+                if (!TpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
