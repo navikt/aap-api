@@ -49,6 +49,11 @@ fun Application.api() {
         logging()
     }
 
+    install(CallId) {
+        retrieveFromHeader("x-callid")
+        verify { callId -> callId.isNotEmpty() }
+    }
+
     install(MicrometerMetrics) {
         registry = prometheus
         meterBinders += LogbackMetrics()
