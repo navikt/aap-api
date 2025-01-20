@@ -73,7 +73,7 @@ fun Route.api(
                         call.callId ?: UUID.randomUUID().toString()
                     )
                 ) {
-                    call.respond(HttpStatusCode.NotFound, "Ingen forhold funnet mellom bruker og organisasjon")
+                    call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
                 } else {
                     call.respond(
                         hentMaksimum(
@@ -99,7 +99,7 @@ fun Route.api(
                         call.callId ?: UUID.randomUUID().toString()
                     )
                 ) {
-                    call.respond(HttpStatusCode.NotFound, "Ingen forhold funnet mellom bruker og organisasjon")
+                    call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
                 } else {
                     call.respond(
                         hentMedium(
