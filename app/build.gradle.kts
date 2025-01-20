@@ -12,7 +12,7 @@ application {
 
 val aapLibVersion = "5.0.25"
 val ktorVersion = "3.0.3"
-val komponenterVersjon = "1.0.101"
+val komponenterVersjon = "1.0.114"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
