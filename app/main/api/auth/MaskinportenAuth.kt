@@ -7,6 +7,8 @@ import io.ktor.server.application.*
 import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.plugins.callid.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
@@ -30,10 +32,23 @@ fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config:
 
     jwt(name) {
         verifier(maskinportenJwkProvider, config.oauth.maskinporten.issuer.name)
-        challenge { _, _ -> call.respond(HttpStatusCode.Unauthorized, "Ikke tilgang til maskinporten") }
+        challenge { _, _ ->
+            call.respond(
+                HttpStatusCode.Unauthorized,
+                "Ikke tilgang til maskinporten"
+            )
+                .also { logger.info("Ikke tilgang til maskinporten. Path: ${call.request.path()}. Call-ID: ${call.callId}") }
+        }
         validate { cred ->
             if (!scope.contains(cred.getClaim("scope", String::class))) {
-                logger.warn("Wrong scope in claim. Ser etter $scope, fikk ${cred.getClaim("scope", String::class)}")
+                logger.warn(
+                    "Wrong scope in claim. Ser etter $scope, fikk ${
+                        cred.getClaim(
+                            "scope",
+                            String::class
+                        )
+                    }"
+                )
                 return@validate null
             }
 
