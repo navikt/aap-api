@@ -12,6 +12,7 @@ object Consumers {
     private const val KLP = "938708606"
     private const val STOREBRAND = "931936492"
     private const val OSLO_PENSJONSFORSIKRING = "982759412"
+    private const val ARENDAL = "940380014"
 
     private val consumerTags = mapOf(
         NAV_ORGNR to "NAV",
@@ -20,7 +21,8 @@ object Consumers {
         GABLER to "Gabler",
         KLP to "KLP",
         STOREBRAND to "Storebrand",
-        OSLO_PENSJONSFORSIKRING to "Oslo Pensjonsforsikring"
+        OSLO_PENSJONSFORSIKRING to "Oslo Pensjonsforsikring",
+        ARENDAL to "Arendal Kommunale Pensjonskasse",
     )
 
     private val behandlingsgrunnlag = mapOf(
