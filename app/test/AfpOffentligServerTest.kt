@@ -4,6 +4,8 @@ import api.api
 import api.arena.IArenaoppslagRestClient
 import api.dsop.DsopRequest
 import api.sporingslogg.Spor
+import api.tp.ITpRegisterClient
+import api.tp.TpRegisterClient
 import api.util.Config
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -27,7 +29,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.*
 
-class TpOffentligServerTest {
+class AfpOffentligServerTest {
     companion object {
         private val server = MockOAuth2Server()
 
@@ -73,53 +75,17 @@ class TpOffentligServerTest {
     @Test
     fun testAfpOffentlig() = testApplication {
         val mockProducer = MockProducer<String, Spor>()
-        val arenaRestClient = object : IArenaoppslagRestClient {
-            override fun hentMaksimum(
-                callId: String,
-                vedtakRequest: EksternVedtakRequest
-            ): Maksimum {
-                TODO("Not yet implemented")
-            }
-
-            override fun hentVedtakFellesordning(
-                callId: UUID,
-                vedtakRequest: VedtakRequest
-            ): VedtakResponse {
-                return VedtakResponse(
-                    perioder = listOf()
-                )
-            }
-
-            override fun hentVedtakDsop(
-                callId: UUID,
-                dsopRequest: DsopRequest
-            ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
-                TODO("Not yet implemented")
-            }
-
-            override fun hentMeldepliktDsop(
-                callId: UUID,
-                dsopRequest: DsopRequest
-            ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
-                TODO("Not yet implemented")
-            }
-        }
+        val arenaRestClient = arenaOppslagKlient()
 
         application {
             api(
                 Config(), mockProducer,
                 arenaRestClient,
+                TpRegisterClient,
             )
         }
-        val client = createClient {
-            install(ContentNegotiation) {
-                jackson {
-                    registerModule(JavaTimeModule())
-                    disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                }
-            }
-        }
-        val jwt = issueToken()
+        val client = createClient()
+        val jwt = issueToken("nav:aap:afpoffentlig.read")
 
         val response = sendPostRequest(
             client, jwt, VedtakRequestMedSaksRef(
@@ -127,7 +93,7 @@ class TpOffentligServerTest {
                 fraOgMedDato = LocalDate.now(),
                 tilOgMedDato = LocalDate.now(),
                 saksId = null
-            )
+            ), "/afp/offentlig"
         )
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals(
@@ -136,21 +102,104 @@ class TpOffentligServerTest {
         )
     }
 
+    @Test
+    fun `hent ut dummy-vedtak fra tp-ordningen`() = testApplication {
+        val mockProducer = MockProducer<String, Spor>()
+        val arenaRestClient = arenaOppslagKlient()
+
+        application {
+            api(
+                Config(), mockProducer,
+                arenaRestClient,
+                object : ITpRegisterClient {
+                    override fun brukerHarTpForholdOgYtelse(
+                        fnr: String,
+                        orgnr: String,
+                        requestId: String
+                    ): Boolean {
+                        return true
+                    }
+
+                },
+            )
+        }
+        val client = createClient()
+        val jwt = issueToken("nav:aap:tpordningen.read")
+
+        val response = sendPostRequest(
+            client, jwt, VedtakRequestMedSaksRef(
+                personidentifikator = "123",
+                fraOgMedDato = LocalDate.now(),
+                tilOgMedDato = LocalDate.now(),
+                saksId = null
+            ), "/tp-samhandling"
+        )
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals(
+            api.Maksimum(vedtak = listOf()),
+            response.body() as api.Maksimum
+        )
+    }
+
+    private fun arenaOppslagKlient() = object : IArenaoppslagRestClient {
+        override fun hentMaksimum(
+            callId: String,
+            vedtakRequest: EksternVedtakRequest
+        ): Maksimum {
+            return Maksimum(
+                vedtak = listOf()
+            )
+        }
+
+        override fun hentVedtakFellesordning(
+            callId: UUID,
+            vedtakRequest: VedtakRequest
+        ): VedtakResponse {
+            return VedtakResponse(
+                perioder = listOf()
+            )
+        }
+
+        override fun hentVedtakDsop(
+            callId: UUID,
+            dsopRequest: DsopRequest
+        ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
+            TODO("Not yet implemented")
+        }
+
+        override fun hentMeldepliktDsop(
+            callId: UUID,
+            dsopRequest: DsopRequest
+        ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
+            TODO("Not yet implemented")
+        }
+    }
+
+    private fun ApplicationTestBuilder.createClient() = createClient {
+        install(ContentNegotiation) {
+            jackson {
+                registerModule(JavaTimeModule())
+                disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            }
+        }
+    }
+
     private suspend fun sendPostRequest(
         client: HttpClient,
         jwt: SignedJWT,
-        payload: VedtakRequestMedSaksRef
-    ) = client.post("/afp/offentlig") {
+        payload: VedtakRequestMedSaksRef,
+        path: String
+    ) = client.post(path) {
         header("Authorization", "Bearer ${jwt.serialize()}")
         header("X-callid", UUID.randomUUID().toString())
         contentType(ContentType.Application.Json)
         setBody(payload)
     }
 
-    private fun issueToken() = server.issueToken(
+    private fun issueToken(scope: String) = server.issueToken(
         issuerId = "default",
         claims = mapOf(
-            "scope" to "nav:aap:afpoffentlig.read",
+            "scope" to scope,
             "consumer" to mapOf("authority" to "123")
         ),
     )

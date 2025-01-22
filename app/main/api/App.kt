@@ -9,6 +9,8 @@ import api.auth.maskinporten
 import api.sporingslogg.KafkaFactory
 import api.sporingslogg.Spor
 import api.sporingslogg.SporingsloggKafkaClient
+import api.tp.ITpRegisterClient
+import api.tp.TpRegisterClient
 import api.util.Config
 import api.util.actuator
 import api.util.feilhåndtering
@@ -42,16 +44,22 @@ fun main() {
     embeddedServer(Netty, port = 8080) {
         val config = Config()
         api(
-            config = Config(), kafkaProducer = KafkaFactory.createProducer(
+            config = Config(),
+            kafkaProducer = KafkaFactory.createProducer(
                 "aap-api-producer-${config.sporingslogg.topic}",
                 config.kafka
-            ), arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
+            ),
+            arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure),
+            tpRegisterClient = TpRegisterClient
         )
     }.start(wait = true)
 }
 
 fun Application.api(
-    config: Config, kafkaProducer: Producer<String, Spor>, arenaRestClient: IArenaoppslagRestClient
+    config: Config,
+    kafkaProducer: Producer<String, Spor>,
+    arenaRestClient: IArenaoppslagRestClient,
+    tpRegisterClient: ITpRegisterClient
 ) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val sporingsloggKafkaClient = SporingsloggKafkaClient(
@@ -115,6 +123,12 @@ fun Application.api(
         actuator(prometheus)
         swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
 
-        api(config.sporingslogg.enabled, arenaRestClient, sporingsloggKafkaClient, prometheus)
+        api(
+            config.sporingslogg.enabled,
+            arenaRestClient,
+            sporingsloggKafkaClient,
+            tpRegisterClient,
+            prometheus
+        )
     }
 }

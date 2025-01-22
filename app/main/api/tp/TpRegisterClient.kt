@@ -13,7 +13,15 @@ import java.net.URI
 
 private val logger = LoggerFactory.getLogger("api.tp.TpRegisterClient")
 
-object TpRegisterClient {
+interface ITpRegisterClient {
+    fun brukerHarTpForholdOgYtelse(
+        fnr: String,
+        orgnr: String,
+        requestId: String
+    ): Boolean?
+}
+
+object TpRegisterClient : ITpRegisterClient {
 
     private val baseUri = URI.create(requiredConfigForKey("integrasjon.tp.url"))
     private val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tp.scope"))
@@ -22,7 +30,7 @@ object TpRegisterClient {
         tokenProvider = ClientCredentialsTokenProvider
     )
 
-    fun brukerHarTpForholdOgYtelse(
+    override fun brukerHarTpForholdOgYtelse(
         fnr: String,
         orgnr: String,
         requestId: String

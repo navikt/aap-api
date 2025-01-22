@@ -3,7 +3,6 @@ package api
 import api.afp.VedtakPeriode
 import api.afp.VedtakRequestMedSaksRef
 import api.afp.VedtakResponse
-import api.arena.ArenaoppslagRestClient
 import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
@@ -12,7 +11,7 @@ import api.auth.hentConsumerId
 import api.sporingslogg.Spor
 import api.sporingslogg.SporingsloggException
 import api.sporingslogg.SporingsloggKafkaClient
-import api.tp.TpRegisterClient
+import api.tp.ITpRegisterClient
 import api.util.Consumers.getConsumerTag
 import api.util.httpCallCounter
 import api.util.httpFailedCallCounter
@@ -36,6 +35,7 @@ fun Route.api(
     brukSporingslogg: Boolean,
     arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
+    tpRegisterClient: ITpRegisterClient,
     prometheus: PrometheusMeterRegistry
 ) {
 
@@ -68,7 +68,7 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequestMedSaksRef>()
-                if (TpRegisterClient.brukerHarTpForholdOgYtelse(
+                if (tpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
@@ -79,6 +79,7 @@ fun Route.api(
                     call.respond(
                         hentMaksimum(
                             call,
+                            body,
                             brukSporingslogg,
                             arenaoppslagRestClient,
                             sporingsloggClient,
@@ -94,7 +95,7 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequestMedSaksRef>()
-                if (TpRegisterClient.brukerHarTpForholdOgYtelse(
+                if (tpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
@@ -105,6 +106,7 @@ fun Route.api(
                     call.respond(
                         hentMedium(
                             call,
+                            body,
                             brukSporingslogg,
                             arenaoppslagRestClient,
                             sporingsloggClient,
@@ -166,6 +168,7 @@ private suspend fun hentPerioder(
 
 private suspend fun hentMedium(
     call: ApplicationCall,
+    body: VedtakRequestMedSaksRef,
     brukSporingslogg: Boolean,
     arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
@@ -175,7 +178,6 @@ private suspend fun hentMedium(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val body = call.receive<VedtakRequestMedSaksRef>()
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
         val arenaOppslagRequestBody = EksternVedtakRequest(
@@ -216,6 +218,7 @@ private suspend fun hentMedium(
 
 private suspend fun hentMaksimum(
     call: ApplicationCall,
+    body: VedtakRequestMedSaksRef,
     brukSporingslogg: Boolean,
     arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
@@ -225,7 +228,6 @@ private suspend fun hentMaksimum(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val body = call.receive<VedtakRequestMedSaksRef>()
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
         val arenaOppslagRequestBody = EksternVedtakRequest(
