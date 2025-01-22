@@ -67,11 +67,11 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequestMedSaksRef>()
-                if (!TpRegisterClient.brukerHarTpForholdOgYtelse(
+                if (TpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
-                    )
+                    ) != true
                 ) {
                     call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
                 } else {
@@ -93,11 +93,11 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequestMedSaksRef>()
-                if (!TpRegisterClient.brukerHarTpForholdOgYtelse(
+                if (TpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
-                    )
+                    ) != true
                 ) {
                     call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
                 } else {
@@ -182,7 +182,8 @@ private suspend fun hentMedium(
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        arenaoppslagRestClient.hentMaksimum(callId, arenaOppslagRequestBody).fraKontraktUtenUtbetalinger()
+        arenaoppslagRestClient.hentMaksimum(callId, arenaOppslagRequestBody)
+            .fraKontraktUtenUtbetalinger()
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
@@ -191,7 +192,14 @@ private suspend fun hentMedium(
     }.onSuccess { res ->
         if (brukSporingslogg) {
             try {
-                sporingsloggClient.send(Spor.opprett(body.personidentifikator, res, orgnr, saksId = body.saksId))
+                sporingsloggClient.send(
+                    Spor.opprett(
+                        body.personidentifikator,
+                        res,
+                        orgnr,
+                        saksId = body.saksId
+                    )
+                )
                 call.respond(res)
             } catch (e: Exception) {
                 prometheus.sporingsloggFailCounter(consumerTag).increment()
