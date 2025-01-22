@@ -120,8 +120,10 @@ spec:
       value: http://test-token-provider/samtykke/.well-known/oauth-authorization-server
     - name: ALTINN_AUDIENCE
       value: https://aap-test-token-provider.intern.dev.nav.no
-    - name: TP_URL
+    - name: INTEGRASJON_TP_URL
       value: https://tp-api-q2.dev-fss-pub.nais.io
+    - name: INTEGRASJON_TP_SCOPE
+      value: api://dev-fss.pensjonsamhandling.tp-q2/.default
     - name: SPORINGSLOGG_TOPIC
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt-q2
     - name: SPORINGSLOGG_ENABLED

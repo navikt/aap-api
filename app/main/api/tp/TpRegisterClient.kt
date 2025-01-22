@@ -11,8 +11,8 @@ import java.net.URI
 
 object TpRegisterClient {
 
-    private val baseUri = URI.create(requiredConfigForKey("integrasjon.tpregister.url"))
-    private val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tpregister.scope"))
+    private val baseUri = URI.create(requiredConfigForKey("integrasjon.tp.url"))
+    private val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tp.scope"))
     private val client = RestClient.withDefaultResponseHandler(
         config = config,
         tokenProvider = ClientCredentialsTokenProvider
