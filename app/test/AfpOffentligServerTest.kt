@@ -81,7 +81,7 @@ class AfpOffentligServerTest {
             api(
                 Config(), mockProducer,
                 arenaRestClient,
-                TpRegisterClient,
+                tpRegisterKlient(),
             )
         }
         val client = createClient()
@@ -111,16 +111,7 @@ class AfpOffentligServerTest {
             api(
                 Config(), mockProducer,
                 arenaRestClient,
-                object : ITpRegisterClient {
-                    override fun brukerHarTpForholdOgYtelse(
-                        fnr: String,
-                        orgnr: String,
-                        requestId: String
-                    ): Boolean {
-                        return true
-                    }
-
-                },
+                tpRegisterKlient(),
             )
         }
         val client = createClient()
@@ -139,6 +130,17 @@ class AfpOffentligServerTest {
             api.Maksimum(vedtak = listOf()),
             response.body() as api.Maksimum
         )
+    }
+
+    private fun tpRegisterKlient() = object : ITpRegisterClient {
+        override fun brukerHarTpForholdOgYtelse(
+            fnr: String,
+            orgnr: String,
+            requestId: String
+        ): Boolean {
+            return true
+        }
+
     }
 
     private fun arenaOppslagKlient() = object : IArenaoppslagRestClient {
