@@ -1,12 +1,12 @@
 package api.sporingslogg
 
-import api.afp.VedtakRequestMedSaksRef
 import api.util.Consumers
-import api.util.KafkaConfig
 import api.util.SporingsloggConfig
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.clients.producer.RecordMetadata
 import java.time.LocalDateTime
@@ -14,12 +14,13 @@ import java.util.*
 
 class SporingsloggException(cause: Throwable) : Exception(cause)
 
-class SporingsloggKafkaClient(kafkaConf: KafkaConfig, private val sporingConf: SporingsloggConfig) {
-    private val producer = KafkaFactory.createProducer<Spor>("aap-api-producer-${sporingConf.topic}", kafkaConf)
+class SporingsloggKafkaClient(
+    private val sporingsloggTopic: String,
+    private val kafkaProducer: Producer<String, Spor>
+) {
+    fun send(spor: Spor): RecordMetadata = kafkaProducer.send(record(spor)).get()
 
-    fun send(spor: Spor): RecordMetadata = producer.send(record(spor)).get()
-
-    private fun <V> record(value: V) = ProducerRecord<String, V>(sporingConf.topic, value)
+    private fun <V> record(value: V) = ProducerRecord<String, V>(sporingsloggTopic, value)
 }
 
 //https://confluence.adeo.no/display/KES/Sporingslogg

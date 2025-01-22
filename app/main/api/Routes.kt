@@ -4,6 +4,7 @@ import api.afp.VedtakPeriode
 import api.afp.VedtakRequestMedSaksRef
 import api.afp.VedtakResponse
 import api.arena.ArenaoppslagRestClient
+import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
 import api.auth.MASKINPORTEN_TP_ORDNINGEN
@@ -33,7 +34,7 @@ private val logger = LoggerFactory.getLogger("App")
 
 fun Route.api(
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: ArenaoppslagRestClient,
+    arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
@@ -119,7 +120,7 @@ fun Route.api(
 private suspend fun hentPerioder(
     call: ApplicationCall,
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: ArenaoppslagRestClient,
+    arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
@@ -166,7 +167,7 @@ private suspend fun hentPerioder(
 private suspend fun hentMedium(
     call: ApplicationCall,
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: ArenaoppslagRestClient,
+    arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
@@ -216,7 +217,7 @@ private suspend fun hentMedium(
 private suspend fun hentMaksimum(
     call: ApplicationCall,
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: ArenaoppslagRestClient,
+    arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {

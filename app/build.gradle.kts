@@ -12,7 +12,8 @@ application {
 
 val aapLibVersion = "5.0.25"
 val ktorVersion = "3.0.3"
-val komponenterVersjon = "1.0.114"
+val komponenterVersjon = "1.0.118"
+val mockOAuth2ServerVersion = "2.1.10"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
@@ -58,6 +59,8 @@ dependencies {
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.5")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
+
     testImplementation(kotlin("test"))
 }
 

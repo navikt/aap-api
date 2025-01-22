@@ -1,28 +1,29 @@
 package api.util
 
+import no.nav.aap.komponenter.config.requiredConfigForKey
 import no.nav.aap.ktor.client.auth.azure.AzureConfig
 import java.net.URI
 import java.net.URL
-
-private fun getEnvVar(envar: String) = System.getenv(envar) ?: error("missing envvar $envar")
 
 data class Config(
     val oauth: OauthConfig = OauthConfig(),
     val arenaoppslag: ArenaoppslagConfig = ArenaoppslagConfig(),
     val azure: AzureConfig = AzureConfig(
-        tokenEndpoint = getEnvVar("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT"),
-        clientId = getEnvVar("AZURE_APP_CLIENT_ID"),
-        clientSecret = getEnvVar("AZURE_APP_CLIENT_SECRET")
+        tokenEndpoint = requiredConfigForKey("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT"),
+        clientId = requiredConfigForKey("AZURE_APP_CLIENT_ID"),
+        clientSecret = requiredConfigForKey("AZURE_APP_CLIENT_SECRET"),
+        jwksUri = requiredConfigForKey("AZURE_OPENID_CONFIG_JWKS_URI"),
+        issuer = requiredConfigForKey("AZURE_OPENID_CONFIG_ISSUER"),
     ),
     val kafka: KafkaConfig = KafkaConfig(),
     val sporingslogg: SporingsloggConfig = SporingsloggConfig()
 )
 
 data class KafkaConfig(
-    val brokers: String = getEnvVar("KAFKA_BROKERS"),
-    val truststorePath: String = getEnvVar("KAFKA_TRUSTSTORE_PATH"),
-    val keystorePath: String = getEnvVar("KAFKA_KEYSTORE_PATH"),
-    val credstorePsw: String = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
+    val brokers: String = requiredConfigForKey("KAFKA_BROKERS"),
+    val truststorePath: String = requiredConfigForKey("KAFKA_TRUSTSTORE_PATH"),
+    val keystorePath: String = requiredConfigForKey("KAFKA_KEYSTORE_PATH"),
+    val credstorePsw: String = requiredConfigForKey("KAFKA_CREDSTORE_PASSWORD"),
 )
 
 data class OauthConfig(
@@ -31,19 +32,19 @@ data class OauthConfig(
 )
 
 data class SporingsloggConfig(
-    val enabled: Boolean = getEnvVar("SPORINGSLOGG_ENABLED").toBoolean(),
-    val topic: String = getEnvVar("SPORINGSLOGG_TOPIC")
+    val enabled: Boolean = requiredConfigForKey("SPORINGSLOGG_ENABLED").toBoolean(),
+    val topic: String = requiredConfigForKey("SPORINGSLOGG_TOPIC")
 )
 
 data class MaskinportenConfig(
-    val jwksUri: URL = URI(getEnvVar("MASKINPORTEN_JWKS_URI")).toURL(),
+    val jwksUri: URL = URI(requiredConfigForKey("MASKINPORTEN_JWKS_URI")).toURL(),
     val issuer: IssuerConfig = IssuerConfig(),
     val scope: ScopeConfig = ScopeConfig()
 ) {
     data class IssuerConfig(
-        val name: String = getEnvVar("MASKINPORTEN_ISSUER"),
-        val discoveryUrl: String = getEnvVar("MASKINPORTEN_WELL_KNOWN_URL"),
-        val audience: String = getEnvVar("AAP_AUDIENCE"),
+        val name: String = requiredConfigForKey("MASKINPORTEN_ISSUER"),
+        val discoveryUrl: String = requiredConfigForKey("MASKINPORTEN_WELL_KNOWN_URL"),
+        val audience: String = requiredConfigForKey("AAP_AUDIENCE"),
         val optionalClaims: String = "sub,nbf",
     )
 
@@ -56,11 +57,11 @@ data class MaskinportenConfig(
 }
 
 data class ArenaoppslagConfig(
-    val proxyBaseUrl: String = getEnvVar("ARENAOPPSLAG_PROXY_BASE_URL"),
-    val scope: String = getEnvVar("ARENAOPPSLAG_SCOPE")
+    val proxyBaseUrl: String = requiredConfigForKey("ARENAOPPSLAG_PROXY_BASE_URL"),
+    val scope: String = requiredConfigForKey("ARENAOPPSLAG_SCOPE")
 )
 
 data class SamtykkeConfig(
-    val wellknownUrl: String = getEnvVar("ALTINN_WELLKNOWN"),
-    val audience: String = getEnvVar("ALTINN_AUDIENCE")
+    val wellknownUrl: String = requiredConfigForKey("ALTINN_WELLKNOWN"),
+    val audience: String = requiredConfigForKey("ALTINN_AUDIENCE")
 )

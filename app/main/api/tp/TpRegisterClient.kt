@@ -39,7 +39,7 @@ object TpRegisterClient {
         return try {
             client.post<String, Boolean>(uri, httpRestClient)
         } catch (e: IkkeFunnetException) {
-            logger.info("Person ikke funnet i TP-registeret, returnerer null.")
+            logger.info("Person ikke funnet i TP-registeret, returnerer null. Melding: ${e.body}")
             null
         }
     }

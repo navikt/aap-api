@@ -1,10 +1,13 @@
 package api
 
 import api.arena.ArenaoppslagRestClient
+import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
 import api.auth.MASKINPORTEN_TP_ORDNINGEN
 import api.auth.maskinporten
+import api.sporingslogg.KafkaFactory
+import api.sporingslogg.Spor
 import api.sporingslogg.SporingsloggKafkaClient
 import api.util.Config
 import api.util.actuator
@@ -29,20 +32,32 @@ import io.ktor.server.routing.*
 import io.micrometer.core.instrument.binder.logging.LogbackMetrics
 import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
+import org.apache.kafka.clients.producer.Producer
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("App")
 
 fun main() {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> logger.error("Uhåndtert feil", e) }
-    embeddedServer(Netty, port = 8080, module = Application::api).start(wait = true)
+    embeddedServer(Netty, port = 8080) {
+        val config = Config()
+        api(
+            config = Config(), kafkaProducer = KafkaFactory.createProducer(
+                "aap-api-producer-${config.sporingslogg.topic}",
+                config.kafka
+            ), arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
+        )
+    }.start(wait = true)
 }
 
-fun Application.api() {
-    val config = Config()
+fun Application.api(
+    config: Config, kafkaProducer: Producer<String, Spor>, arenaRestClient: IArenaoppslagRestClient
+) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
-    val sporingsloggKafkaClient = SporingsloggKafkaClient(config.kafka, config.sporingslogg)
-    val arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure)
+    val sporingsloggKafkaClient = SporingsloggKafkaClient(
+        config.sporingslogg.topic,
+        kafkaProducer
+    )
 
     install(CallLogging) {
         callIdMdc("x-callid")
