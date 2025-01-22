@@ -5,7 +5,6 @@ import api.arena.IArenaoppslagRestClient
 import api.dsop.DsopRequest
 import api.sporingslogg.Spor
 import api.tp.ITpRegisterClient
-import api.tp.TpRegisterClient
 import api.util.Config
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -14,6 +13,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
@@ -132,13 +132,44 @@ class AfpOffentligServerTest {
         )
     }
 
-    private fun tpRegisterKlient() = object : ITpRegisterClient {
+    @Test
+    fun `får 404 ved negativt svar fra tp-ordningen`() = testApplication {
+        val mockProducer = MockProducer<String, Spor>()
+        val arenaRestClient = arenaOppslagKlient()
+
+        application {
+            api(
+                Config(), mockProducer,
+                arenaRestClient,
+                // Får false fra TP-registeret
+                tpRegisterKlient(false),
+            )
+        }
+        val client = createClient()
+        val jwt = issueToken("nav:aap:tpordningen.read")
+
+        val response = sendPostRequest(
+            client, jwt, VedtakRequestMedSaksRef(
+                personidentifikator = "123",
+                fraOgMedDato = LocalDate.now(),
+                tilOgMedDato = LocalDate.now(),
+                saksId = null
+            ), "/tp-samhandling"
+        )
+        assertEquals(HttpStatusCode.NotFound, response.status)
+        assertEquals(
+            "Mangler TP-ytelse.",
+            response.bodyAsText()
+        )
+    }
+
+    private fun tpRegisterKlient(ønsketSvar: Boolean? = true) = object : ITpRegisterClient {
         override fun brukerHarTpForholdOgYtelse(
             fnr: String,
             orgnr: String,
             requestId: String
-        ): Boolean {
-            return true
+        ): Boolean? {
+            return ønsketSvar
         }
 
     }
