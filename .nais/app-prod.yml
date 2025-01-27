@@ -9,7 +9,7 @@ metadata:
 spec:
   image: {{image}}
   ingresses:
-       - https://aap-api.nav.no
+    - https://aap-api.nav.no
   replicas:
     max: 2
     min: 2
@@ -48,6 +48,8 @@ spec:
               orgno: "931936492"
             - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
               orgno: "938708606"
+            - name: "Gabler Pensjonstjenester AS"
+              orgno: "916833520"
   liveness:
     path: /actuator/live
     initialDelay: 1

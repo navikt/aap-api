@@ -4,12 +4,12 @@ AAP-API tilbyr AAP-data til eksterne konsumenter som enten har hjemmel til å he
 ![img](diagram.png)
 
 API’et vil hente data fra 2 kilder
-- Arena – det eksisterende saksbehandlingsverktøyet NAV bruker til å behandle AAP-saker
+- Arena – det eksisterende saksbehandlingsverktøyet Nav bruker til å behandle AAP-saker
 - Kelvin – nytt saksbehandlingsverktøy som nå er under utvikling
 
 Når Kelvin er ferdig vil data begynne å flyte derfra, men tanken er at dette ikke skal merkes av konsumentene.
 
-Interndokumentasjon for datadeling fra aap kan finnes på [aap-sysdoc](https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Datadeling/funksjonell).
+Interndokumentasjon for datadeling fra AAP kan finnes på [aap-sysdoc](https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Datadeling/funksjonell).
 
 ## URL som benyttes
 Base-URL for AAP-API er:
@@ -26,13 +26,13 @@ Tilgangen til AAP-API oppnås på to måter:
 
 ### Tilgang med maskinporten
 
-Konsumenter som har hjemmel til å hente AAP-data fra NAV trenger kun å benytte seg av et token utstedt av maskinporten.
+Konsumenter som har hjemmel til å hente AAP-data fra Nav trenger kun å benytte seg av et token utstedt av maskinporten.
 
-For å bruke et Maskinporten-token må konsumenten ta kontakt med NAV og få registrert sitt organisasjonsnummer. Konsumenten får da tilgang til et scope.
+For å bruke et Maskinporten-token må konsumenten ta kontakt med Nav og få registrert sitt organisasjonsnummer. Konsumenten får da tilgang til et scope.
 
 Deretter må konsument registrere seg hos Digdir med det scope de har fått tilgang til. Detaljert beskrivelse om maskinporten finnes [på denne lenken](https://samarbeid.digdir.no/maskinporten/ta-i-bruk-maskinporten/97).
 
-NAV har laget et [kodeeksempel](https://github.com/navikt/aap-test-token-provider/blob/main/app/main/tokenprovider/makinporten/MaskinportenTokenProvider.kt) for å utstede et test-token for Maskinporten.
+Nav har laget et [kodeeksempel](https://github.com/navikt/aap-test-token-provider/blob/main/app/main/tokenprovider/makinporten/MaskinportenTokenProvider.kt) for å utstede et test-token for Maskinporten.
 
 ### Kodeendringer for hver ny konsument
 
@@ -40,7 +40,7 @@ NAV har laget et [kodeeksempel](https://github.com/navikt/aap-test-token-provide
  - [ ] Oppdater `Consumers.kt` og referer til riktig behandlingsgrunnlag i `behandlingsgrunnlag`-feltet.
 
 ### Tilgang med samtykke
-Konsumenter som ikke har hjemmel til å hente AAP-data trenger samtykke fra personen man ønsker å hente data for. Dette tokenet må brukes sammen med Maskinporten-token. Samtykke-token må derfor legges inn i header på request som NAV-Samtykke-Token.
+Konsumenter som ikke har hjemmel til å hente AAP-data trenger samtykke fra personen man ønsker å hente data for. Dette tokenet må brukes sammen med Maskinporten-token. Samtykke-token må derfor legges inn i header på request som Nav-Samtykke-Token.
 
 Samtykke er beskrevet [på Altinn sine sider](https://altinn.github.io/docs/utviklingsguider/samtykke/).
 
