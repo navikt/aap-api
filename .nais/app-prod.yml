@@ -50,6 +50,14 @@ spec:
               orgno: "938708606"
             - name: "Gabler Pensjonstjenester AS"
               orgno: "916833520"
+        - name: "delegertafpoffentlig.read"
+          enabled: true
+          product: "aap"
+          delegationSource: altinn
+          consumers:
+            - name: "aksio"
+              orgno: "927613298"
+          separator: "/"
   liveness:
     path: /actuator/live
     initialDelay: 1
