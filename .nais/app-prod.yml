@@ -55,8 +55,10 @@ spec:
           product: "aap"
           delegationSource: altinn
           consumers:
-            - name: "aksio"
-              orgno: "927613298"
+            - name: "Drammen"
+              orgno: "980650383"
+            - name: "Arendal"
+              orgno: "940380014"
           separator: "/"
   liveness:
     path: /actuator/live

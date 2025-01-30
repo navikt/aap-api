@@ -3,10 +3,9 @@ package api.dsop
 import api.arena.ArenaoppslagRestClient
 import api.auth.verifiserOgPakkUtSamtykkeToken
 import api.sporingslogg.Spor
-import api.util.Config
 import api.sporingslogg.SporingsloggKafkaClient
+import api.util.Config
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
