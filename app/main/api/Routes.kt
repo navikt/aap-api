@@ -1,6 +1,7 @@
 package api
 
 import api.afp.VedtakPeriode
+import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.afp.VedtakResponse
 import api.arena.IArenaoppslagRestClient
@@ -67,7 +68,7 @@ fun Route.api(
     route("/tp-samhandling-med-utbetalinger") {
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
-                val body = call.receive<VedtakRequestMedSaksRef>()
+                val body = call.receive<VedtakRequest>()
                 if (tpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
@@ -94,7 +95,7 @@ fun Route.api(
     route("/tp-samhandling") {
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
-                val body = call.receive<VedtakRequestMedSaksRef>()
+                val body = call.receive<VedtakRequest>()
                 if (tpRegisterClient.brukerHarTpForholdOgYtelse(
                         body.personidentifikator,
                         call.hentConsumerId(),
@@ -168,7 +169,7 @@ private suspend fun hentPerioder(
 
 private suspend fun hentMedium(
     call: ApplicationCall,
-    body: VedtakRequestMedSaksRef,
+    body: VedtakRequest,
     brukSporingslogg: Boolean,
     arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,
@@ -199,8 +200,7 @@ private suspend fun hentMedium(
                     Spor.opprett(
                         body.personidentifikator,
                         res,
-                        orgnr,
-                        saksId = body.saksId
+                        orgnr
                     )
                 )
                 call.respond(res)
@@ -218,7 +218,7 @@ private suspend fun hentMedium(
 
 private suspend fun hentMaksimum(
     call: ApplicationCall,
-    body: VedtakRequestMedSaksRef,
+    body: VedtakRequest,
     brukSporingslogg: Boolean,
     arenaoppslagRestClient: IArenaoppslagRestClient,
     sporingsloggClient: SporingsloggKafkaClient,

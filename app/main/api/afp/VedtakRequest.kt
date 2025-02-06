@@ -11,8 +11,11 @@ data class VedtakRequestMedSaksRef(
     fun toVedtakRequest() = VedtakRequest(personidentifikator, fraOgMedDato, tilOgMedDato)
 }
 
+
 data class VedtakRequest(
     val personidentifikator: String,
     val fraOgMedDato: LocalDate,
     val tilOgMedDato: LocalDate
-)
+) {
+    fun toVedtakRequest() = VedtakRequest(personidentifikator, fraOgMedDato, tilOgMedDato)
+}

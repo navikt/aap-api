@@ -118,11 +118,10 @@ class AfpOffentligServerTest {
         val jwt = issueToken("nav:aap:tpordningen.read")
 
         val response = sendPostRequest(
-            client, jwt, VedtakRequestMedSaksRef(
+            client, jwt, VedtakRequest(
                 personidentifikator = "123",
                 fraOgMedDato = LocalDate.now(),
                 tilOgMedDato = LocalDate.now(),
-                saksId = null
             ), "/tp-samhandling"
         )
         assertEquals(HttpStatusCode.OK, response.status)
@@ -149,11 +148,10 @@ class AfpOffentligServerTest {
         val jwt = issueToken("nav:aap:tpordningen.read")
 
         val response = sendPostRequest(
-            client, jwt, VedtakRequestMedSaksRef(
+            client, jwt, VedtakRequest(
                 personidentifikator = "123",
                 fraOgMedDato = LocalDate.now(),
                 tilOgMedDato = LocalDate.now(),
-                saksId = null
             ), "/tp-samhandling"
         )
         assertEquals(HttpStatusCode.NotFound, response.status)
@@ -220,7 +218,7 @@ class AfpOffentligServerTest {
     private suspend fun sendPostRequest(
         client: HttpClient,
         jwt: SignedJWT,
-        payload: VedtakRequestMedSaksRef,
+        payload: Any,
         path: String
     ) = client.post(path) {
         header("Authorization", "Bearer ${jwt.serialize()}")
