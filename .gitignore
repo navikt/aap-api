@@ -23,6 +23,7 @@ src/generated
 /gradle/daemon/
 /gradle/native/
 /gradle/wrapper/dists/
+gradle/kotlin-profile
 gradle/.tmp
 # Ignore Gradle build output directory
 build
