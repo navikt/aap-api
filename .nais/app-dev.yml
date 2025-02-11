@@ -80,6 +80,8 @@ spec:
               orgno: "931936492"
             - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
               orgno: "938708606"
+            - name: "Oslo Pensjonsforsikring"
+              orgno: "982759412"
   liveness:
     path: /actuator/live
     initialDelay: 1
