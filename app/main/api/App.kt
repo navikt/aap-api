@@ -121,7 +121,9 @@ fun Application.api(
 
     routing {
         actuator(prometheus)
-        swaggerUI(path = "swagger", swaggerFile = "openapi.yaml")
+        swaggerUI(path = "swagger", swaggerFile = "openapi.yaml") {
+            deepLinking = true
+        }
 
         api(
             config.sporingslogg.enabled,
