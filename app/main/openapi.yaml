@@ -26,7 +26,7 @@ info:
     
     | Ord                   | Kommentar                                                                                                                      |
     |-----------------------|--------------------------------------------------------------------------------------------------------------------------------|
-    | Dagsats               | Her har vi to verdier. Den som ligger på selve vedtaket er før samordning uten barnetillegg, mens det som ligger i utbetalingsobjektet er etter. |
+    | Dagsats               | Her har vi to verdier. Den som ligger på selve vedtaket er før samordning uten barnetillegg, mens det som ligger i utbetalingsobjektet er etter samordning uten barnetillegg. |
     | Beløp                 | Fullt beløp, etter samhandling med barnetillegg. Det bruker faktisk får utbetalt.                                       |
     | Barnetillegg          |                                                                                                                                |
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
