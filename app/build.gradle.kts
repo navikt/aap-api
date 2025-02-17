@@ -56,7 +56,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.14.4")
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
     implementation("org.apache.kafka:kafka-streams:3.9.0")
-    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.5")
+    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.6")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
