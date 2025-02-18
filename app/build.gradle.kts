@@ -34,6 +34,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
         implementation("io.netty:netty-common:4.1.118.Final")
+        implementation("io.netty:netty-handler:4.1.118.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
@@ -59,7 +60,13 @@ dependencies {
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.6")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    constraints {
+        implementation("commons-codec:commons-codec:1.13")
+    }
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
+    constraints {
+        implementation("net.minidev:json-smart:2.5.2")
+    }
 
     testImplementation(kotlin("test"))
 }
