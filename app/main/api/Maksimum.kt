@@ -1,7 +1,7 @@
 package api
 
-import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum as KontraktMaksimum
 import java.time.LocalDate
+import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum as KontraktMaksimum
 
 
 data class Maksimum(
@@ -26,6 +26,7 @@ fun KontraktMaksimum.fraKontraktUtenUtbetalinger(): Medium {
  */
 data class Vedtak(
     val dagsats: Int,
+    val vedtakId: String,
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String,
     val vedtaksdato: String, //reg_dato
@@ -43,6 +44,7 @@ data class Vedtak(
 
 data class VedtakUtenUtbetaling(
     val dagsats: Int,
+    val vedtakId: String,
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String,
     val vedtaksdato: String, //reg_dato
@@ -55,11 +57,12 @@ data class VedtakUtenUtbetaling(
     val kildesystem: String = "ARENA",
     val samordningsId: String? = null,
     val opphorsAarsak: String? = null,
-    )
+)
 
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
     return Vedtak(
         this.dagsats,
+        this.vedtaksId,
         this.status,
         this.saksnummer,
         this.vedtaksdato,
@@ -76,6 +79,7 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
 fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontraktUtenUtbetaling(): VedtakUtenUtbetaling {
     return VedtakUtenUtbetaling(
         this.dagsats,
+        this.vedtaksId,
         this.status,
         this.saksnummer,
         this.vedtaksdato,
