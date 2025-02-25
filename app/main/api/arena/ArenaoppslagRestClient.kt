@@ -3,6 +3,7 @@ package api.arena
 import api.afp.VedtakRequest
 import api.dsop.DsopRequest
 import api.util.ArenaoppslagConfig
+import api.util.prometheus
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -35,7 +36,8 @@ private val clientLatencyStats: Summary = Summary.builder()
     .quantile(0.9, 0.01) // Add 90th percentile with 1% tolerated error
     .quantile(0.99, 0.001) // Add 99th percentile with 0.1% tolerated error
     .help("Latency arenaoppslag, in seconds")
-    .register()
+    .register(prometheus.prometheusRegistry)
+
 private val objectMapper = jacksonObjectMapper()
     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
     .registerModule(JavaTimeModule())
@@ -43,39 +45,52 @@ private val objectMapper = jacksonObjectMapper()
 interface IArenaoppslagRestClient {
     fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum
     fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse
-    fun hentVedtakDsop(callId: UUID, dsopRequest: DsopRequest): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse
-    fun hentMeldepliktDsop(callId: UUID, dsopRequest: DsopRequest): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse
+    fun hentVedtakDsop(
+        callId: UUID,
+        dsopRequest: DsopRequest
+    ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse
+
+    fun hentMeldepliktDsop(
+        callId: UUID,
+        dsopRequest: DsopRequest
+    ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse
 }
 
 class ArenaoppslagRestClient(
     private val arenaoppslagConfig: ArenaoppslagConfig,
     azureConfig: AzureConfig
 ) : IArenaoppslagRestClient {
-    private val tokenProvider = AzureAdTokenProvider(no.nav.aap.ktor.client.auth.azure.AzureConfig(
-        tokenEndpoint = azureConfig.tokenEndpoint.toString(),
-        clientId = azureConfig.clientId,
-        clientSecret = azureConfig.clientSecret,
-        jwksUri = azureConfig.jwksUri,
-        issuer = azureConfig.issuer,
-    ))
+    private val tokenProvider = AzureAdTokenProvider(
+        no.nav.aap.ktor.client.auth.azure.AzureConfig(
+            tokenEndpoint = azureConfig.tokenEndpoint.toString(),
+            clientId = azureConfig.clientId,
+            clientSecret = azureConfig.clientSecret,
+            jwksUri = azureConfig.jwksUri,
+            issuer = azureConfig.issuer,
+        )
+    )
 
-    override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum = runBlocking{
-        val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum"){
-            accept(ContentType.Application.Json)
-            header("x-callid", callId)
-            bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
-            contentType(ContentType.Application.Json)
-            setBody(vedtakRequest)
+    override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum =
+        runBlocking {
+            val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum") {
+                accept(ContentType.Application.Json)
+                header("x-callid", callId)
+                bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
+                contentType(ContentType.Application.Json)
+                setBody(vedtakRequest)
+            }
+                .bodyAsText()
+
+            return@runBlocking res.let { objectMapper.readValue(it) }
         }
-            .bodyAsText()
 
-        return@runBlocking res.let { objectMapper.readValue(it) }
-    }
-
-    override fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
+    override fun hentVedtakFellesordning(
+        callId: UUID,
+        vedtakRequest: VedtakRequest
+    ): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
-                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum"){
+                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum") {
                     accept(ContentType.Application.Json)
                     header("x-callid", callId)
                     bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
@@ -88,10 +103,13 @@ class ArenaoppslagRestClient(
             }
         }
 
-    override fun hentVedtakDsop(callId: UUID, dsopRequest: DsopRequest): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
+    override fun hentVedtakDsop(
+        callId: UUID,
+        dsopRequest: DsopRequest
+    ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
-                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/vedtak"){
+                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/vedtak") {
                     accept(ContentType.Application.Json)
                     header("Nav-Call-Id", callId)
                     bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
@@ -104,10 +122,13 @@ class ArenaoppslagRestClient(
             }
         }
 
-    override fun hentMeldepliktDsop(callId: UUID, dsopRequest: DsopRequest): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
+    override fun hentMeldepliktDsop(
+        callId: UUID,
+        dsopRequest: DsopRequest
+    ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
-                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/meldeplikt"){
+                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/meldeplikt") {
                     accept(ContentType.Application.Json)
                     header("Nav-Call-Id", callId)
                     bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))

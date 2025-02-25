@@ -2,6 +2,7 @@ package api.util
 
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.Tag
+import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 
 fun PrometheusMeterRegistry.httpCallCounter(consumer: String, path: String): Counter = this.counter(
@@ -22,3 +23,5 @@ fun PrometheusMeterRegistry.sporingsloggFailCounter(consumer: String): Counter =
 
 fun PrometheusMeterRegistry.uhåndtertExceptionCounter(name: String): Counter =
     this.counter("uhåndtert_exception_total", "name", name)
+
+val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)

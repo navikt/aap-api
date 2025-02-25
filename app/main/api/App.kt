@@ -11,10 +11,7 @@ import api.sporingslogg.Spor
 import api.sporingslogg.SporingsloggKafkaClient
 import api.tp.ITpRegisterClient
 import api.tp.TpRegisterClient
-import api.util.Config
-import api.util.actuator
-import api.util.feilhåndtering
-import api.util.logging
+import api.util.*
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.http.*
@@ -32,8 +29,6 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 import io.micrometer.core.instrument.binder.logging.LogbackMetrics
-import io.micrometer.prometheusmetrics.PrometheusConfig
-import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import org.apache.kafka.clients.producer.Producer
 import org.slf4j.LoggerFactory
 
@@ -61,7 +56,6 @@ fun Application.api(
     arenaRestClient: IArenaoppslagRestClient,
     tpRegisterClient: ITpRegisterClient
 ) {
-    val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val sporingsloggKafkaClient = SporingsloggKafkaClient(
         config.sporingslogg.topic,
         kafkaProducer
