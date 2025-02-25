@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import java.net.URI
 
 private val logger = LoggerFactory.getLogger("api.tp.TpRegisterClient")
+private val secureLog = LoggerFactory.getLogger("secureLog")
 
 interface ITpRegisterClient {
     fun brukerHarTpForholdOgYtelse(
@@ -50,7 +51,7 @@ object TpRegisterClient : ITpRegisterClient {
         return try {
             client.post<String, Boolean>(uri, httpRestClient)
         } catch (e: IkkeFunnetException) {
-            logger.info("Person ikke funnet i TP-registeret, returnerer null. Melding: ${e.body}")
+            logger.info("Person ikke funnet i TP-registeret, returnerer null. Melding: ${e.body}. Orgnr: $orgnr.")
             null
         }
     }
