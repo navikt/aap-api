@@ -1,15 +1,16 @@
 package api.util
 
 import no.nav.aap.komponenter.config.requiredConfigForKey
-import no.nav.aap.ktor.client.auth.azure.AzureConfig
+import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.AzureConfig
 import java.net.URI
 import java.net.URL
+
 
 data class Config(
     val oauth: OauthConfig = OauthConfig(),
     val arenaoppslag: ArenaoppslagConfig = ArenaoppslagConfig(),
     val azure: AzureConfig = AzureConfig(
-        tokenEndpoint = requiredConfigForKey("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT"),
+        tokenEndpoint = URI.create(requiredConfigForKey("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT")),
         clientId = requiredConfigForKey("AZURE_APP_CLIENT_ID"),
         clientSecret = requiredConfigForKey("AZURE_APP_CLIENT_SECRET"),
         jwksUri = requiredConfigForKey("AZURE_OPENID_CONFIG_JWKS_URI"),

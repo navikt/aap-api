@@ -5,6 +5,7 @@ import no.nav.aap.komponenter.httpklient.httpclient.ClientConfig
 import no.nav.aap.komponenter.httpklient.httpclient.Header
 import no.nav.aap.komponenter.httpklient.httpclient.RestClient
 import no.nav.aap.komponenter.httpklient.httpclient.error.IkkeFunnetException
+import no.nav.aap.komponenter.httpklient.httpclient.error.ManglerTilgangException
 import no.nav.aap.komponenter.httpklient.httpclient.post
 import no.nav.aap.komponenter.httpklient.httpclient.request.ContentType
 import no.nav.aap.komponenter.httpklient.httpclient.request.PostRequest
@@ -53,6 +54,9 @@ object TpRegisterClient : ITpRegisterClient {
         } catch (e: IkkeFunnetException) {
             logger.info("Person ikke funnet i TP-registeret, returnerer null. Melding: ${e.body}. Orgnr: $orgnr.")
             null
+        } catch (e: ManglerTilgangException) {
+            logger.warn("Manglet tilgang til å spørre TP-registeret. Melding: ${e.body}. Orgnr: $orgnr.")
+            throw e
         }
     }
 }

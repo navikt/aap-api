@@ -22,8 +22,8 @@ import kotlinx.coroutines.runBlocking
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse
 import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum
+import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.AzureConfig
 import no.nav.aap.ktor.client.auth.azure.AzureAdTokenProvider
-import no.nav.aap.ktor.client.auth.azure.AzureConfig
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -51,7 +51,7 @@ class ArenaoppslagRestClient(
     private val arenaoppslagConfig: ArenaoppslagConfig,
     azureConfig: AzureConfig
 ) : IArenaoppslagRestClient {
-    private val tokenProvider = AzureAdTokenProvider(azureConfig)
+    private val tokenProvider = AzureAdTokenProvider(no.nav.aap.ktor.client.auth.azure.AzureConfig())
 
     override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum = runBlocking{
         val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum"){
