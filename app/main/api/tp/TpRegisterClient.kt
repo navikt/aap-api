@@ -6,8 +6,9 @@ import no.nav.aap.komponenter.httpklient.httpclient.Header
 import no.nav.aap.komponenter.httpklient.httpclient.RestClient
 import no.nav.aap.komponenter.httpklient.httpclient.error.IkkeFunnetException
 import no.nav.aap.komponenter.httpklient.httpclient.post
+import no.nav.aap.komponenter.httpklient.httpclient.request.ContentType
 import no.nav.aap.komponenter.httpklient.httpclient.request.PostRequest
-import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.ClientCredentialsTokenProvider
+import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.NoTokenTokenProvider
 import org.slf4j.LoggerFactory
 import java.net.URI
 
@@ -27,7 +28,7 @@ object TpRegisterClient : ITpRegisterClient {
     private val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tp.scope"))
     private val client = RestClient.withDefaultResponseHandler(
         config = config,
-        tokenProvider = ClientCredentialsTokenProvider
+        tokenProvider = NoTokenTokenProvider()
     )
 
     override fun brukerHarTpForholdOgYtelse(
@@ -41,8 +42,8 @@ object TpRegisterClient : ITpRegisterClient {
         val uri = baseUri.resolve("/api/tjenestepensjon/hasYtelse?orgnr=$orgnr")
         val httpRestClient = PostRequest(
             body = fnr,
+            contentType = ContentType.TEXT_PLAIN,
             additionalHeaders = listOf(
-                Header("Content-Type", "application/json"),
                 Header("Nav-Consumer-Id", "aap-api"),
                 Header("X-Request-Id", requestId)
             )
