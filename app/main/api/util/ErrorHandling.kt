@@ -7,6 +7,7 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
+import no.nav.aap.komponenter.httpklient.httpclient.error.ManglerTilgangException
 import org.slf4j.Logger
 
 data class FeilRespons(
@@ -43,6 +44,13 @@ fun StatusPagesConfig.feilhåndtering(
             is IllegalArgumentException -> {
                 logger.warn("Feil i mottatte data", cause)
                 call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
+            }
+
+            is ManglerTilgangException -> {
+                call.respond(
+                    HttpStatusCode.Forbidden,
+                    FeilRespons("Mangler tilgang til baksysystemer.")
+                )
             }
 
             else -> {

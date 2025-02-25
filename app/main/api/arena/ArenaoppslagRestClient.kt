@@ -51,9 +51,15 @@ class ArenaoppslagRestClient(
     private val arenaoppslagConfig: ArenaoppslagConfig,
     azureConfig: AzureConfig
 ) : IArenaoppslagRestClient {
-    private val tokenProvider = AzureAdTokenProvider(no.nav.aap.ktor.client.auth.azure.AzureConfig())
+    private val tokenProvider = AzureAdTokenProvider(no.nav.aap.ktor.client.auth.azure.AzureConfig(
+        tokenEndpoint = azureConfig.tokenEndpoint.toString(),
+        clientId = azureConfig.clientId,
+        clientSecret = azureConfig.clientSecret,
+        jwksUri = azureConfig.jwksUri,
+        issuer = azureConfig.issuer,
+    ))
 
-    override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum = runBlocking{
+    override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum = runBlocking{
         val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum"){
             accept(ContentType.Application.Json)
             header("x-callid", callId)
@@ -66,7 +72,7 @@ class ArenaoppslagRestClient(
         return@runBlocking res.let { objectMapper.readValue(it) }
     }
 
-    override fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse =
+    override fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse =
         clientLatencyStats.startTimer().use {
             runBlocking {
                 httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum"){
