@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory
 import java.net.URI
 
 private val logger = LoggerFactory.getLogger("api.tp.TpRegisterClient")
-private val secureLog = LoggerFactory.getLogger("secureLog")
 
 interface ITpRegisterClient {
     fun brukerHarTpForholdOgYtelse(
@@ -43,7 +42,7 @@ object TpRegisterClient : ITpRegisterClient {
         val httpRestClient = PostRequest(
             body = fnr,
             additionalHeaders = listOf(
-                Header("Content-Type", "text/plain"),
+                Header("Content-Type", "application/json"),
                 Header("Nav-Consumer-Id", "aap-api"),
                 Header("X-Request-Id", requestId)
             )

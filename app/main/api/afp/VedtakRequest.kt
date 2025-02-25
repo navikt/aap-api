@@ -8,7 +8,11 @@ data class VedtakRequestMedSaksRef(
     val tilOgMedDato: LocalDate,
     val saksId: String?
 ) {
-    fun toVedtakRequest() = VedtakRequest(personidentifikator, fraOgMedDato, tilOgMedDato)
+    fun toVedtakRequest() = VedtakRequest(
+        personidentifikator = personidentifikator,
+        fraOgMedDato = fraOgMedDato,
+        tilOgMedDato = tilOgMedDato
+    )
 }
 
 
