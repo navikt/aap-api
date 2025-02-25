@@ -231,7 +231,7 @@ class AfpOffentligServerTest {
         issuerId = "default",
         claims = mapOf(
             "scope" to scope,
-            "consumer" to mapOf("authority" to "123")
+            "consumer" to mapOf("authority" to "123", "ID" to "0192:889640782")
         ),
     )
 }

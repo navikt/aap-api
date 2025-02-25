@@ -21,7 +21,12 @@ const val MASKINPORTEN_TP_ORDNINGEN = "tp-ordningen"
 fun ApplicationCall.hentConsumerId(): String {
     val principal = requireNotNull(this.principal<JWTPrincipal>())
     val consumer = requireNotNull(principal.payload.getClaim("consumer"))
-    return consumer.asMap()["ID"].toString().split(":").last()
+    val id = consumer.asMap()["ID"]
+    requireNotNull(id) { "ID-feltet må være satt i JWT i consumer-claimen." }
+
+    val res = (id as String).split(":").last()
+    require(res.isNotBlank())
+    return res
 }
 
 fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config: Config) {
