@@ -50,7 +50,11 @@ object TpRegisterClient : ITpRegisterClient {
             )
         )
         return try {
-            client.post<String, Boolean>(uri, httpRestClient)
+            client.post<String, TpRespons>(uri, httpRestClient)?.value.also {
+                if (it == null) {
+                    logger.info("Fikk null-respons fra tp-registeret. Orgnr: $orgnr")
+                }
+            }
         } catch (e: IkkeFunnetException) {
             logger.info("Person ikke funnet i TP-registeret, returnerer null. Melding: ${e.body}. Orgnr: $orgnr.")
             null
@@ -60,3 +64,5 @@ object TpRegisterClient : ITpRegisterClient {
         }
     }
 }
+
+data class TpRespons(val value: Boolean)
