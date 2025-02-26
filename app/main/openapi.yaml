@@ -1,12 +1,12 @@
 openapi: "3.0.0"
 info:
-  title: AAP-api
+  title: Arbeidsavklaringspenger (AAP) API
   description: |
-    AAP-API tilbyr AAP-informasjon til eksterne konsumenter som enten har hjemmel til å hente
+    AAP API tilbyr AAP-informasjon til eksterne konsumenter som enten har hjemmel til å hente
     AAP informasjon eller et samtykke fra bruker. Konsumenter må logge seg inn med token fra
     Maskinporten (alle konsumenter) og et Samtykke-token (konsumenter som ikke har hjemmel).
     
-    Linker til autentiseringsløsninger
+    Lenker til autentiseringsløsninger:
     
     [Maskinporten](https://www.digdir.no/felleslosninger/maskinporten/869)
     
