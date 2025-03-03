@@ -1,12 +1,12 @@
 openapi: "3.0.0"
 info:
-  title: AAP-api
+  title: Arbeidsavklaringspenger (AAP) API
   description: |
-    AAP-API tilbyr AAP-informasjon til eksterne konsumenter som enten har hjemmel til å hente
+    AAP API tilbyr AAP-informasjon til eksterne konsumenter som enten har hjemmel til å hente
     AAP informasjon eller et samtykke fra bruker. Konsumenter må logge seg inn med token fra
     Maskinporten (alle konsumenter) og et Samtykke-token (konsumenter som ikke har hjemmel).
     
-    Linker til autentiseringsløsninger
+    Lenker til autentiseringsløsninger:
     
     [Maskinporten](https://www.digdir.no/felleslosninger/maskinporten/869)
     
@@ -32,7 +32,7 @@ info:
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
     | Rettighetstype        | Også kalt aktivitetsfasekode.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning) |                                                                                                |
     | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_.                                                                                           |
-    | vedtaksId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
+    | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
     | Saksnummer | Referanse til saken. |
     | Vedtaksdato | Dato fra da vedtaket er fattet. |
     | Vedtaktype | Kan være E (Endring), G (Gjenpptak), O (Ny rettighet), A (Reaksjon), F (Forlenget ventetid), S (Stans), T (Tidsbegrenset bortfall), N (Annuler sanksjon), K (Kontroll), M (Omgjør reaksjon). |
@@ -281,23 +281,6 @@ components:
           type: number
           description: Sum av fraværsdager av forskjellige årsaker.
           example: 13
-    AnnenReduksjon:
-      type: object
-      properties:
-        sykedager:
-          type: integer
-          description: Antall sykedager.
-          example: 23
-        sentMeldekort:
-          type: integer
-          minimum: 0
-          maximum: 1
-          description: Var utbetalingens koblede meldekort sendt for sent? Hvis ja, er svaret 1.
-          example: false
-        fraver:
-          type: integer
-          description: Antall fraværsdager.
-          example: 2
     UtbetalingMedMer:
       type: object
       properties:
@@ -338,7 +321,7 @@ components:
             enum:
               - IVERK
               - AVSLU
-          vedtaksId:
+          vedtakId:
             type: string
             description: Vedtak-ID
           saksnummer:
@@ -412,7 +395,7 @@ components:
               - AVSLU
             description: Status for vedtaket.
             example: "AVSLU"
-          vedtaksId:
+          vedtakId:
             type: string
             description: Vedtak-ID
           saksnummer:

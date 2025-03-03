@@ -26,6 +26,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
+import no.nav.aap.komponenter.miljo.Miljø
+import no.nav.aap.komponenter.miljo.MiljøKode
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -114,6 +116,35 @@ fun Route.api(
                             prometheus
                         )
                     )
+                }
+            }
+        }
+    }
+
+    if (Miljø.er() == MiljøKode.DEV) {
+        route("/tp-samhandling-2") {
+            authenticate(MASKINPORTEN_TP_ORDNINGEN) {
+                post {
+                    val body = call.receive<VedtakRequest>()
+                    if (tpRegisterClient.brukerHarTpForholdOgYtelse(
+                            body.personidentifikator,
+                            982759412.toString(),
+                            call.callId ?: UUID.randomUUID().toString()
+                        ) != true
+                    ) {
+                        call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
+                    } else {
+                        call.respond(
+                            hentMedium(
+                                call,
+                                body,
+                                brukSporingslogg,
+                                arenaoppslagRestClient,
+                                sporingsloggClient,
+                                prometheus
+                            )
+                        )
+                    }
                 }
             }
         }

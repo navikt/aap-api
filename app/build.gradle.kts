@@ -12,7 +12,7 @@ application {
 
 val aapLibVersion = "5.0.25"
 val ktorVersion = "3.1.1"
-val komponenterVersjon = "1.0.152"
+val komponenterVersjon = "1.0.159"
 val mockOAuth2ServerVersion = "2.1.10"
 
 dependencies {
@@ -33,8 +33,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
-        implementation("io.netty:netty-common:4.1.118.Final")
-        implementation("io.netty:netty-handler:4.1.118.Final")
+        implementation("io.netty:netty-common:4.1.119.Final")
+        implementation("io.netty:netty-handler:4.1.119.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")

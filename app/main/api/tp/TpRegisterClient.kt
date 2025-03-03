@@ -9,7 +9,7 @@ import no.nav.aap.komponenter.httpklient.httpclient.error.ManglerTilgangExceptio
 import no.nav.aap.komponenter.httpklient.httpclient.post
 import no.nav.aap.komponenter.httpklient.httpclient.request.ContentType
 import no.nav.aap.komponenter.httpklient.httpclient.request.PostRequest
-import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.NoTokenTokenProvider
+import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.ClientCredentialsTokenProvider
 import org.slf4j.LoggerFactory
 import java.net.URI
 
@@ -29,7 +29,7 @@ object TpRegisterClient : ITpRegisterClient {
     private val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tp.scope"))
     private val client = RestClient.withDefaultResponseHandler(
         config = config,
-        tokenProvider = NoTokenTokenProvider()
+        tokenProvider = ClientCredentialsTokenProvider
     )
 
     override fun brukerHarTpForholdOgYtelse(
@@ -50,7 +50,11 @@ object TpRegisterClient : ITpRegisterClient {
             )
         )
         return try {
-            client.post<String, Boolean>(uri, httpRestClient)
+            client.post<String, TpRespons>(uri, httpRestClient)?.value.also {
+                if (it == null) {
+                    logger.info("Fikk null-respons fra tp-registeret. Orgnr: $orgnr")
+                }
+            }
         } catch (e: IkkeFunnetException) {
             logger.info("Person ikke funnet i TP-registeret, returnerer null. Melding: ${e.body}. Orgnr: $orgnr.")
             null
@@ -60,3 +64,5 @@ object TpRegisterClient : ITpRegisterClient {
         }
     }
 }
+
+data class TpRespons(val value: Boolean)
