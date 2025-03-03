@@ -32,7 +32,7 @@ info:
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
     | Rettighetstype        | Også kalt aktivitetsfasekode.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning) |                                                                                                |
     | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_.                                                                                           |
-    | vedtaksId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
+    | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
     | Saksnummer | Referanse til saken. |
     | Vedtaksdato | Dato fra da vedtaket er fattet. |
     | Vedtaktype | Kan være E (Endring), G (Gjenpptak), O (Ny rettighet), A (Reaksjon), F (Forlenget ventetid), S (Stans), T (Tidsbegrenset bortfall), N (Annuler sanksjon), K (Kontroll), M (Omgjør reaksjon). |
@@ -321,7 +321,7 @@ components:
             enum:
               - IVERK
               - AVSLU
-          vedtaksId:
+          vedtakId:
             type: string
             description: Vedtak-ID
           saksnummer:
@@ -395,7 +395,7 @@ components:
               - AVSLU
             description: Status for vedtaket.
             example: "AVSLU"
-          vedtaksId:
+          vedtakId:
             type: string
             description: Vedtak-ID
           saksnummer:
