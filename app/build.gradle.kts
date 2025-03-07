@@ -48,7 +48,7 @@ dependencies {
     implementation("io.ktor:ktor-client-jackson:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    implementation("no.nav.aap.arenaoppslag:kontrakt:0.0.18")
+    implementation("no.nav.aap.arenaoppslag:kontrakt:0.0.19")
 
     implementation("ch.qos.logback:logback-classic:1.5.17")
     implementation("com.auth0:java-jwt:4.5.0")
