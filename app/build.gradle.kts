@@ -64,9 +64,6 @@ dependencies {
         implementation("commons-codec:commons-codec:1.18.0")
     }
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
-    constraints {
-        implementation("net.minidev:json-smart:2.5.2")
-    }
 
     testImplementation(kotlin("test"))
 }

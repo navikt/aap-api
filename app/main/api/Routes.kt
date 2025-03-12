@@ -182,8 +182,7 @@ private suspend fun hentPerioder(
                     Spor.opprett(
                         body.personidentifikator,
                         res,
-                        orgnr,
-                        body.saksId
+                        orgnr
                     )
                 )
                 call.respond(res)

@@ -1,11 +1,9 @@
 package api.sporingslogg
 
 import api.util.Consumers
-import api.util.SporingsloggConfig
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.clients.producer.RecordMetadata
@@ -40,8 +38,7 @@ data class Spor(
         fun opprett(
             personIdent: String,
             utlevertData: Any,
-            konsumentOrgNr: String,
-            saksId: String? = null
+            konsumentOrgNr: String
         ) = Spor(
             person = personIdent,
             mottaker = konsumentOrgNr,
@@ -50,7 +47,6 @@ data class Spor(
             uthentingsTidspunkt = LocalDateTime.now(),
             leverteData = Base64.getEncoder()
                 .encodeToString(objectMapper.writeValueAsString(utlevertData).encodeToByteArray()),
-            saksId = saksId
         )
 
         private val objectMapper = jacksonObjectMapper()

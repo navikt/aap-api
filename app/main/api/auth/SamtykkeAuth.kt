@@ -22,14 +22,18 @@ data class SamtykkeData(
     val tidspunkt: LocalDate = LocalDate.now(),
 )
 
-data class Samtykkeperiode(val fraOgMed:LocalDate, val tilOgMed:LocalDate)
+data class Samtykkeperiode(val fraOgMed: LocalDate, val tilOgMed: LocalDate)
 
-class SamtykkeIkkeGittException: Exception {
-    constructor(msg: String): super(msg)
-    constructor(msg: String, cause: Throwable): super(msg, cause)
+class SamtykkeIkkeGittException : Exception {
+    constructor(msg: String) : super(msg)
+    constructor(msg: String, cause: Throwable) : super(msg, cause)
 }
 
-fun verifiserOgPakkUtSamtykkeToken(token: String, call:ApplicationCall, config: Config): SamtykkeData {
+fun verifiserOgPakkUtSamtykkeToken(
+    token: String,
+    call: ApplicationCall,
+    config: Config
+): SamtykkeData {
     val samtykkeJwks = SamtykkeJwks(config.oauth.samtykke.wellknownUrl)
     val jwkProvider = UrlJwkProvider(samtykkeJwks.jwksUri)
 
@@ -56,7 +60,12 @@ fun verifiserOgPakkUtSamtykkeToken(token: String, call:ApplicationCall, config: 
 
     return try {
         verifier.verify(token)
-        SamtykkeData(samtykketoken = token, consumerId = consumerId, personIdent = personIdent, samtykkeperiode = parseDates(jwt))
+        SamtykkeData(
+            samtykketoken = token,
+            consumerId = consumerId,
+            personIdent = personIdent,
+            samtykkeperiode = parseDates(jwt)
+        )
     } catch (e: Exception) {
         logger.info("Token not verified: $e")
         throw SamtykkeIkkeGittException("Klarte ikke godkjenne samtykketoken", e)
@@ -65,15 +74,16 @@ fun verifiserOgPakkUtSamtykkeToken(token: String, call:ApplicationCall, config: 
 }
 
 private fun hentPersonIdent(call: ApplicationCall): String =
-    call.request.headers["NAV-PersonIdent"]?: throw SamtykkeIkkeGittException("NAV-PersonIdent ikke satt")
+    call.request.headers["NAV-PersonIdent"]
+        ?: throw SamtykkeIkkeGittException("NAV-PersonIdent ikke satt")
 
-private fun hentConsumerId(call:ApplicationCall): String {
+private fun hentConsumerId(call: ApplicationCall): String {
     val principal = requireNotNull(call.principal<JWTPrincipal>())
     val consumer = requireNotNull(principal.payload.getClaim("consumer"))
     return consumer.asMap()["ID"].toString().split(":").last()
 }
 
-private fun parseDates(jwt:DecodedJWT):Samtykkeperiode{
+private fun parseDates(jwt: DecodedJWT): Samtykkeperiode {
     val services = jwt.getClaim("Services").asArray(String::class.java)
     return Samtykkeperiode(
         LocalDate.parse(services[1].split("=").last()),
