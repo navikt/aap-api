@@ -462,16 +462,19 @@ components:
       properties:
         personidentifikator:
           type: string
+          nullable: false
           description: Personnummeret til brukeren.
           example: 12345678901
         fraOgMedDato:
           type: string
           format: date
+          nullable: false
           description: Start-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
         tilOgMedDato:
           type: string
           format: date
+          nullable: false
           description: Slutt-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
     PeriodeRequestMedSaksId:
@@ -479,16 +482,19 @@ components:
       properties:
         personidentifikator:
           type: string
+          nullable: false
           description: Personnummeret til brukeren
           example: 12345678901
         fraOgMedDato:
           type: string
           format: date
+          nullable: false
           description: Start-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
         tilOgMedDato:
           type: string
           format: date
+          nullable: false
           description: Slutt-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
         saksId:
