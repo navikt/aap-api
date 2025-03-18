@@ -58,6 +58,8 @@ spec:
               orgno: "889640782"
             - name: "Statens pensjonskasse"
               orgno: "982583462"
+            - name: "Gabler Pensjonstjenester AS"
+              orgno: "916833520"
         - name: "delegertafpoffentlig.read"
           enabled: true
           product: "aap"
