@@ -56,7 +56,7 @@ dependencies {
     implementation("com.nimbusds:nimbus-jose-jwt:10.0.2")
     implementation("io.micrometer:micrometer-registry-prometheus:1.14.5")
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
-    implementation("org.apache.kafka:kafka-streams:3.9.0")
+    implementation("org.apache.kafka:kafka-streams:4.0.0")
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.6")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
