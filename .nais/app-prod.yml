@@ -50,6 +50,14 @@ spec:
               orgno: "938708606"
             - name: "Gabler Pensjonstjenester AS"
               orgno: "916833520"
+        - name: "tpordningen.read"
+          enabled: true
+          product: "aap"
+          consumers:
+            - name: "NAV"
+              orgno: "889640782"
+            - name: "Statens pensjonskasse"
+              orgno: "982583462"
         - name: "delegertafpoffentlig.read"
           enabled: true
           product: "aap"
