@@ -111,7 +111,7 @@ spec:
     - name: INTEGRASJON_TP_URL
       value: https://tp-api.prod-fss-pub.nais.io
     - name: INTEGRASJON_TP_SCOPE
-      value: api://dev-fss.pensjonsamhandling.tp-q2/.default
+      value: api://prod-fss.pensjonsamhandling.tp/.default
     - name: SPORINGSLOGG_TOPIC
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt
     - name: SPORINGSLOGG_ENABLED
