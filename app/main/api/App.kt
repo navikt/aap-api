@@ -46,7 +46,6 @@ fun main() {
                 "aap-api-producer-${config.sporingslogg.topic}",
                 config.kafka
             ),
-            arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure),
             tpRegisterClient = TpRegisterClient
         )
     }.start(wait = true)
@@ -55,7 +54,6 @@ fun main() {
 fun Application.api(
     config: Config,
     kafkaProducer: Producer<String, Spor>,
-    arenaRestClient: IArenaoppslagRestClient,
     apiInternClient: IApiInternClient = ApiInternClient(config.apiInternConfig),
     tpRegisterClient: ITpRegisterClient
 ) {
@@ -124,7 +122,6 @@ fun Application.api(
 
         api(
             config.sporingslogg.enabled,
-            arenaRestClient,
             apiInternClient,
             sporingsloggKafkaClient,
             tpRegisterClient,

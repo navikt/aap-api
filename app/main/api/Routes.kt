@@ -38,7 +38,6 @@ private val logger = LoggerFactory.getLogger("App")
 
 fun Route.api(
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: IArenaoppslagRestClient,
     apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     tpRegisterClient: ITpRegisterClient,
@@ -51,7 +50,7 @@ fun Route.api(
                 hentPerioder(
                     call,
                     brukSporingslogg,
-                    arenaoppslagRestClient,
+                    apiInternClient,
                     sporingsloggClient,
                     prometheus
                 )
@@ -63,7 +62,7 @@ fun Route.api(
                 hentPerioder(
                     call,
                     brukSporingslogg,
-                    arenaoppslagRestClient,
+                    apiInternClient,
                     sporingsloggClient,
                     prometheus
                 )
@@ -129,7 +128,7 @@ fun Route.api(
 private suspend fun hentPerioder(
     call: ApplicationCall,
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: IArenaoppslagRestClient,
+    apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
@@ -141,10 +140,11 @@ private suspend fun hentPerioder(
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
         VedtakResponse(
-            perioder = arenaoppslagRestClient.hentVedtakFellesordning(
+            perioder = apiInternClient.hentPerioder(
                 UUID.fromString(callId),
-                body.toVedtakRequest()
-            ).perioder.map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) })
+                body
+            ).map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) }
+        )
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
