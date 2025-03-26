@@ -1,5 +1,7 @@
 package api
 
+import api.api_intern.ApiInternClient
+import api.api_intern.IApiInternClient
 import api.arena.ArenaoppslagRestClient
 import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
@@ -54,6 +56,7 @@ fun Application.api(
     config: Config,
     kafkaProducer: Producer<String, Spor>,
     arenaRestClient: IArenaoppslagRestClient,
+    apiInternClient: IApiInternClient = ApiInternClient(config.apiInternConfig),
     tpRegisterClient: ITpRegisterClient
 ) {
     val sporingsloggKafkaClient = SporingsloggKafkaClient(
@@ -122,6 +125,7 @@ fun Application.api(
         api(
             config.sporingslogg.enabled,
             arenaRestClient,
+            apiInternClient,
             sporingsloggKafkaClient,
             tpRegisterClient,
             prometheus

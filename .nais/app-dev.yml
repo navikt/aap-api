@@ -109,6 +109,8 @@ spec:
     outbound:
       rules:
         - application: test-token-provider
+        - application: api-intern
+          namespace: aap
       external:
         - host: arenaoppslag.dev-fss-pub.nais.io
   env:
