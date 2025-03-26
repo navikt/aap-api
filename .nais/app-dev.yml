@@ -135,4 +135,4 @@ spec:
     - name: API_INTERN_URL
       value: https://api-intern
     - name: API_INTERN_SCOPE
-      value: api://api-intern/.default
+      value: api://prod-gcp.aap.api-intern/.default
