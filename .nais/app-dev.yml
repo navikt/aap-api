@@ -132,3 +132,7 @@ spec:
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt-q2
     - name: SPORINGSLOGG_ENABLED
       value: "false"
+    - name: API_INTERN_URL
+      value: https://api-intern
+    - name: API_INTERN_SCOPE
+      value: api://api-intern/.default
