@@ -1,7 +1,6 @@
 import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.api
-import api.api_intern.ApiInternClient
 import api.api_intern.IApiInternClient
 import api.arena.IArenaoppslagRestClient
 import api.dsop.DsopRequest
@@ -79,13 +78,11 @@ class AfpOffentligServerTest {
     @Test
     fun testAfpOffentlig() = testApplication {
         val mockProducer = MockProducer<String, Spor>()
-        val arenaRestClient = arenaOppslagKlient()
-        val apiInternClient = ApiInternClient(Config().apiInternConfig)
+        val apiInternClient = ApiInternKlient()
 
         application {
             api(
                 Config(), mockProducer,
-                arenaRestClient,
                 apiInternClient,
                 tpRegisterKlient()
             )
@@ -111,13 +108,11 @@ class AfpOffentligServerTest {
     @Test
     fun `hent ut dummy-vedtak fra tp-ordningen`() = testApplication {
         val mockProducer = MockProducer<String, Spor>()
-        val arenaRestClient = arenaOppslagKlient()
-        val apiInternClient = apiInternKlient()
+        val apiInternClient = ApiInternKlient()
 
         application {
             api(
                 Config(), mockProducer,
-                arenaRestClient,
                 apiInternClient,
                 tpRegisterKlient(),
             )
@@ -142,15 +137,13 @@ class AfpOffentligServerTest {
     @Test
     fun `får 404 ved negativt svar fra tp-ordningen`() = testApplication {
         val mockProducer = MockProducer<String, Spor>()
-        val arenaRestClient = arenaOppslagKlient()
-        val apiInternClient = ApiInternClient(Config().apiInternConfig)
+        val apiInternClient = ApiInternKlient()
 
         application {
             api(
                 Config(), mockProducer,
-                arenaRestClient,
-                // Får false fra TP-registeret
                 apiInternClient,
+                // Får false fra TP-registeret
                 tpRegisterKlient(false),
             )
         }
@@ -182,12 +175,12 @@ class AfpOffentligServerTest {
 
     }
 
-    private fun apiInternKlient() = object : IApiInternClient {
+    private fun ApiInternKlient() = object : IApiInternClient {
         override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): api.Maksimum {
             return api.Maksimum(vedtak = listOf())
         }
 
-        override fun hentPerioder(callId: UUID, vedtakRequest: EksternVedtakRequest): List<api.Periode> {
+        override fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): List<api.Periode> {
             return listOf()
         }
 
