@@ -142,6 +142,9 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.AnnenReduksjon.fraKontrakt(): Anne
     )
 }
 
+data class WrapperPeriode(
+    val perioder: List<Periode>
+)
 
 data class Periode(
     val fraOgMedDato: LocalDate?,

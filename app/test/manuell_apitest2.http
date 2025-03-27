@@ -5,17 +5,16 @@ Accept: application/json
 
 ###
 
-POST https://aap-api.ekstern.dev.nav.no/tp-samhandling
+POST https://aap-api.ekstern.dev.nav.no/tp-samhandling-2
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{auth_token_2}}
-x-callid: 08e61a77-54bd-4156-b343-a283a68abe0e
+X-callId: 08e61a77-54bd-4156-b343-a283a68abe0e
 
 {
-  "personidentifikator": "23047616018",
-  "fraOgMedDato": "2020-01-01",
-  "tilOgMedDato": "2023-12-31",
-  "saksId": "13494077"
+  "personidentifikator": "04496904937",
+  "fraOgMedDato": "2010-01-01",
+  "tilOgMedDato": "2026-12-31"
 }
 
 
@@ -28,8 +27,7 @@ Authorization: Bearer {{auth_token_2}}
 x-callid: 08e61a77-54bd-4156-b343-a283a68abe0e
 
 {
-  "personidentifikator": "23047616018",
+  "personidentifikator": "04496904937",
   "fraOgMedDato": "2020-01-01",
-  "tilOgMedDato": "2023-12-31",
-  "saksId": "13494077"
+  "tilOgMedDato": "2023-12-31"
 }

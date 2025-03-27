@@ -118,3 +118,8 @@ spec:
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt
     - name: SPORINGSLOGG_ENABLED
       value: "true"
+    - name: API_INTERN_URL
+      value: http://api-intern
+    - name: API_INTERN_SCOPE
+      value: api://prod-gcp.aap.api-intern/.default
+

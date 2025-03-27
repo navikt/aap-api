@@ -1,6 +1,8 @@
+import api.WrapperPeriode
 import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.api
+import api.api_intern.IApiInternClient
 import api.arena.IArenaoppslagRestClient
 import api.dsop.DsopRequest
 import api.sporingslogg.Spor
@@ -52,6 +54,8 @@ class AfpOffentligServerTest {
             System.setProperty("KAFKA_CREDSTORE_PASSWORD", "http://kafka")
             System.setProperty("SPORINGSLOGG_ENABLED", "http://kafka")
             System.setProperty("SPORINGSLOGG_TOPIC", "http://kafka")
+            System.setProperty("API_INTERN_URL", "http://kafka")
+            System.setProperty("API_INTERN_SCOPE", "http://kafka")
 
             server.start()
 
@@ -75,13 +79,13 @@ class AfpOffentligServerTest {
     @Test
     fun testAfpOffentlig() = testApplication {
         val mockProducer = MockProducer<String, Spor>()
-        val arenaRestClient = arenaOppslagKlient()
+        val apiInternClient = ApiInternKlient()
 
         application {
             api(
                 Config(), mockProducer,
-                arenaRestClient,
-                tpRegisterKlient(),
+                apiInternClient,
+                tpRegisterKlient()
             )
         }
         val client = createClient()
@@ -105,12 +109,12 @@ class AfpOffentligServerTest {
     @Test
     fun `hent ut dummy-vedtak fra tp-ordningen`() = testApplication {
         val mockProducer = MockProducer<String, Spor>()
-        val arenaRestClient = arenaOppslagKlient()
+        val apiInternClient = ApiInternKlient()
 
         application {
             api(
                 Config(), mockProducer,
-                arenaRestClient,
+                apiInternClient,
                 tpRegisterKlient(),
             )
         }
@@ -134,12 +138,12 @@ class AfpOffentligServerTest {
     @Test
     fun `får 404 ved negativt svar fra tp-ordningen`() = testApplication {
         val mockProducer = MockProducer<String, Spor>()
-        val arenaRestClient = arenaOppslagKlient()
+        val apiInternClient = ApiInternKlient()
 
         application {
             api(
                 Config(), mockProducer,
-                arenaRestClient,
+                apiInternClient,
                 // Får false fra TP-registeret
                 tpRegisterKlient(false),
             )
@@ -170,6 +174,20 @@ class AfpOffentligServerTest {
             return ønsketSvar
         }
 
+    }
+
+    private fun ApiInternKlient() = object : IApiInternClient {
+        override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): api.Maksimum {
+            return api.Maksimum(vedtak = listOf())
+        }
+
+        override fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): WrapperPeriode {
+            return WrapperPeriode(perioder = listOf())
+        }
+
+        override fun hentMedium(vedtakRequest: EksternVedtakRequest): api.Medium {
+            return api.Medium(vedtak = listOf())
+        }
     }
 
     private fun arenaOppslagKlient() = object : IArenaoppslagRestClient {

@@ -4,6 +4,8 @@ import api.afp.VedtakPeriode
 import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.afp.VedtakResponse
+import api.api_intern.ApiInternClient
+import api.api_intern.IApiInternClient
 import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
@@ -36,7 +38,7 @@ private val logger = LoggerFactory.getLogger("App")
 
 fun Route.api(
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: IArenaoppslagRestClient,
+    apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     tpRegisterClient: ITpRegisterClient,
     prometheus: PrometheusMeterRegistry
@@ -48,7 +50,7 @@ fun Route.api(
                 hentPerioder(
                     call,
                     brukSporingslogg,
-                    arenaoppslagRestClient,
+                    apiInternClient,
                     sporingsloggClient,
                     prometheus
                 )
@@ -60,7 +62,7 @@ fun Route.api(
                 hentPerioder(
                     call,
                     brukSporingslogg,
-                    arenaoppslagRestClient,
+                    apiInternClient,
                     sporingsloggClient,
                     prometheus
                 )
@@ -84,7 +86,7 @@ fun Route.api(
                             call,
                             body,
                             brukSporingslogg,
-                            arenaoppslagRestClient,
+                            apiInternClient,
                             sporingsloggClient,
                             prometheus
                         )
@@ -111,7 +113,7 @@ fun Route.api(
                             call,
                             body,
                             brukSporingslogg,
-                            arenaoppslagRestClient,
+                            apiInternClient,
                             sporingsloggClient,
                             prometheus
                         )
@@ -119,42 +121,41 @@ fun Route.api(
                 }
             }
         }
-    }
-
-    if (Miljø.er() == MiljøKode.DEV) {
-        route("/tp-samhandling-2") {
-            authenticate(MASKINPORTEN_TP_ORDNINGEN) {
-                post {
-                    val body = call.receive<VedtakRequest>()
-                    if (tpRegisterClient.brukerHarTpForholdOgYtelse(
-                            body.personidentifikator,
-                            982759412.toString(),
-                            call.callId ?: UUID.randomUUID().toString()
-                        ) != true
-                    ) {
-                        call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
-                    } else {
-                        call.respond(
-                            hentMedium(
-                                call,
-                                body,
-                                brukSporingslogg,
-                                arenaoppslagRestClient,
-                                sporingsloggClient,
-                                prometheus
+    }/* TESTING PURPOSES
+        if (Miljø.er() == MiljøKode.DEV) {
+            route("/tp-samhandling-2") {
+                authenticate(MASKINPORTEN_TP_ORDNINGEN) {
+                    post {
+                        val body = call.receive<VedtakRequest>()
+                        if (tpRegisterClient.brukerHarTpForholdOgYtelse(
+                                body.personidentifikator,
+                                982759412.toString(),
+                                call.callId ?: UUID.randomUUID().toString()
+                            ) != true
+                        ) {
+                            call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
+                        } else {
+                            call.respond(
+                                hentMaksimum(
+                                    call,
+                                    body,
+                                    brukSporingslogg,
+                                    apiInternClient,
+                                    sporingsloggClient,
+                                    prometheus
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
-        }
-    }
+        }*/
 }
 
 private suspend fun hentPerioder(
     call: ApplicationCall,
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: IArenaoppslagRestClient,
+    apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
@@ -166,14 +167,14 @@ private suspend fun hentPerioder(
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
         VedtakResponse(
-            perioder = arenaoppslagRestClient.hentVedtakFellesordning(
+            perioder = apiInternClient.hentPerioder(
                 UUID.fromString(callId),
-                body.toVedtakRequest()
-            ).perioder.map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) })
+                body
+            ).perioder.map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) }
+        )
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
-        logger.error("Klarte ikke hente vedtak fra Arena. Se sikker logg for stacktrace.")
+        logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
         if (brukSporingslogg) {
@@ -201,7 +202,7 @@ private suspend fun hentMedium(
     call: ApplicationCall,
     body: VedtakRequest,
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: IArenaoppslagRestClient,
+    apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
@@ -216,12 +217,10 @@ private suspend fun hentMedium(
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        arenaoppslagRestClient.hentMaksimum(callId, arenaOppslagRequestBody)
-            .fraKontraktUtenUtbetalinger()
+        apiInternClient.hentMedium(arenaOppslagRequestBody)
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
-        logger.error("Klarte ikke hente vedtak fra Arena. Se sikker logg for stacktrace.")
+        logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
         if (brukSporingslogg) {
@@ -250,7 +249,7 @@ private suspend fun hentMaksimum(
     call: ApplicationCall,
     body: VedtakRequest,
     brukSporingslogg: Boolean,
-    arenaoppslagRestClient: IArenaoppslagRestClient,
+    apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
 ) {
@@ -265,11 +264,10 @@ private suspend fun hentMaksimum(
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        arenaoppslagRestClient.hentMaksimum(callId, arenaOppslagRequestBody).fraKontrakt()
+        apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
-        logger.error("Klarte ikke hente vedtak fra Arena. Se sikker logg for stacktrace.")
+        logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
         if (brukSporingslogg) {

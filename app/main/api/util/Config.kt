@@ -17,7 +17,8 @@ data class Config(
         issuer = requiredConfigForKey("AZURE_OPENID_CONFIG_ISSUER"),
     ),
     val kafka: KafkaConfig = KafkaConfig(),
-    val sporingslogg: SporingsloggConfig = SporingsloggConfig()
+    val sporingslogg: SporingsloggConfig = SporingsloggConfig(),
+    val apiInternConfig: ApiInternConfig = ApiInternConfig()
 )
 
 data class KafkaConfig(
@@ -60,6 +61,11 @@ data class MaskinportenConfig(
 data class ArenaoppslagConfig(
     val proxyBaseUrl: String = requiredConfigForKey("ARENAOPPSLAG_PROXY_BASE_URL"),
     val scope: String = requiredConfigForKey("ARENAOPPSLAG_SCOPE")
+)
+
+data class ApiInternConfig(
+    val url: String = requiredConfigForKey("API_INTERN_URL"),
+    val scope : String = requiredConfigForKey("API_INTERN_SCOPE")
 )
 
 data class SamtykkeConfig(

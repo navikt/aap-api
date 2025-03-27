@@ -109,6 +109,8 @@ spec:
     outbound:
       rules:
         - application: test-token-provider
+        - application: api-intern
+          namespace: aap
       external:
         - host: arenaoppslag.dev-fss-pub.nais.io
   env:
@@ -130,3 +132,7 @@ spec:
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt-q2
     - name: SPORINGSLOGG_ENABLED
       value: "false"
+    - name: API_INTERN_URL
+      value: http://api-intern
+    - name: API_INTERN_SCOPE
+      value: api://dev-gcp.aap.api-intern/.default

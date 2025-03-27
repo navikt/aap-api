@@ -1,5 +1,7 @@
 package api
 
+import api.api_intern.ApiInternClient
+import api.api_intern.IApiInternClient
 import api.arena.ArenaoppslagRestClient
 import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
@@ -44,7 +46,6 @@ fun main() {
                 "aap-api-producer-${config.sporingslogg.topic}",
                 config.kafka
             ),
-            arenaRestClient = ArenaoppslagRestClient(config.arenaoppslag, config.azure),
             tpRegisterClient = TpRegisterClient
         )
     }.start(wait = true)
@@ -53,7 +54,7 @@ fun main() {
 fun Application.api(
     config: Config,
     kafkaProducer: Producer<String, Spor>,
-    arenaRestClient: IArenaoppslagRestClient,
+    apiInternClient: IApiInternClient = ApiInternClient(config.apiInternConfig),
     tpRegisterClient: ITpRegisterClient
 ) {
     val sporingsloggKafkaClient = SporingsloggKafkaClient(
@@ -121,7 +122,7 @@ fun Application.api(
 
         api(
             config.sporingslogg.enabled,
-            arenaRestClient,
+            apiInternClient,
             sporingsloggKafkaClient,
             tpRegisterClient,
             prometheus
