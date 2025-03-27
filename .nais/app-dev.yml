@@ -133,6 +133,6 @@ spec:
     - name: SPORINGSLOGG_ENABLED
       value: "false"
     - name: API_INTERN_URL
-      value: https://api-intern
+      value: http://api-intern
     - name: API_INTERN_SCOPE
       value: api://dev-gcp.aap.api-intern/.default
