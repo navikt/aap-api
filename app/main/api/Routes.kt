@@ -193,8 +193,7 @@ private suspend fun hentMedium(
         apiInternClient.hentMedium(arenaOppslagRequestBody)
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
-        logger.error("Klarte ikke hente vedtak fra Arena. Se sikker logg for stacktrace.")
+        logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
         if (brukSporingslogg) {
@@ -241,8 +240,7 @@ private suspend fun hentMaksimum(
         apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        secureLog.error("Klarte ikke hente vedtak fra Arena", ex)
-        logger.error("Klarte ikke hente vedtak fra Arena. Se sikker logg for stacktrace.")
+        logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
         if (brukSporingslogg) {
