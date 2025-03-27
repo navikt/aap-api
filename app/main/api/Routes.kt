@@ -122,35 +122,35 @@ fun Route.api(
             }
         }
     }
-
-    if (Miljø.er() == MiljøKode.DEV) {
-        route("/tp-samhandling-2") {
-            authenticate(MASKINPORTEN_TP_ORDNINGEN) {
-                post {
-                    val body = call.receive<VedtakRequest>()
-                    if (tpRegisterClient.brukerHarTpForholdOgYtelse(
-                            body.personidentifikator,
-                            982759412.toString(),
-                            call.callId ?: UUID.randomUUID().toString()
-                        ) != true
-                    ) {
-                        call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
-                    } else {
-                        call.respond(
-                            hentMedium(
-                                call,
-                                body,
-                                brukSporingslogg,
-                                apiInternClient,
-                                sporingsloggClient,
-                                prometheus
+    /* TESTING PURPOSES
+        if (Miljø.er() == MiljøKode.DEV) {
+            route("/tp-samhandling-2") {
+                authenticate(MASKINPORTEN_TP_ORDNINGEN) {
+                    post {
+                        val body = call.receive<VedtakRequest>()
+                        if (tpRegisterClient.brukerHarTpForholdOgYtelse(
+                                body.personidentifikator,
+                                982759412.toString(),
+                                call.callId ?: UUID.randomUUID().toString()
+                            ) != true
+                        ) {
+                            call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
+                        } else {
+                            call.respond(
+                                hentMedium(
+                                    call,
+                                    body,
+                                    brukSporingslogg,
+                                    apiInternClient,
+                                    sporingsloggClient,
+                                    prometheus
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
-        }
-    }
+        } */
 }
 
 private suspend fun hentPerioder(
