@@ -60,6 +60,8 @@ spec:
               orgno: "982583462"
             - name: "Gabler Pensjonstjenester AS"
               orgno: "916833520"
+            - name: "Oslo Pensjonsforsikring"
+              orgno: "982759412"
         - name: "delegertafpoffentlig.read"
           enabled: true
           product: "aap"
@@ -111,7 +113,7 @@ spec:
     - name: INTEGRASJON_TP_URL
       value: https://tp-api.prod-fss-pub.nais.io
     - name: INTEGRASJON_TP_SCOPE
-      value: api://dev-fss.pensjonsamhandling.tp-q2/.default
+      value: api://prod-fss.pensjonsamhandling.tp/.default
     - name: SPORINGSLOGG_TOPIC
       value: pensjonsamhandling.public-sporingslogg-loggmeldingmottatt
     - name: SPORINGSLOGG_ENABLED
@@ -120,3 +122,4 @@ spec:
       value: http://api-intern
     - name: API_INTERN_SCOPE
       value: api://prod-gcp.aap.api-intern/.default
+

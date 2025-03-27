@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.1.10"
+    kotlin("jvm") version "2.1.20"
     id("io.ktor.plugin") version "3.1.1"
     application
 }
@@ -12,7 +12,7 @@ application {
 
 val aapLibVersion = "5.0.76"
 val ktorVersion = "3.1.1"
-val komponenterVersjon = "1.0.176"
+val komponenterVersjon = "1.0.190"
 val mockOAuth2ServerVersion = "2.1.10"
 
 dependencies {
@@ -48,15 +48,15 @@ dependencies {
     implementation("io.ktor:ktor-client-jackson:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    implementation("no.nav.aap.arenaoppslag:kontrakt:0.0.19")
+    implementation("no.nav.aap.arenaoppslag:kontrakt:0.0.20")
 
-    implementation("ch.qos.logback:logback-classic:1.5.17")
+    implementation("ch.qos.logback:logback-classic:1.5.18")
     implementation("com.auth0:java-jwt:4.5.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3")
     implementation("com.nimbusds:nimbus-jose-jwt:10.0.2")
     implementation("io.micrometer:micrometer-registry-prometheus:1.14.5")
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
-    implementation("org.apache.kafka:kafka-streams:3.9.0")
+    implementation("org.apache.kafka:kafka-streams:4.0.0")
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.6")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
