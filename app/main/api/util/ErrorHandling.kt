@@ -54,7 +54,7 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             else -> {
-                logger.error("Uhåndtert feil", cause)
+                logger.error("Uhåndtert feil ved kall mot ${call.request.path()}", cause)
                 call.respond(
                     HttpStatusCode.InternalServerError,
                     "Feil i tjeneste: ${cause.message}"
