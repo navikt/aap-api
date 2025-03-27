@@ -125,26 +125,22 @@ fun Route.api(
 
     if (Miljø.er() == MiljøKode.DEV) {
         route("/tp-samhandling-2") {
-            authenticate(MASKINPORTEN_TP_ORDNINGEN) {
-                post {
-                    val body = call.receive<VedtakRequest>()
+            post {
+                val body = call.receive<VedtakRequest>()
 
-                    call.respond(
-                        hentMedium(
-                            call,
-                            body,
-                            brukSporingslogg,
-                            apiInternClient,
-                            sporingsloggClient,
-                            prometheus
-                        )
+                call.respond(
+                    hentMedium(
+                        call,
+                        body,
+                        brukSporingslogg,
+                        apiInternClient,
+                        sporingsloggClient,
+                        prometheus
                     )
-
-                }
+                )
             }
         }
     }
-
 }
 
 private suspend fun hentPerioder(
