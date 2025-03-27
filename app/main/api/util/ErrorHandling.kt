@@ -38,12 +38,12 @@ fun StatusPagesConfig.feilhåndtering(
 
             is ContentTransformationException -> {
                 logger.warn("Feil i mottatte data", cause)
-                call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data: ${cause.message}")
+                call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
             }
 
             is IllegalArgumentException -> {
                 logger.warn("Feil i mottatte data", cause)
-                call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data: ${cause.message}")
+                call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
             }
 
             is ManglerTilgangException -> {
