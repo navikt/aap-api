@@ -1,3 +1,4 @@
+import api.WrapperPeriode
 import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.api
@@ -180,8 +181,8 @@ class AfpOffentligServerTest {
             return api.Maksimum(vedtak = listOf())
         }
 
-        override fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): List<api.Periode> {
-            return listOf()
+        override fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): WrapperPeriode {
+            return WrapperPeriode(perioder = listOf())
         }
 
         override fun hentMedium(vedtakRequest: EksternVedtakRequest): api.Medium {

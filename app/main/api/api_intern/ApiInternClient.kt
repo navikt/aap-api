@@ -4,9 +4,8 @@ import api.Medium
 import api.Periode
 import api.afp.VedtakRequestMedSaksRef
 import api.util.ApiInternConfig
+import api.WrapperPeriode
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
-import no.nav.aap.arenaoppslag.kontrakt.intern.InternVedtakRequest
-import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum
 import no.nav.aap.komponenter.httpklient.httpclient.ClientConfig
 import no.nav.aap.komponenter.httpklient.httpclient.RestClient
 import no.nav.aap.komponenter.httpklient.httpclient.Header
@@ -20,7 +19,7 @@ import no.nav.aap.komponenter.json.DefaultJsonMapper
 interface IApiInternClient {
     fun hentMedium(vedtakRequest: EksternVedtakRequest): Medium
     fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): api.Maksimum
-    fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): List<Periode>
+    fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): WrapperPeriode
 }
 
 class ApiInternClient(
@@ -72,7 +71,7 @@ class ApiInternClient(
         }
     }
 
-    override fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): List<api.Periode> {
+    override fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): WrapperPeriode {
         val request = PostRequest(
             additionalHeaders = listOf(
                 Header("Accept", "application/json"),

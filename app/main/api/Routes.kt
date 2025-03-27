@@ -143,7 +143,7 @@ private suspend fun hentPerioder(
             perioder = apiInternClient.hentPerioder(
                 UUID.fromString(callId),
                 body
-            ).map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) }
+            ).perioder.map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) }
         )
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
