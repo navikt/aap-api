@@ -122,7 +122,6 @@ fun Route.api(
             }
         }
     }
-    /* TESTING PURPOSES
         if (Miljø.er() == MiljøKode.DEV) {
             route("/tp-samhandling-2") {
                 authenticate(MASKINPORTEN_TP_ORDNINGEN) {
@@ -137,7 +136,7 @@ fun Route.api(
                             call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
                         } else {
                             call.respond(
-                                hentMedium(
+                                hentMaksimum(
                                     call,
                                     body,
                                     brukSporingslogg,
@@ -150,7 +149,7 @@ fun Route.api(
                     }
                 }
             }
-        } */
+        }
 }
 
 private suspend fun hentPerioder(
