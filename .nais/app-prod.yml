@@ -99,6 +99,8 @@ spec:
     outbound:
       external:
         - host: arenaoppslag.prod-fss-pub.nais.io
+      rules:
+        - application: api-intern
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.nav.no

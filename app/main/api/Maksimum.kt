@@ -1,7 +1,6 @@
 package api
 
 import java.time.LocalDate
-import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum as KontraktMaksimum
 
 
 data class Maksimum(
@@ -9,16 +8,6 @@ data class Maksimum(
 )
 
 data class Medium(val vedtak: List<VedtakUtenUtbetaling>)
-
-fun KontraktMaksimum.fraKontrakt(): Maksimum {
-    return Maksimum(
-        vedtak = this.vedtak.map { it.fraKontrakt() }
-    )
-}
-
-fun KontraktMaksimum.fraKontraktUtenUtbetalinger(): Medium {
-    return Medium(vedtak = this.vedtak.map { it.fraKontraktUtenUtbetaling() })
-}
 
 /**
  * @param status Hypotese, vedtaksstatuskode
@@ -59,39 +48,6 @@ data class VedtakUtenUtbetaling(
     val opphorsAarsak: String? = null,
 )
 
-fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontrakt(): Vedtak {
-    return Vedtak(
-        this.dagsats,
-        this.vedtaksId,
-        this.status,
-        this.saksnummer,
-        this.vedtaksdato,
-        this.periode.fraKontrakt(),
-        rettighetsType = this.rettighetsType,
-        beregningsgrunnlag = this.beregningsgrunnlag,
-        barnMedStonad = this.barnMedStonad,
-        vedtaksTypeKode = this.vedtaksTypeKode,
-        vedtaksTypeNavn = this.vedtaksTypeNavn,
-        utbetaling = this.utbetaling.map { it.fraKontrakt() },
-    )
-}
-
-fun no.nav.aap.arenaoppslag.kontrakt.modeller.Vedtak.fraKontraktUtenUtbetaling(): VedtakUtenUtbetaling {
-    return VedtakUtenUtbetaling(
-        this.dagsats,
-        this.vedtaksId,
-        this.status,
-        this.saksnummer,
-        this.vedtaksdato,
-        periode = this.periode.fraKontrakt(),
-        rettighetsType = this.rettighetsType,
-        beregningsgrunnlag = this.beregningsgrunnlag,
-        barnMedStonad = this.barnMedStonad,
-        vedtaksTypeKode = this.vedtaksTypeKode,
-        vedtaksTypeNavn = this.vedtaksTypeNavn,
-    )
-}
-
 
 data class UtbetalingMedMer(
     val reduksjon: Reduksjon? = null,
@@ -101,17 +57,6 @@ data class UtbetalingMedMer(
     val dagsats: Int,
     val barnetilegg: Int,
 )
-
-fun no.nav.aap.arenaoppslag.kontrakt.modeller.UtbetalingMedMer.fraKontrakt(): UtbetalingMedMer {
-    return UtbetalingMedMer(
-        this.reduksjon?.fraKontrakt(),
-        this.utbetalingsgrad,
-        this.periode.fraKontrakt(),
-        this.belop,
-        this.dagsats,
-        this.barnetillegg
-    )
-}
 
 data class Reduksjon(
     val timerArbeidet: Double,
@@ -151,6 +96,3 @@ data class Periode(
     val tilOgMedDato: LocalDate?
 )
 
-fun no.nav.aap.arenaoppslag.kontrakt.modeller.Periode.fraKontrakt(): Periode {
-    return Periode(fraOgMedDato, tilOgMedDato)
-}
