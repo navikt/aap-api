@@ -404,7 +404,7 @@ components:
             example: "13494077"
           vedtaksdato:
             type: string
-            format: date-time
+            format: date
             description: Dato da vedtaket ble fattet.
             example: 2022-05-01
           vedtaksTypeKode:
