@@ -330,9 +330,9 @@ components:
             example: "13494077"
           vedtaksdato:
             type: string
-            format: date-time
+            format: date
             description: Dato da vedtaket ble fattet.
-            example: 2020-05-02T00:00:00
+            example: 2020-05-02
           vedtaksTypeKode:
             type: string
             enum:
@@ -406,7 +406,7 @@ components:
             type: string
             format: date-time
             description: Dato da vedtaket ble fattet.
-            example: 2022-05-01T00:00:00
+            example: 2022-05-01
           vedtaksTypeKode:
             type: string
             enum:

@@ -1,8 +1,10 @@
-import api.WrapperPeriode
 import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.api
 import api.api_intern.IApiInternClient
+import api.api_intern.MaksimumFraInternAoi
+import api.api_intern.MediumFraInternApi
+import api.api_intern.PerioderResponse
 import api.arena.IArenaoppslagRestClient
 import api.dsop.DsopRequest
 import api.sporingslogg.Spor
@@ -177,16 +179,22 @@ class AfpOffentligServerTest {
     }
 
     private fun ApiInternKlient() = object : IApiInternClient {
-        override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): api.Maksimum {
-            return api.Maksimum(vedtak = listOf())
+        override fun hentMaksimum(
+            callId: String,
+            vedtakRequest: EksternVedtakRequest
+        ): MaksimumFraInternAoi {
+            return MaksimumFraInternAoi(vedtak = listOf())
         }
 
-        override fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): WrapperPeriode {
-            return WrapperPeriode(perioder = listOf())
+        override fun hentPerioder(
+            callId: UUID,
+            vedtakRequest: VedtakRequestMedSaksRef
+        ): PerioderResponse {
+            return PerioderResponse(perioder = listOf())
         }
 
-        override fun hentMedium(vedtakRequest: EksternVedtakRequest): api.Medium {
-            return api.Medium(vedtak = listOf())
+        override fun hentMedium(vedtakRequest: EksternVedtakRequest): MediumFraInternApi {
+            return MediumFraInternApi(vedtak = listOf())
         }
     }
 

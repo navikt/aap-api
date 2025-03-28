@@ -18,7 +18,7 @@ data class Vedtak(
     val vedtakId: String,
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String,
-    val vedtaksdato: String, //reg_dato
+    val vedtaksdato: LocalDate, //reg_dato
     val periode: Periode,
     val rettighetsType: String, ////aktivitetsfase //Aktfasekode
     val beregningsgrunnlag: Int,
@@ -36,7 +36,7 @@ data class VedtakUtenUtbetaling(
     val vedtakId: String,
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String,
-    val vedtaksdato: String, //reg_dato
+    val vedtaksdato: LocalDate, //reg_dato
     val vedtaksTypeKode: String,
     val vedtaksTypeNavn: String,
     val periode: Periode,
@@ -86,10 +86,6 @@ fun no.nav.aap.arenaoppslag.kontrakt.modeller.AnnenReduksjon.fraKontrakt(): Anne
         this.fraver
     )
 }
-
-data class WrapperPeriode(
-    val perioder: List<Periode>
-)
 
 data class Periode(
     val fraOgMedDato: LocalDate?,

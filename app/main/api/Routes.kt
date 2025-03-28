@@ -4,9 +4,7 @@ import api.afp.VedtakPeriode
 import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.afp.VedtakResponse
-import api.api_intern.ApiInternClient
 import api.api_intern.IApiInternClient
-import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
 import api.auth.MASKINPORTEN_TP_ORDNINGEN
@@ -28,9 +26,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
-import no.nav.aap.komponenter.miljo.Miljø
-import no.nav.aap.komponenter.miljo.MiljøKode
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
 import java.util.*
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
@@ -217,7 +214,27 @@ private suspend fun hentMedium(
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        apiInternClient.hentMedium(arenaOppslagRequestBody)
+        val res = apiInternClient.hentMedium(arenaOppslagRequestBody)
+        Medium(
+            vedtak = res.vedtak.map {
+                VedtakUtenUtbetaling(
+                    dagsats = it.dagsats,
+                    vedtakId = it.vedtakId,
+                    status = it.status,
+                    saksnummer = it.saksnummer,
+                    vedtaksdato = LocalDateTime.parse(it.vedtaksdato).toLocalDate(),
+                    vedtaksTypeKode = it.vedtaksTypeKode,
+                    vedtaksTypeNavn = it.vedtaksTypeNavn,
+                    periode = it.periode,
+                    rettighetsType = it.rettighetsType,
+                    beregningsgrunnlag = it.beregningsgrunnlag,
+                    barnMedStonad = it.barnMedStonad,
+                    kildesystem = it.kildesystem,
+                    samordningsId = it.samordningsId,
+                    opphorsAarsak = it.opphorsAarsak
+                )
+            }
+        )
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         logger.error("Klarte ikke hente vedtak fra intern API", ex)
@@ -264,7 +281,41 @@ private suspend fun hentMaksimum(
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
+        val res = apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
+        Maksimum(
+            vedtak = res.vedtak.map {
+                Vedtak(
+                    dagsats = it.dagsats,
+                    vedtakId = it.vedtakId,
+                    status = it.status,
+                    saksnummer = it.saksnummer,
+                    vedtaksdato = LocalDateTime.parse(it.vedtaksdato).toLocalDate(),
+                    vedtaksTypeKode = it.vedtaksTypeKode,
+                    periode = it.periode,
+                    rettighetsType = it.rettighetsType,
+                    beregningsgrunnlag = it.beregningsgrunnlag,
+                    barnMedStonad = it.barnMedStonad,
+                    kildesystem = it.kildesystem.toString(),
+                    samordningsId = it.samordningsId,
+                    opphorsAarsak = it.opphorsAarsak,
+                    vedtaksTypeNavn = it.vedtaksTypeNavn,
+                    utbetaling = it.utbetaling.map {
+                        UtbetalingMedMer(
+                            reduksjon = it.reduksjon?.let {
+                                Reduksjon(
+                                    timerArbeidet = it.timerArbeidet,
+                                    annenReduksjon = it.annenReduksjon
+                                )
+                            },
+                            utbetalingsgrad = it.utbetalingsgrad,
+                            periode = it.periode,
+                            belop = it.belop,
+                            dagsats = it.dagsats,
+                            barnetilegg = it.barnetilegg
+                        )
+                    },
+                )
+            })
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         logger.error("Klarte ikke hente vedtak fra intern API", ex)
