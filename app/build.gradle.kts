@@ -64,7 +64,7 @@ dependencies {
         implementation("commons-codec:commons-codec:1.18.0")
     }
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
-
+    testImplementation("org.assertj:assertj-core:3.27.3")
     testImplementation(kotlin("test"))
 }
 

@@ -27,7 +27,13 @@ import io.ktor.server.routing.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import org.slf4j.LoggerFactory
+import java.text.DateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.DateTimeParseException
 import java.util.*
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
@@ -222,7 +228,7 @@ private suspend fun hentMedium(
                     vedtakId = it.vedtakId,
                     status = it.status,
                     saksnummer = it.saksnummer,
-                    vedtaksdato = LocalDateTime.parse(it.vedtaksdato).toLocalDate(),
+                    vedtaksdato = localDate(it.vedtaksdato),
                     vedtaksTypeKode = it.vedtaksTypeKode,
                     vedtaksTypeNavn = it.vedtaksTypeNavn,
                     periode = it.periode,
@@ -258,6 +264,20 @@ private suspend fun hentMedium(
             logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
             call.respond(res)
         }
+    }
+}
+
+fun localDate(s: String): LocalDate {
+    val formatter = DateTimeFormatterBuilder()
+        .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+        .toFormatter()
+
+    return try {
+        LocalDate.parse(s, formatter)
+    } catch (e: DateTimeParseException) {
+        logger.error("Failed to parse date string: $s", e)
+        throw e
     }
 }
 
