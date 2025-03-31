@@ -5,6 +5,7 @@ import api.Periode
 import api.afp.VedtakRequest
 import api.util.ApiInternConfig
 import no.nav.aap.api.intern.Medium
+import no.nav.aap.api.intern.PerioderResponse
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.komponenter.httpklient.httpclient.ClientConfig
 import no.nav.aap.komponenter.httpklient.httpclient.Header

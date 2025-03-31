@@ -22,6 +22,7 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import no.nav.aap.api.intern.Medium
+import no.nav.aap.api.intern.Periode
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse
 import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum
@@ -190,8 +191,8 @@ class AfpOffentligServerTest {
         override fun hentPerioder(
             callId: UUID,
             vedtakRequest: VedtakRequest
-        ): PerioderResponse {
-            return PerioderResponse(perioder = listOf())
+        ): no.nav.aap.api.intern.PerioderResponse {
+            return no.nav.aap.api.intern.PerioderResponse(perioder = listOf())
         }
 
         override fun hentMedium(vedtakRequest: EksternVedtakRequest): Medium {
