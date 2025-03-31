@@ -21,6 +21,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
+import no.nav.aap.api.intern.Medium
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse
 import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum
@@ -182,8 +183,8 @@ class AfpOffentligServerTest {
         override fun hentMaksimum(
             callId: String,
             vedtakRequest: EksternVedtakRequest
-        ): MaksimumFraInternAoi {
-            return MaksimumFraInternAoi(vedtak = listOf())
+        ): no.nav.aap.api.intern.Maksimum {
+            return no.nav.aap.api.intern.Maksimum(vedtak = listOf())
         }
 
         override fun hentPerioder(
@@ -193,8 +194,8 @@ class AfpOffentligServerTest {
             return PerioderResponse(perioder = listOf())
         }
 
-        override fun hentMedium(vedtakRequest: EksternVedtakRequest): MediumFraInternApi {
-            return MediumFraInternApi(vedtak = listOf())
+        override fun hentMedium(vedtakRequest: EksternVedtakRequest): Medium {
+            return Medium(vedtak = listOf())
         }
     }
 
