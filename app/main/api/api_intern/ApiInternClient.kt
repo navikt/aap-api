@@ -1,7 +1,7 @@
 package api.api_intern
 
 import api.Periode
-import api.afp.VedtakRequestMedSaksRef
+import api.afp.VedtakRequest
 import api.util.ApiInternConfig
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.komponenter.httpklient.httpclient.ClientConfig
@@ -82,7 +82,7 @@ data class PerioderResponse(val perioder: List<Periode>)
 interface IApiInternClient {
     fun hentMedium(vedtakRequest: EksternVedtakRequest): MediumFraInternApi
     fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): MaksimumFraInternAoi
-    fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequestMedSaksRef): PerioderResponse
+    fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequest): PerioderResponse
 }
 
 class ApiInternClient(
@@ -141,7 +141,7 @@ class ApiInternClient(
 
     override fun hentPerioder(
         callId: UUID,
-        vedtakRequest: VedtakRequestMedSaksRef
+        vedtakRequest: VedtakRequest
     ): PerioderResponse {
         val request = PostRequest(
             additionalHeaders = listOf(

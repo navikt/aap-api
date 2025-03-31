@@ -50,8 +50,11 @@ fun Route.api(
     route("/afp") {
         authenticate(MASKINPORTEN_AFP_PRIVAT) {
             post("/fellesordningen") {
+                val body = call.receive<VedtakRequest>()
                 hentPerioder(
                     call,
+                    body,
+                    saksnummer = null,
                     brukSporingslogg,
                     apiInternClient,
                     sporingsloggClient,
@@ -62,8 +65,11 @@ fun Route.api(
 
         authenticate(MASKINPORTEN_AFP_OFFENTLIG) {
             post("/offentlig") {
+                val body = call.receive<VedtakRequestMedSaksRef>()
                 hentPerioder(
                     call,
+                    body.tilVedtakRequest(),
+                    saksnummer = body.saksId,
                     brukSporingslogg,
                     apiInternClient,
                     sporingsloggClient,
@@ -157,6 +163,8 @@ fun Route.api(
 
 private suspend fun hentPerioder(
     call: ApplicationCall,
+    vedtakRequest: VedtakRequest,
+    saksnummer: String? = null,
     brukSporingslogg: Boolean,
     apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
@@ -166,13 +174,12 @@ private suspend fun hentPerioder(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val body = call.receive<VedtakRequestMedSaksRef>()
     val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
     runCatching {
         VedtakResponse(
             perioder = apiInternClient.hentPerioder(
                 UUID.fromString(callId),
-                body
+                vedtakRequest
             ).perioder.map { VedtakPeriode(it.fraOgMedDato, it.tilOgMedDato) }
         )
     }.onFailure { ex ->
@@ -184,9 +191,15 @@ private suspend fun hentPerioder(
             try {
                 sporingsloggClient.send(
                     Spor.opprett(
-                        body.personidentifikator,
-                        res,
-                        orgnr
+                        personIdent = vedtakRequest.personidentifikator,
+                        utlevertData = res,
+                        konsumentOrgNr = orgnr,
+                        requestObjekt = if (saksnummer != null) VedtakRequestMedSaksRef(
+                            personidentifikator = vedtakRequest.personidentifikator,
+                            fraOgMedDato = vedtakRequest.fraOgMedDato,
+                            tilOgMedDato = vedtakRequest.tilOgMedDato,
+                            saksId = saksnummer
+                        ) else vedtakRequest,
                     )
                 )
                 call.respond(res)
@@ -250,9 +263,10 @@ private suspend fun hentMedium(
             try {
                 sporingsloggClient.send(
                     Spor.opprett(
-                        body.personidentifikator,
-                        res,
-                        orgnr
+                        personIdent = body.personidentifikator,
+                        utlevertData = res,
+                        requestObjekt = body,
+                        konsumentOrgNr = orgnr,
                     )
                 )
                 call.respond(res)
@@ -343,7 +357,12 @@ private suspend fun hentMaksimum(
     }.onSuccess { res ->
         if (brukSporingslogg) {
             try {
-                sporingsloggClient.send(Spor.opprett(body.personidentifikator, res, orgnr))
+                sporingsloggClient.send(Spor.opprett(
+                    personIdent = body.personidentifikator,
+                    utlevertData = res,
+                    requestObjekt = body,
+                    konsumentOrgNr = orgnr,
+                ))
                 call.respond(res)
             } catch (e: Exception) {
                 prometheus.sporingsloggFailCounter(consumerTag).increment()

@@ -30,8 +30,17 @@ fun Routing.dsop(
         try {
             arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
             sporingsloggKafkaClient.send(
-                Spor(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
-                    LocalDateTime.now(),"leverteData",samtykke.samtykketoken,"dataForespoersel", "leverandoer")
+                Spor(
+                    samtykke.personIdent,
+                    samtykke.consumerId,
+                    "aap",
+                    "behandlingsgrunnlag",
+                    LocalDateTime.now(),
+                    "leverteData",
+                    samtykke.samtykketoken,
+                    "dataForespoersel",
+                    "leverandoer"
+                )
             )
             call.respond("OK")
         } catch (e:Exception){
@@ -50,8 +59,17 @@ fun Routing.dsop(
         try {
             arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
             sporingsloggKafkaClient.send(
-                Spor(samtykke.personIdent,samtykke.consumerId,"aap", "behandlingsgrunnlag",
-                    LocalDateTime.now(),"leverteData",samtykke.samtykketoken,"dataForespoersel", "leverandoer")
+                Spor(
+                    samtykke.personIdent,
+                    samtykke.consumerId,
+                    "aap",
+                    "behandlingsgrunnlag",
+                    LocalDateTime.now(),
+                    "leverteData",
+                    samtykke.samtykketoken,
+                    "dataForespoersel",
+                    "leverandoer"
+                )
             )
             call.respond("OK")
         } catch (e:Exception){

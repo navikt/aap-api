@@ -98,7 +98,7 @@ class AfpOffentligServerTest {
                 personidentifikator = "123",
                 fraOgMedDato = LocalDate.now(),
                 tilOgMedDato = LocalDate.now(),
-                saksId = null
+                saksId = "dasdasd"
             ), "/afp/offentlig"
         )
         assertEquals(HttpStatusCode.OK, response.status)
@@ -188,7 +188,7 @@ class AfpOffentligServerTest {
 
         override fun hentPerioder(
             callId: UUID,
-            vedtakRequest: VedtakRequestMedSaksRef
+            vedtakRequest: VedtakRequest
         ): PerioderResponse {
             return PerioderResponse(perioder = listOf())
         }

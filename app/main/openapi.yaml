@@ -88,7 +88,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PeriodeRequestMedSaksId'
+              $ref: '#/components/schemas/PeriodeRequest'
       responses:
         '200':
           description: OK
@@ -499,8 +499,8 @@ components:
           example: 2021-01-01
         saksId:
           type: string
-          nullable: true
-          description: ekstern saksId for sporing
+          required: true
+          description: Ekstern saksId for sporing
           example: "086BE575-25E1-4425-8970-A16A9D7953E9"
   securitySchemes:
     maskinporten:

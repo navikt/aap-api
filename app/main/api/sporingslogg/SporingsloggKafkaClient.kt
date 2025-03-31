@@ -4,6 +4,7 @@ import api.util.Consumers
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.aap.komponenter.json.DefaultJsonMapper
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.clients.producer.RecordMetadata
@@ -21,7 +22,11 @@ class SporingsloggKafkaClient(
     private fun <V> record(value: V) = ProducerRecord<String, V>(sporingsloggTopic, value)
 }
 
-//https://confluence.adeo.no/display/KES/Sporingslogg
+/**
+ * Definert her https://confluence.adeo.no/display/KES/Sporingslogg
+ *
+ * @param dataForespoersel Request-objektet
+ */
 data class Spor(
     val person: String,
     val mottaker: String,
@@ -30,14 +35,14 @@ data class Spor(
     val uthentingsTidspunkt: LocalDateTime,
     val leverteData: String,
     val samtykkeToken: String? = null,
-    val dataForespoersel: String? = null,
+    val dataForespoersel: String?,
     val leverandoer: String? = null,
-    val saksId: String? = null
-) {
+    ) {
     companion object {
         fun opprett(
             personIdent: String,
             utlevertData: Any,
+            requestObjekt: Any,
             konsumentOrgNr: String
         ) = Spor(
             person = personIdent,
@@ -45,6 +50,7 @@ data class Spor(
             tema = "AAP",
             behandlingsGrunnlag = Consumers.getBehandlingsgrunnlag(konsumentOrgNr),
             uthentingsTidspunkt = LocalDateTime.now(),
+            dataForespoersel =  DefaultJsonMapper.toJson(requestObjekt),
             leverteData = Base64.getEncoder()
                 .encodeToString(objectMapper.writeValueAsString(utlevertData).encodeToByteArray()),
         )
