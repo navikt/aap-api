@@ -2,9 +2,6 @@ import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.api
 import api.api_intern.IApiInternClient
-import api.api_intern.MaksimumFraInternAoi
-import api.api_intern.MediumFraInternApi
-import api.api_intern.PerioderResponse
 import api.arena.IArenaoppslagRestClient
 import api.dsop.DsopRequest
 import api.sporingslogg.Spor
@@ -22,7 +19,6 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import no.nav.aap.api.intern.Medium
-import no.nav.aap.api.intern.Periode
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse
 import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum
