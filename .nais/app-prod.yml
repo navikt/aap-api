@@ -62,6 +62,8 @@ spec:
               orgno: "916833520"
             - name: "Oslo Pensjonsforsikring"
               orgno: "982759412"
+            - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
+              orgno: "938708606"
         - name: "delegertafpoffentlig.read"
           enabled: true
           product: "aap"
