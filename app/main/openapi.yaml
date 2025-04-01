@@ -30,7 +30,7 @@ info:
     | Beløp                 | Fullt beløp, etter samhandling med barnetillegg. Det bruker faktisk får utbetalt.                                       |
     | Barnetillegg          |                                                                                                                                |
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
-    | Rettighetstype        | Også kalt aktivitetsfasekode.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning) |                                                                                                |
+    | Rettighetstype        | Også kalt aktivitetsfasekode.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning). Om kildesystem er Kelvin er disse verdiene mulig: `BISTANDSBEHOV`, `SYKEPENGEERSTATNING`, `STUDENT`,  `ARBEIDSSØKER`,  `VURDERES_FOR_UFØRETRYGD`.|                                                                                                |
     | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_.                                                                                           |
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
     | Saksnummer | Referanse til saken. |
@@ -345,17 +345,7 @@ components:
           periode:
             $ref: '#/components/schemas/Periode'
           rettighetsType:
-            type: string
-            description: |
-              Rettighetstype for vedtaket. Mulige verdier er `UA` ("under arbeidsavklaring"), `AU` ("arbeidsutprøving"), `FA` ("Ferdig avklart"), `UVUP` ("Vurdering for uføre"), `SPE` ("Sykepengeerstatning"), `IKKE` ("ikke spesif. aktivitetsfase").
-            enum:
-              - "FA"
-              - "AU"
-              - "UVUP"
-              - "IKKE"
-              - "SPE"
-              - "UA"
-            example: "FA"
+            $ref: '#/components/schemas/RettighetsType'
           beregningsgrunnlag:
             type: integer
             description: Beregningsgrunnlag for vedtaket.
@@ -378,6 +368,24 @@ components:
             type: string
             nullable: true
             description: Her finnes kun data fra ny løsning. Ellers `null`.
+
+    RettighetsType:
+      type: string
+      description: |
+        Rettighetstype for vedtaket. Mulige verdier er `UA` ("under arbeidsavklaring"), `AU` ("arbeidsutprøving"), `FA` ("Ferdig avklart"), `UVUP` ("Vurdering for uføre"), `SPE` ("Sykepengeerstatning"), `IKKE` ("ikke spesif. aktivitetsfase").
+      enum:
+        - "FA"
+        - "AU"
+        - "UVUP"
+        - "IKKE"
+        - "SPE"
+        - "UA"
+        - "BISTANDSBEHOV"
+        - "SYKEPENGEERSTATNING"
+        - "STUDENT"
+        - "ARBEIDSSØKER"
+        - "VURDERES_FOR_UFØRETRYGD"
+      example: "BISTANDSBEHOV"
 
     VedtakMedUtbetalinger:
       type: array
@@ -419,17 +427,7 @@ components:
           periode:
             $ref: '#/components/schemas/Periode'
           rettighetsType:
-            type: string
-            description: |
-              Rettighetstype for vedtaket. Mulige verdier er UA ("under arbeidsavklaring"), AU ("arbeidsutprøving"), FA ("Ferdig avklart"), UVUP ("Vurdering for uføre"), SPE ("Sykepengeerstatning"), IKKE ("Ikke spesif. aktivitetsfase").
-            enum:
-              - "FA"
-              - "AU"
-              - "UVUP"
-              - "IKKE"
-              - "SPE"
-              - "UA"
-            example: "FA"
+            $ref: '#/components/schemas/RettighetsType'
           beregningsgrunnlag:
             type: integer
             description: Beregningsgrunnlag for vedtaket.

@@ -1,7 +1,5 @@
 package api.api_intern
 
-import api.Maksimum
-import api.Periode
 import api.afp.VedtakRequest
 import api.util.ApiInternConfig
 import no.nav.aap.api.intern.Medium
@@ -16,71 +14,6 @@ import no.nav.aap.komponenter.json.DefaultJsonMapper
 import java.net.URI
 import java.util.*
 
-
-// KLASSER FRA API INTERN - GJØR DISSE TIL KONTRAKT
-data class VedtakUtenUtbetaling(
-    val dagsats: Int,
-    val vedtakId: String,
-    val status: String, //Hypotese, vedtaksstatuskode
-    val saksnummer: String,
-    val vedtaksdato: String, //reg_dato
-    val vedtaksTypeKode: String,
-    val vedtaksTypeNavn: String,
-    val periode: Periode,
-    val rettighetsType: String, ////aktivitetsfase //Aktfasekode
-    val beregningsgrunnlag: Int,
-    val barnMedStonad: Int,
-    val kildesystem: String = "ARENA",
-    val samordningsId: String? = null,
-    val opphorsAarsak: String? = null,
-)
-
-data class MediumFraInternApi(val vedtak: List<VedtakUtenUtbetaling>)
-
-data class Vedtak(
-    val dagsats: Int,
-    val vedtakId: String,
-    val status: String, //Hypotese, vedtaksstatuskode
-    val saksnummer: String,
-    val vedtaksdato: String, //reg_dato
-    val periode: Periode,
-    val rettighetsType: String, ////aktivitetsfase //Aktfasekode
-    val beregningsgrunnlag: Int,
-    val barnMedStonad: Int,
-    val kildesystem: Kilde = Kilde.ARENA,
-    val samordningsId: String? = null,
-    val opphorsAarsak: String? = null,
-    val vedtaksTypeKode: String,
-    val vedtaksTypeNavn: String,
-    val utbetaling: List<UtbetalingMedMer>,
-)
-
-data class Reduksjon(
-    val timerArbeidet: Double,
-    val annenReduksjon: Float
-)
-
-data class UtbetalingMedMer(
-    val reduksjon: Reduksjon? = null,
-    val utbetalingsgrad: Int? = null,
-    val periode: Periode,
-    val belop: Int,
-    val dagsats: Int,
-    val barnetilegg: Int,
-)
-
-
-enum class Kilde {
-    ARENA,
-    KELVIN
-}
-
-data class MaksimumFraInternAoi(
-    val vedtak: List<Vedtak>,
-)
-
-data class PerioderResponse(val perioder: List<Periode>)
-// SLUTT PÅ KLASSER FRA API INTERN
 
 interface IApiInternClient {
     fun hentMedium(vedtakRequest: EksternVedtakRequest): Medium
