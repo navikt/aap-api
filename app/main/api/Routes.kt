@@ -285,6 +285,7 @@ fun localDate(s: String): LocalDate {
     val formatter = DateTimeFormatterBuilder()
         .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+        .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         .toFormatter()
 
     return try {

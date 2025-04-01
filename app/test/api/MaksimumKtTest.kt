@@ -45,4 +45,13 @@ class MaksimumKtTest {
 
         assertThat(res).isEqualTo("2021-01-13")
     }
+
+    @Test
+    fun `parse dato til dato`() {
+        val dato = "2021-01-13"
+
+        val res = localDate(dato)
+
+        assertThat(res).isEqualTo("2021-01-13")
+    }
 }
