@@ -486,12 +486,14 @@ components:
         fraOgMedDato:
           type: string
           format: date
+          required: true
           nullable: false
           description: Start-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
         tilOgMedDato:
           type: string
           format: date
+          required: true
           nullable: false
           description: Slutt-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
