@@ -3,8 +3,10 @@ package api.util
 import api.auth.SamtykkeIkkeGittException
 import api.sporingslogg.SporingsloggException
 import io.ktor.http.*
+import io.ktor.server.plugins.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
+import io.ktor.server.request.ContentTransformationException
 import io.ktor.server.response.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import no.nav.aap.komponenter.httpklient.httpclient.error.ManglerTilgangException
@@ -19,7 +21,7 @@ fun StatusPagesConfig.feilhåndtering(
     prometheusMeterRegistry: PrometheusMeterRegistry
 ) {
     exception<Throwable> { call, cause ->
-        when (cause) {
+        when (val actualCause = cause.cause ?: cause) {
             is SporingsloggException -> {
                 logger.error(
                     "Klarte ikke produsere til Kafka sporingslogg og kan derfor ikke returnere data",
@@ -54,8 +56,13 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is PeriodeErrorException -> {
-                logger.warn("Feil i periode:", cause)
-                call.respond(HttpStatusCode.BadRequest, "${cause.message}")
+                logger.warn("Feil i periode:", actualCause)
+                call.respond(HttpStatusCode.BadRequest, "${actualCause.message}")
+            }
+
+            is BadRequestException -> {
+                logger.warn("Bad request", cause)
+                call.respond(HttpStatusCode.BadRequest, FeilRespons("Feil i mottatte data"))
             }
 
             else -> {
