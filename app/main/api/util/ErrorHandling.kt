@@ -54,8 +54,8 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is PeriodeErrorException -> {
-                logger.warn("Feil i periode", cause)
-                call.respond(HttpStatusCode.BadRequest, "FraOgMed må være før TilOgMed")
+                logger.warn("Feil i periode:", cause)
+                call.respond(HttpStatusCode.BadRequest, "${cause.message}")
             }
 
             else -> {
