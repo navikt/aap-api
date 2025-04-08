@@ -53,6 +53,11 @@ fun StatusPagesConfig.feilhåndtering(
                 )
             }
 
+            is PeriodeErrorException -> {
+                logger.warn("Feil i periode", cause)
+                call.respond(HttpStatusCode.BadRequest, "FraOgMed må være før TilOgMed")
+            }
+
             else -> {
                 logger.error("Uhåndtert feil ved kall mot ${call.request.path()}", cause)
                 call.respond(
@@ -64,3 +69,5 @@ fun StatusPagesConfig.feilhåndtering(
         prometheusMeterRegistry.uhåndtertExceptionCounter(cause.javaClass.simpleName)
     }
 }
+
+class PeriodeErrorException(message: String) : Exception(message)
