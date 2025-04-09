@@ -15,6 +15,7 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import io.ktor.client.utils.EmptyContent.contentType
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
@@ -30,8 +31,10 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.*
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
-class AfpOffentligServerTest {
+internal class AfpOffentligServerTest {
     companion object {
         private val server = MockOAuth2Server()
 
@@ -61,7 +64,6 @@ class AfpOffentligServerTest {
 
             val wellnowurl = server.wellKnownUrl("default").toString()
             val jwksuri = server.jwksUrl("default").toString()
-
 
             System.setProperty("MASKINPORTEN_JWKS_URI", jwksuri)
             System.setProperty("MASKINPORTEN_ISSUER", server.issuerUrl("default").toString())
@@ -163,6 +165,79 @@ class AfpOffentligServerTest {
             "Mangler TP-ytelse.",
             response.bodyAsText()
         )
+    }
+
+    @Test
+    fun `AFP felles - Ugyldig request gir 400 Bad request`() = testApplication {
+        application {
+            api(
+                Config(),
+                MockProducer(),
+                ApiInternKlient(),
+                tpRegisterKlient(),
+            )
+        }
+
+        val jwt = issueToken("nav:aap:afpprivat.read")
+
+        val response = client.post("/afp/fellesordningen") {
+            header("Authorization", "Bearer ${jwt.serialize()}")
+            header("X-callid", UUID.randomUUID().toString())
+            contentType(ContentType.Application.Json)
+            setBody("""{"personidentifikator":"1234","fraOgMedDato":"2025-01-01","tilOgMedDato":"2024-01-01","saksId":"123"}""")
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
+
+    @Test
+    fun `AFP offentlig - Ugyldig request gir 400 Bad request`() = testApplication {
+        application {
+            api(
+                Config(),
+                MockProducer(),
+                ApiInternKlient(),
+                tpRegisterKlient(),
+            )
+        }
+
+        val jwt = issueToken("nav:aap:afpoffentlig.read")
+
+        val response = client.post("/afp/offentlig") {
+            header("Authorization", "Bearer ${jwt.serialize()}")
+            header("X-callid", UUID.randomUUID().toString())
+            contentType(ContentType.Application.Json)
+            setBody("""{"personidentifikator":"1234","fraOgMedDato":"2025-01-01","tilOgMedDato":"2024-01-01","saksId":"123"}""")
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "/tp-samhandling",
+        "/tp-samhandling-med-utbetalinger",
+    )
+    fun `TP Samhandling - Ugyldig request gir 400 Bad request`(endepunkt: String) = testApplication {
+        application {
+            api(
+                Config(),
+                MockProducer(),
+                ApiInternKlient(),
+                tpRegisterKlient(),
+            )
+        }
+
+        val jwt = issueToken("nav:aap:tpordningen.read")
+
+        val response = client.post(endepunkt) {
+            header("Authorization", "Bearer ${jwt.serialize()}")
+            header("X-callid", UUID.randomUUID().toString())
+            contentType(ContentType.Application.Json)
+            setBody("""{"personidentifikator":"1234","fraOgMedDato":"2025-01-01","tilOgMedDato":"2024-01-01"}""")
+        }
+
+        assertEquals(HttpStatusCode.BadRequest, response.status)
     }
 
     private fun tpRegisterKlient(ønsketSvar: Boolean? = true) = object : ITpRegisterClient {

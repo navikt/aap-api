@@ -2,13 +2,12 @@ package api.util
 
 import api.auth.SamtykkeIkkeGittException
 import api.sporingslogg.SporingsloggException
-import io.ktor.http.*
-import io.ktor.server.plugins.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.request.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.plugins.BadRequestException
+import io.ktor.server.plugins.statuspages.StatusPagesConfig
 import io.ktor.server.request.ContentTransformationException
-import io.ktor.server.response.*
-import io.ktor.util.*
+import io.ktor.server.request.path
+import io.ktor.server.response.respond
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import no.nav.aap.komponenter.httpklient.httpclient.error.ManglerTilgangException
 import org.slf4j.Logger
@@ -17,13 +16,10 @@ data class FeilRespons(
     val melding: String,
 )
 
-fun Throwable.findRootCause(): Throwable {
-    var current: Throwable = this
-    while (current.cause != null && current.cause != current) {
-        current = current.cause!!
-    }
-    return current
-}
+private fun Throwable.findRootCause(): Throwable =
+    generateSequence(this) { it.cause }
+        .takeWhile { it.cause != it }
+        .last()
 
 fun StatusPagesConfig.feilhåndtering(
     logger: Logger,
@@ -56,7 +52,6 @@ fun StatusPagesConfig.feilhåndtering(
                 logger.warn("Feil i periode:", rootCause)
                 call.respond(HttpStatusCode.BadRequest, "${rootCause.message}")
             }
-
 
             is IllegalArgumentException -> {
                 logger.warn("Feil i mottatte data", cause)

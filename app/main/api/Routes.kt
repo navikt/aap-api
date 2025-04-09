@@ -17,26 +17,26 @@ import api.util.Consumers.getConsumerTag
 import api.util.httpCallCounter
 import api.util.httpFailedCallCounter
 import api.util.sporingsloggFailCounter
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.plugins.callid.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.auth.authenticate
+import io.ktor.server.plugins.callid.callId
+import io.ktor.server.request.header
+import io.ktor.server.request.path
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
-import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
-import org.slf4j.LoggerFactory
-import java.text.DateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.DateTimeParseException
-import java.util.*
+import java.util.UUID
+import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
+import org.slf4j.LoggerFactory
 
-private val secureLog = LoggerFactory.getLogger("secureLog")
 private val logger = LoggerFactory.getLogger("App")
 
 fun Route.api(
