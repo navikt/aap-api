@@ -10,8 +10,13 @@ data class VedtakRequestMedSaksRef(
     val saksId: String
 ) {
     init {
-        require(fraOgMedDato <= tilOgMedDato) { throw PeriodeErrorException("fraOgMed (${fraOgMedDato}) må være større eller lik tilOgMed(${tilOgMedDato})") }
+        if (fraOgMedDato > tilOgMedDato) {
+            throw PeriodeErrorException(
+                "fraOgMedDato (${fraOgMedDato}) må være mindre eller lik tilOgMedDato (${tilOgMedDato})"
+            )
+        }
     }
+
     fun tilVedtakRequest() = VedtakRequest(personidentifikator, fraOgMedDato, tilOgMedDato)
 }
 
@@ -21,6 +26,10 @@ data class VedtakRequest(
     val tilOgMedDato: LocalDate = LocalDate.now().plusYears(100)
 ) {
     init {
-        require(fraOgMedDato <= tilOgMedDato) { throw PeriodeErrorException("fraOgMed (${fraOgMedDato}) må være større eller lik tilOgMed(${tilOgMedDato})") }
+        if (fraOgMedDato > tilOgMedDato) {
+            throw PeriodeErrorException(
+                "fraOgMedDato (${fraOgMedDato}) må være mindre eller lik tilOgMedDato (${tilOgMedDato})"
+            )
+        }
     }
 }
