@@ -35,7 +35,7 @@ info:
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
     | Saksnummer | Referanse til saken. |
     | Vedtaksdato | Dato fra da vedtaket er fattet. |
-    | Vedtaktype | Kan være E (Endring), G (Gjenpptak), O (Ny rettighet), A (Reaksjon), F (Forlenget ventetid), S (Stans), T (Tidsbegrenset bortfall), N (Annuler sanksjon), K (Kontroll), M (Omgjør reaksjon). |
+    | Vedtakstype | Kan være E (Endring), G (Gjenpptak), O (Ny rettighet), A (Reaksjon), F (Forlenget ventetid), S (Stans), T (Tidsbegrenset bortfall), N (Annuler sanksjon), K (Kontroll), M (Omgjør reaksjon). |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
     | Barn med stønad | Antall barn som bruker får barnetillegg for.|
     | Sykedager | Reduksjon som skyldes   |
@@ -335,12 +335,14 @@ components:
             example: 2020-05-02
           vedtaksTypeKode:
             type: string
+            nullable: true
             enum:
               - E
               - G
               - O
           vedtaksTypeNavn:
             type: string
+            nullable: true
             description: Menneskelesbart format av `vedtaksTypeKode`.
           periode:
             $ref: '#/components/schemas/Periode'
@@ -416,6 +418,7 @@ components:
             description: Dato da vedtaket ble fattet.
             example: 2022-05-01
           vedtaksTypeKode:
+            nullable: true
             type: string
             enum:
               - E
@@ -423,6 +426,7 @@ components:
               - O
           vedtaksTypeNavn:
             type: string
+            nullable: true
             description: Menneskelesbart format av vedtaksTypeKode.
           periode:
             $ref: '#/components/schemas/Periode'

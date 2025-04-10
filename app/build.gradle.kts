@@ -14,6 +14,7 @@ val aapLibVersion = "5.0.95"
 val ktorVersion = "3.1.2"
 val komponenterVersjon = "1.0.211"
 val mockOAuth2ServerVersion = "2.1.10"
+val apiInternVersjon = "0.0.7"
 
 dependencies {
     implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
@@ -23,7 +24,7 @@ dependencies {
     implementation("no.nav.aap.kelvin:httpklient:$komponenterVersjon")
     implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
 
-    implementation("no.nav.aap.api.intern:kontrakt:0.0.5")
+    implementation("no.nav.aap.api.intern:kontrakt:$apiInternVersjon")
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")

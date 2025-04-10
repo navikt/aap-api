@@ -26,8 +26,8 @@ data class Vedtak(
     val kildesystem: String = "ARENA",
     val samordningsId: String? = null,
     val opphorsAarsak: String? = null,
-    val vedtaksTypeKode: String,
-    val vedtaksTypeNavn: String,
+    val vedtaksTypeKode: String?,
+    val vedtaksTypeNavn: String?,
     val utbetaling: List<UtbetalingMedMer>,
 )
 
@@ -37,8 +37,8 @@ data class VedtakUtenUtbetaling(
     val status: String, //Hypotese, vedtaksstatuskode
     val saksnummer: String,
     val vedtaksdato: LocalDate, //reg_dato
-    val vedtaksTypeKode: String,
-    val vedtaksTypeNavn: String,
+    val vedtaksTypeKode: String?,
+    val vedtaksTypeNavn: String?,
     val periode: Periode,
     val rettighetsType: String, ////aktivitetsfase //Aktfasekode
     val beregningsgrunnlag: Int,
