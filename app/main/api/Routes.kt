@@ -252,7 +252,7 @@ private suspend fun hentMedium(
                     samordningsId = it.samordningsId,
                     opphorsAarsak = it.opphorsAarsak
                 )
-            }
+            }.filter { it.status != "INAKT" }
         )
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
@@ -350,7 +350,7 @@ private suspend fun hentMaksimum(
                         )
                     },
                 )
-            })
+            }.filter { it.status != "INAKT" })
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
         logger.error("Klarte ikke hente vedtak fra intern API", ex)
