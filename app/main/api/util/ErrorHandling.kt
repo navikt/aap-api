@@ -71,6 +71,11 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             else -> {
+                if(cause is BadRequestException){
+                    logger.warn("Bad request", cause)
+                    call.respond(HttpStatusCode.BadRequest, FeilRespons("Feil i mottatte data: ${rootCause.message}"))
+                    return@exception
+                }
                 logger.error("Uhåndtert feil ved kall mot ${call.request.path()}", cause)
                 call.respond(
                     HttpStatusCode.InternalServerError,
