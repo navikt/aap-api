@@ -10,7 +10,7 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val aapLibVersion = "5.0.95"
+val aapLibVersion = "5.0.101"
 val ktorVersion = "3.1.2"
 val komponenterVersjon = "1.0.220"
 val mockOAuth2ServerVersion = "2.1.10"
