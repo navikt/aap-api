@@ -54,6 +54,8 @@ spec:
               orgno: "938708606"
             - name: "Oslo Pensjonsforsikring"
               orgno: "982759412"
+            - name: "GARANTIKASSEN FOR FISKERE"
+              orgno: "974652382"
         - name: "delegertafpoffentlig.read"
           enabled: true
           product: "aap"
@@ -82,6 +84,8 @@ spec:
               orgno: "938708606"
             - name: "Oslo Pensjonsforsikring"
               orgno: "982759412"
+            - name: "GARANTIKASSEN FOR FISKERE"
+              orgno: "974652382"
   liveness:
     path: /actuator/live
     initialDelay: 1
