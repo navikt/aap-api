@@ -86,6 +86,8 @@ spec:
               orgno: "982759412"
             - name: "GARANTIKASSEN FOR FISKERE"
               orgno: "974652382"
+            - name: "MARITIM PENSJONSKASSE"
+              orgnr: "940415683"
   liveness:
     path: /actuator/live
     initialDelay: 1
