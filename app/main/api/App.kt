@@ -82,7 +82,7 @@ fun Application.api(
     }
 
     install(ContentNegotiation) {
-        jackson {
+        jackson(ContentType.Application.Json.withCharset(Charsets.UTF_8)) {
             registerModule(JavaTimeModule())
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         }
