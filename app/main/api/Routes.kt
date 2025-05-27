@@ -226,7 +226,7 @@ private suspend fun hentMedium(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
+
     runCatching {
         val arenaOppslagRequestBody = EksternVedtakRequest(
             personidentifikator = body.personidentifikator,

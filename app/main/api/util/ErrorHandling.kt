@@ -44,7 +44,7 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is ContentTransformationException -> {
-                logger.warn("Feil i mottatte data", cause)
+                logger.warn("Feil i mottatte data: ContentTransformationException", cause)
                 call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
             }
 
@@ -54,7 +54,7 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is IllegalArgumentException -> {
-                logger.warn("Feil i mottatte data", cause)
+                logger.warn("Feil i mottatte data: IllegalArgumentException", cause)
                 call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
             }
 
