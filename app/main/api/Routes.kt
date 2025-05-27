@@ -39,6 +39,11 @@ import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("App")
 
+fun ApplicationCall.getCallId(): String? {
+    val headerNames = listOf("x-call-id", "x-callid", "x-request-id")
+    return headerNames.firstNotNullOfOrNull { request.headers[it] }
+}
+
 fun Route.api(
     brukSporingslogg: Boolean,
     apiInternClient: IApiInternClient,
@@ -174,7 +179,7 @@ private suspend fun hentPerioder(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
+    val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
     runCatching {
         VedtakResponse(
             perioder = apiInternClient.hentPerioder(
@@ -309,7 +314,7 @@ private suspend fun hentMaksimum(
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
-    val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
+    val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
     runCatching {
         val arenaOppslagRequestBody = EksternVedtakRequest(
             personidentifikator = body.personidentifikator,

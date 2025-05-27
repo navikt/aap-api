@@ -2,6 +2,7 @@ package api.dsop
 
 import api.arena.ArenaoppslagRestClient
 import api.auth.verifiserOgPakkUtSamtykkeToken
+import api.getCallId
 import api.sporingslogg.Spor
 import api.sporingslogg.SporingsloggKafkaClient
 import api.util.Config
@@ -23,7 +24,7 @@ fun Routing.dsop(
     sporingsloggKafkaClient: SporingsloggKafkaClient
 ) {
     post("/dsop/meldeplikt") {//TODO: gjør om til get()
-        val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
+        val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
         val samtykke = verifiserOgPakkUtSamtykkeToken(requireNotNull(call.request.header("NAV-samtykke-token")), call, config)
         val dsopRequest = call.receive<DsopRequest>()
         logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
@@ -52,7 +53,7 @@ fun Routing.dsop(
         }
     }
     post("/dsop/vedtak") {//TODO: gjør om til get()
-        val callId = requireNotNull(call.request.header("x-callid")) { "x-callid ikke satt" }
+        val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
         val samtykke = verifiserOgPakkUtSamtykkeToken(requireNotNull(call.request.header("NAV-samtykke-token")), call, config)
         val dsopRequest = call.receive<DsopRequest>() //TODO: hent ut personId fra token
         logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
