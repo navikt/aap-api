@@ -15,6 +15,7 @@ object Consumers {
     private const val ARENDAL = "940380014"
     private const val DRAMMEN = "980650383"
     private const val GFF = "974652382"
+    private const val MARITIM_PENSJONSKASSE = "940415683"
 
     private val consumerTags = mapOf(
         NAV_ORGNR to "NAV",
@@ -26,7 +27,8 @@ object Consumers {
         OSLO_PENSJONSFORSIKRING to "Oslo Pensjonsforsikring",
         ARENDAL to "Arendal Kommunale Pensjonskasse",
         DRAMMEN to "Drammen Kommunale Pensjonskasse",
-        GFF to "GARANTIKASSEN FOR FISKERE"
+        GFF to "GARANTIKASSEN FOR FISKERE",
+        MARITIM_PENSJONSKASSE to "Maritim Pensjonskasse"
     )
 
     private val behandlingsgrunnlag = mapOf(
@@ -39,7 +41,7 @@ object Consumers {
         DRAMMEN to "GDPR Art. 6(1)e. AFP-tilskottsloven §17 første ledd, §29 andre ledd, første punktum. GDPR Art. 9(2)b",
         ARENDAL to "GDPR Art. 6(1)e. AFP-tilskottsloven §17 første ledd, §29 andre ledd, første punktum. GDPR Art. 9(2)b",
         GFF to "GDPR Art. 6(1)e. AFP-tilskottsloven §17 første ledd, §29 andre ledd, første punktum. GDPR Art. 9(2)b",
-
+        MARITIM_PENSJONSKASSE to "GDPR Art. 6(1)e. AFP-tilskottsloven §17 første ledd, §29 andre ledd, første punktum. GDPR Art. 9(2)b",
     )
 
     fun getConsumerTag(orgnr: String) = consumerTags[orgnr] ?: orgnr.also {
