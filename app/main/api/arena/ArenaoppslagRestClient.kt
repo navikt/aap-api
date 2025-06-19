@@ -9,24 +9,31 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.serialization.jackson.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.accept
+import io.ktor.client.request.bearerAuth
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.serialization.jackson.jackson
 import io.prometheus.metrics.core.metrics.Summary
-import kotlinx.coroutines.runBlocking
+import java.util.UUID
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse
 import no.nav.aap.arenaoppslag.kontrakt.modeller.Maksimum
 import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.AzureConfig
 import no.nav.aap.ktor.client.auth.azure.AzureAdTokenProvider
 import org.slf4j.LoggerFactory
-import java.util.*
 
 private const val ARENAOPPSLAG_CLIENT_SECONDS_METRICNAME = "arenaoppslag_client_seconds"
 private val sikkerLogg = LoggerFactory.getLogger("secureLog")
@@ -43,22 +50,22 @@ private val objectMapper = jacksonObjectMapper()
     .registerModule(JavaTimeModule())
 
 interface IArenaoppslagRestClient {
-    fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum
-    fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse
-    fun hentVedtakDsop(
+    suspend fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum
+    suspend fun hentVedtakFellesordning(callId: UUID, vedtakRequest: VedtakRequest): VedtakResponse
+    suspend fun hentVedtakDsop(
         callId: UUID,
-        dsopRequest: DsopRequest
+        dsopRequest: DsopRequest,
     ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse
 
-    fun hentMeldepliktDsop(
+    suspend fun hentMeldepliktDsop(
         callId: UUID,
-        dsopRequest: DsopRequest
+        dsopRequest: DsopRequest,
     ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse
 }
 
 class ArenaoppslagRestClient(
     private val arenaoppslagConfig: ArenaoppslagConfig,
-    azureConfig: AzureConfig
+    azureConfig: AzureConfig,
 ) : IArenaoppslagRestClient {
     private val tokenProvider = AzureAdTokenProvider(
         no.nav.aap.ktor.client.auth.azure.AzureConfig(
@@ -70,9 +77,9 @@ class ArenaoppslagRestClient(
         )
     )
 
-    override fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum =
-        runBlocking {
-            val res = httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum") {
+    override suspend fun hentMaksimum(callId: String, vedtakRequest: EksternVedtakRequest): Maksimum =
+        clientLatencyStats.startTimer().use {
+            httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/maksimum") {
                 accept(ContentType.Application.Json)
                 header("x-callid", callId)
                 bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
@@ -80,65 +87,58 @@ class ArenaoppslagRestClient(
                 setBody(vedtakRequest)
             }
                 .bodyAsText()
-
-            return@runBlocking res.let { objectMapper.readValue(it) }
+                .let(objectMapper::readValue)
         }
 
-    override fun hentVedtakFellesordning(
+    override suspend fun hentVedtakFellesordning(
         callId: UUID,
-        vedtakRequest: VedtakRequest
+        vedtakRequest: VedtakRequest,
     ): VedtakResponse =
         clientLatencyStats.startTimer().use {
-            runBlocking {
-                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum") {
-                    accept(ContentType.Application.Json)
-                    header("x-callid", callId)
-                    bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
-                    contentType(ContentType.Application.Json)
-                    setBody(vedtakRequest)
-                }
-                    .bodyAsText()
-                    .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
-                    .let(objectMapper::readValue)
+            httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/ekstern/minimum") {
+                accept(ContentType.Application.Json)
+                header("x-callid", callId)
+                bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
+                contentType(ContentType.Application.Json)
+                setBody(vedtakRequest)
             }
+                .bodyAsText()
+                .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+                .let(objectMapper::readValue)
         }
 
-    override fun hentVedtakDsop(
+    override suspend fun hentVedtakDsop(
         callId: UUID,
-        dsopRequest: DsopRequest
+        dsopRequest: DsopRequest,
     ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
         clientLatencyStats.startTimer().use {
-            runBlocking {
-                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/vedtak") {
-                    accept(ContentType.Application.Json)
-                    header("Nav-Call-Id", callId)
-                    bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
-                    contentType(ContentType.Application.Json)
-                    setBody(dsopRequest)
-                }
-                    .bodyAsText()
-                    .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
-                    .let(objectMapper::readValue)
+            httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/vedtak") {
+                accept(ContentType.Application.Json)
+                header("Nav-Call-Id", callId)
+                bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
+                contentType(ContentType.Application.Json)
+                setBody(dsopRequest)
             }
+                .bodyAsText()
+                .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+                .let(objectMapper::readValue)
         }
 
-    override fun hentMeldepliktDsop(
+    override suspend fun hentMeldepliktDsop(
         callId: UUID,
-        dsopRequest: DsopRequest
+        dsopRequest: DsopRequest,
     ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse =
         clientLatencyStats.startTimer().use {
-            runBlocking {
-                httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/meldeplikt") {
-                    accept(ContentType.Application.Json)
-                    header("Nav-Call-Id", callId)
-                    bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
-                    contentType(ContentType.Application.Json)
-                    setBody(dsopRequest)
-                }
-                    .bodyAsText()
-                    .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
-                    .let(objectMapper::readValue)
+            httpClient.post("${arenaoppslagConfig.proxyBaseUrl}/dsop/meldeplikt") {
+                accept(ContentType.Application.Json)
+                header("Nav-Call-Id", callId)
+                bearerAuth(tokenProvider.getClientCredentialToken(arenaoppslagConfig.scope))
+                contentType(ContentType.Application.Json)
+                setBody(dsopRequest)
             }
+                .bodyAsText()
+                .also { svar -> sikkerLogg.info("Svar fra arenaoppslag:\n$svar") }
+                .let(objectMapper::readValue)
         }
 
     private val httpClient = HttpClient(CIO) {

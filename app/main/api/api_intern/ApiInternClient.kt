@@ -2,6 +2,8 @@ package api.api_intern
 
 import api.afp.VedtakRequest
 import api.util.ApiInternConfig
+import java.net.URI
+import java.util.UUID
 import no.nav.aap.api.intern.Medium
 import no.nav.aap.api.intern.PerioderResponse
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
@@ -11,9 +13,6 @@ import no.nav.aap.komponenter.httpklient.httpclient.RestClient
 import no.nav.aap.komponenter.httpklient.httpclient.request.PostRequest
 import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.ClientCredentialsTokenProvider
 import no.nav.aap.komponenter.json.DefaultJsonMapper
-import java.net.URI
-import java.util.*
-
 
 interface IApiInternClient {
     fun hentMedium(vedtakRequest: EksternVedtakRequest): Medium
@@ -21,9 +20,7 @@ interface IApiInternClient {
     fun hentPerioder(callId: UUID, vedtakRequest: VedtakRequest): PerioderResponse
 }
 
-class ApiInternClient(
-    private val apiInternConfig: ApiInternConfig
-) : IApiInternClient {
+class ApiInternClient(apiInternConfig: ApiInternConfig) : IApiInternClient {
     private val uri = apiInternConfig.url
     private val config = ClientConfig(scope = apiInternConfig.scope)
 
@@ -54,7 +51,7 @@ class ApiInternClient(
 
     override fun hentMaksimum(
         callId: String,
-        vedtakRequest: EksternVedtakRequest
+        vedtakRequest: EksternVedtakRequest,
     ): no.nav.aap.api.intern.Maksimum {
         val request = PostRequest(
             additionalHeaders = listOf(
@@ -77,7 +74,7 @@ class ApiInternClient(
 
     override fun hentPerioder(
         callId: UUID,
-        vedtakRequest: VedtakRequest
+        vedtakRequest: VedtakRequest,
     ): PerioderResponse {
         val request = PostRequest(
             additionalHeaders = listOf(

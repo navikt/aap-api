@@ -10,15 +10,21 @@ import api.util.Config
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.nimbusds.jwt.SignedJWT
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.client.utils.EmptyContent.contentType
-import io.ktor.http.*
-import io.ktor.serialization.jackson.*
-import io.ktor.server.testing.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
+import io.ktor.serialization.jackson.jackson
+import io.ktor.server.testing.ApplicationTestBuilder
+import io.ktor.server.testing.testApplication
+import java.time.LocalDate
+import java.util.UUID
 import no.nav.aap.api.intern.Medium
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.VedtakResponse
@@ -29,8 +35,6 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.util.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
@@ -272,7 +276,7 @@ internal class AfpOffentligServerTest {
     }
 
     private fun arenaOppslagKlient() = object : IArenaoppslagRestClient {
-        override fun hentMaksimum(
+        override suspend fun hentMaksimum(
             callId: String,
             vedtakRequest: EksternVedtakRequest
         ): Maksimum {
@@ -281,7 +285,7 @@ internal class AfpOffentligServerTest {
             )
         }
 
-        override fun hentVedtakFellesordning(
+        override suspend fun hentVedtakFellesordning(
             callId: UUID,
             vedtakRequest: VedtakRequest
         ): VedtakResponse {
@@ -290,14 +294,14 @@ internal class AfpOffentligServerTest {
             )
         }
 
-        override fun hentVedtakDsop(
+        override suspend fun hentVedtakDsop(
             callId: UUID,
             dsopRequest: DsopRequest
         ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
             TODO("Not yet implemented")
         }
 
-        override fun hentMeldepliktDsop(
+        override suspend fun hentMeldepliktDsop(
             callId: UUID,
             dsopRequest: DsopRequest
         ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
