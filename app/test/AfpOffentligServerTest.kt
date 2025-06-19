@@ -15,7 +15,6 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.client.utils.EmptyContent.contentType
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
@@ -272,7 +271,7 @@ internal class AfpOffentligServerTest {
     }
 
     private fun arenaOppslagKlient() = object : IArenaoppslagRestClient {
-        override fun hentMaksimum(
+        override suspend fun hentMaksimum(
             callId: String,
             vedtakRequest: EksternVedtakRequest
         ): Maksimum {
@@ -281,7 +280,7 @@ internal class AfpOffentligServerTest {
             )
         }
 
-        override fun hentVedtakFellesordning(
+        override suspend fun hentVedtakFellesordning(
             callId: UUID,
             vedtakRequest: VedtakRequest
         ): VedtakResponse {
@@ -290,14 +289,14 @@ internal class AfpOffentligServerTest {
             )
         }
 
-        override fun hentVedtakDsop(
+        override suspend fun hentVedtakDsop(
             callId: UUID,
             dsopRequest: DsopRequest
         ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
             TODO("Not yet implemented")
         }
 
-        override fun hentMeldepliktDsop(
+        override suspend fun hentMeldepliktDsop(
             callId: UUID,
             dsopRequest: DsopRequest
         ): no.nav.aap.arenaoppslag.kontrakt.dsop.VedtakResponse {
