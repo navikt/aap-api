@@ -35,13 +35,13 @@ info:
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
     | Saksnummer | Referanse til saken. |
     | Vedtaksdato | Dato fra da vedtaket er fattet. |
-    | Vedtakstype | Kan være E (Endring), G (Gjenpptak), O (Ny rettighet), A (Reaksjon), F (Forlenget ventetid), S (Stans), T (Tidsbegrenset bortfall), N (Annuler sanksjon), K (Kontroll), M (Omgjør reaksjon). |
+    | Vedtakstype | Kun fra Arena: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet), `A` (Reaksjon), `F` (Forlenget ventetid), `S` (Stans), `T` (Tidsbegrenset bortfall), `N` (Annuler sanksjon), `K` (Kontroll), `M` (Omgjør reaksjon). |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
     | Barn med stønad | Antall barn som bruker får barnetillegg for.|
     | Sykedager | Reduksjon som skyldes   |
     | Sent meldekort | Om meldekortet ble sendt inn sent. |
     | Fravær | Antall fraværsdager. | 
-    | Utbetalingsgrad | Kommer i Kelvin. Er `null` fra Arena. |
+    | Utbetalingsgrad | Kommer fra Kelvin. Er `null` fra Arena. |
     | Samordnings-ID | Her finnes kun data fra ny løsning. Ellers null. |
     | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. Fra Kelvin: `OVERGANG_UFORE`, `AVKLART_TIL_ARBEID`, `ANNET`. |
     | Kilde | Om dataen kommer fra Arena eller Kelvin (henholdsvis gammel og ny løsning) |
