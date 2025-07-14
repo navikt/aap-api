@@ -17,8 +17,6 @@ val mockOAuth2ServerVersion = "2.2.1"
 val apiInternVersjon = "0.0.9"
 
 dependencies {
-    implementation("com.github.navikt.aap-libs:ktor-auth:$aapLibVersion")
-
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
 
     implementation("no.nav.aap.kelvin:httpklient:$komponenterVersjon")

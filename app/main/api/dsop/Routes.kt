@@ -1,6 +1,5 @@
 package api.dsop
 
-import api.arena.ArenaoppslagRestClient
 import api.auth.verifiserOgPakkUtSamtykkeToken
 import api.getCallId
 import api.sporingslogg.Spor
@@ -12,7 +11,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
-import java.util.*
 
 
 private val logger = LoggerFactory.getLogger("App")
@@ -20,7 +18,6 @@ private val secureLog = LoggerFactory.getLogger("secureLog")
 
 fun Routing.dsop(
     config: Config,
-    arenaoppslagRestClient: ArenaoppslagRestClient,
     sporingsloggKafkaClient: SporingsloggKafkaClient
 ) {
     post("/dsop/meldeplikt") {//TODO: gjør om til get()
@@ -29,7 +26,7 @@ fun Routing.dsop(
         val dsopRequest = call.receive<DsopRequest>()
         logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
         try {
-            arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
+//            arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
             sporingsloggKafkaClient.send(
                 Spor(
                     samtykke.personIdent,
@@ -58,7 +55,7 @@ fun Routing.dsop(
         val dsopRequest = call.receive<DsopRequest>() //TODO: hent ut personId fra token
         logger.info("Samtykke OK: ${samtykke.samtykkeperiode}")
         try {
-            arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
+//            arenaoppslagRestClient.hentMeldepliktDsop(UUID.fromString(callId),dsopRequest)
             sporingsloggKafkaClient.send(
                 Spor(
                     samtykke.personIdent,

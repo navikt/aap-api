@@ -2,8 +2,6 @@ package api
 
 import api.api_intern.ApiInternClient
 import api.api_intern.IApiInternClient
-import api.arena.ArenaoppslagRestClient
-import api.arena.IArenaoppslagRestClient
 import api.auth.MASKINPORTEN_AFP_OFFENTLIG
 import api.auth.MASKINPORTEN_AFP_PRIVAT
 import api.auth.MASKINPORTEN_TP_ORDNINGEN
