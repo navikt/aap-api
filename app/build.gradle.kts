@@ -12,7 +12,7 @@ application {
 
 val aapLibVersion = "5.0.103"
 val ktorVersion = "3.2.2"
-val komponenterVersjon = "1.0.290"
+val komponenterVersjon = "1.0.296"
 val mockOAuth2ServerVersion = "2.2.1"
 val apiInternVersjon = "0.0.9"
 
