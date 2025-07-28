@@ -356,7 +356,7 @@ components:
             description: Beregningsgrunnlag for vedtaket.
             example: 668862
           barnMedStonad:
-            type: number
+            type: integer
             description: Hvor mange barn gis det tilleg for i vedtaket.
             example: 1
           kildesystem:
@@ -443,7 +443,7 @@ components:
             description: Beregningsgrunnlag for vedtaket.
             example: 668862
           barnMedStonad:
-            type: number
+            type: integer
             description: Hvor mange barn gis det tilleg for i vedtaket.
             example: 1
           kildesystem:
