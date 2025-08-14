@@ -188,30 +188,23 @@ private suspend fun hentPerioder(
         logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
-        if (brukSporingslogg) {
-            try {
-                sporingsloggClient.send(
-                    Spor.opprett(
-                        personIdent = vedtakRequest.personidentifikator,
-                        utlevertData = res,
-                        konsumentOrgNr = orgnr,
-                        requestObjekt = if (saksnummer != null) VedtakRequestMedSaksRef(
-                            personidentifikator = vedtakRequest.personidentifikator,
-                            fraOgMedDato = vedtakRequest.fraOgMedDato,
-                            tilOgMedDato = vedtakRequest.tilOgMedDato,
-                            saksId = saksnummer
-                        ) else vedtakRequest,
-                    )
-                )
-                call.respond(res)
-            } catch (e: Exception) {
-                prometheus.sporingsloggFailCounter(consumerTag).increment()
-                throw SporingsloggException(e)
-            }
-        } else {
-            logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
-            call.respond(res)
-        }
+        sporingsloggClient.loggTilSporingslogg(
+            brukSporingslogg = brukSporingslogg,
+            prometheus = prometheus,
+            consumerTag = consumerTag,
+            spor = Spor.opprett(
+                personIdent = vedtakRequest.personidentifikator,
+                utlevertData = res,
+                konsumentOrgNr = orgnr,
+                requestObjekt = if (saksnummer != null) VedtakRequestMedSaksRef(
+                    personidentifikator = vedtakRequest.personidentifikator,
+                    fraOgMedDato = vedtakRequest.fraOgMedDato,
+                    tilOgMedDato = vedtakRequest.tilOgMedDato,
+                    saksId = saksnummer
+                ) else vedtakRequest,
+            )
+        )
+        call.respond(res)
     }
 }
 
@@ -260,25 +253,36 @@ private suspend fun hentMedium(
         logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
-        if (brukSporingslogg) {
-            try {
-                sporingsloggClient.send(
-                    Spor.opprett(
-                        personIdent = body.personidentifikator,
-                        utlevertData = res,
-                        requestObjekt = body,
-                        konsumentOrgNr = orgnr,
-                    )
-                )
-                call.respond(res)
-            } catch (e: Exception) {
-                prometheus.sporingsloggFailCounter(consumerTag).increment()
-                throw SporingsloggException(e)
-            }
-        } else {
-            logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
-            call.respond(res)
+        sporingsloggClient.loggTilSporingslogg(
+            brukSporingslogg,
+            prometheus,
+            consumerTag,
+            Spor.opprett(
+                personIdent = body.personidentifikator,
+                utlevertData = res,
+                requestObjekt = body,
+                konsumentOrgNr = orgnr,
+            )
+        )
+        call.respond(res)
+    }
+}
+
+private fun SporingsloggKafkaClient.loggTilSporingslogg(
+    brukSporingslogg: Boolean,
+    prometheus: PrometheusMeterRegistry,
+    consumerTag: String,
+    spor: Spor
+) {
+    if (brukSporingslogg) {
+        try {
+            this.send(spor)
+        } catch (e: Exception) {
+            prometheus.sporingsloggFailCounter(consumerTag).increment()
+            throw SporingsloggException(e)
         }
+    } else {
+        logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
     }
 }
 
@@ -317,25 +321,25 @@ private suspend fun hentMaksimum(
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        val res = apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
+        val maksimumFraApiIntern = apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
         Maksimum(
-            vedtak = res.vedtak.map {
+            vedtak = maksimumFraApiIntern.vedtak.map { vestak ->
                 Vedtak(
-                    dagsats = it.dagsats,
-                    vedtakId = it.vedtakId,
-                    status = it.status,
-                    saksnummer = it.saksnummer,
-                    vedtaksdato = localDate(it.vedtaksdato.toString()),
-                    vedtaksTypeKode =  it.vedtaksTypeKode,
-                    periode = Periode(it.periode.fraOgMedDato, it.periode.tilOgMedDato),
-                    rettighetsType = it.rettighetsType,
-                    beregningsgrunnlag = it.beregningsgrunnlag,
-                    barnMedStonad = it.barnMedStonad,
-                    kildesystem = it.kildesystem.toString(),
-                    samordningsId = it.samordningsId,
-                    opphorsAarsak = it.opphorsAarsak,
-                    vedtaksTypeNavn = it.vedtaksTypeNavn,
-                    utbetaling = it.utbetaling.map {
+                    dagsats = vestak.dagsats,
+                    vedtakId = vestak.vedtakId,
+                    status = vestak.status,
+                    saksnummer = vestak.saksnummer,
+                    vedtaksdato = localDate(vestak.vedtaksdato.toString()),
+                    vedtaksTypeKode = vestak.vedtaksTypeKode,
+                    periode = Periode(vestak.periode.fraOgMedDato, vestak.periode.tilOgMedDato),
+                    rettighetsType = vestak.rettighetsType,
+                    beregningsgrunnlag = vestak.beregningsgrunnlag,
+                    barnMedStonad = vestak.barnMedStonad,
+                    kildesystem = vestak.kildesystem.toString(),
+                    samordningsId = vestak.samordningsId,
+                    opphorsAarsak = vestak.opphorsAarsak,
+                    vedtaksTypeNavn = vestak.vedtaksTypeNavn,
+                    utbetaling = vestak.utbetaling.map {
                         UtbetalingMedMer(
                             reduksjon = it.reduksjon?.let {
                                 Reduksjon(
@@ -358,23 +362,18 @@ private suspend fun hentMaksimum(
         logger.error("Klarte ikke hente vedtak fra intern API", ex)
         throw ex
     }.onSuccess { res ->
-        if (brukSporingslogg) {
-            try {
-                sporingsloggClient.send(Spor.opprett(
-                    personIdent = body.personidentifikator,
-                    utlevertData = res,
-                    requestObjekt = body,
-                    konsumentOrgNr = orgnr,
-                ))
-                call.respond(res)
-            } catch (e: Exception) {
-                prometheus.sporingsloggFailCounter(consumerTag).increment()
-                throw SporingsloggException(e)
-            }
-        } else {
-            logger.info("Sporingslogg er skrudd av, returnerer data uten å sende til Kafka.")
-            call.respond(res)
-        }
+        sporingsloggClient.loggTilSporingslogg(
+            brukSporingslogg = brukSporingslogg,
+            prometheus = prometheus,
+            consumerTag = consumerTag,
+            spor = Spor.opprett(
+                personIdent = body.personidentifikator,
+                utlevertData = res,
+                requestObjekt = body,
+                konsumentOrgNr = orgnr,
+            )
+        )
+        call.respond(res)
     }
 }
 
