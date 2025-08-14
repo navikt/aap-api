@@ -30,10 +30,10 @@ info:
     | Beløp                 | Fullt beløp, etter samhandling med barnetillegg. Det bruker faktisk får utbetalt.                                       |
     | Barnetillegg          |                                                                                                                                |
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
-    | Rettighetstype        | Også kalt aktivitetsfasekode.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning). Om kildesystem er Kelvin er disse verdiene mulig: `BISTANDSBEHOV`, `SYKEPENGEERSTATNING`, `STUDENT`,  `ARBEIDSSØKER`,  `VURDERES_FOR_UFØRETRYGD`.|                                                                                                |
-    | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_. Fra ny løsning kommer verdiene `LØPENDE` (tilsvarer `IVERKSATT`), `AVSLUTTET` og `UTREDES`.                                                                                          |
+    | Rettighetstype        | Ativitetsfasekode i gammelt system.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning). Om kildesystem (`kilde`) er Kelvin er disse verdiene mulige: `BISTANDSBEHOV`, `SYKEPENGEERSTATNING`, `STUDENT`,  `ARBEIDSSØKER`,  `VURDERES_FOR_UFØRETRYGD`.|                                                                                                |
+    | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_. Fra ny løsning (Kelvin) kommer verdiene `LØPENDE` (tilsvarer `IVERK`), `AVSLUTTET` og `UTREDES`.                                                                                          |
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
-    | Saksnummer | Referanse til saken. |
+    | Saksnummer | Referanse til saken. Fra gammelt system er dette en long, fra nytt system er dette en string. |
     | Vedtaksdato | Dato fra da vedtaket er fattet. |
     | Vedtakstype | Kun fra Arena: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet), `A` (Reaksjon), `F` (Forlenget ventetid), `S` (Stans), `T` (Tidsbegrenset bortfall), `N` (Annuler sanksjon), `K` (Kontroll), `M` (Omgjør reaksjon). |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
@@ -296,7 +296,7 @@ components:
           type: number
           description: Dagsats for utbetalingen.
           example: 849
-        barnetilegg:
+        barnetillegg:
           type: number
           description: Barnetillegg for utbetalingen.
           example: 123.45

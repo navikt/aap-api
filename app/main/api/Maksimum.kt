@@ -56,6 +56,7 @@ data class UtbetalingMedMer(
     val belop: Int,
     val dagsats: Int,
     val barnetilegg: Int,
+    val barnetillegg: Int
 )
 
 data class Reduksjon(

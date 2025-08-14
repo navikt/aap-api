@@ -10,11 +10,10 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val aapLibVersion = "5.0.103"
 val ktorVersion = "3.2.3"
 val komponenterVersjon = "1.0.318"
 val mockOAuth2ServerVersion = "2.2.1"
-val apiInternVersjon = "0.0.9"
+val apiInternVersjon = "0.0.10"
 
 dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
