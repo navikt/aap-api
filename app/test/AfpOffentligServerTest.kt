@@ -2,6 +2,7 @@ import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
 import api.api
 import api.api_intern.IApiInternClient
+import api.sporingslogg.JacksonSerializer
 import api.sporingslogg.Spor
 import api.tp.ITpRegisterClient
 import api.util.Config
@@ -16,10 +17,12 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
+import io.ktor.websocket.Serializer
 import no.nav.aap.api.intern.Medium
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.apache.kafka.clients.producer.MockProducer
+import org.apache.kafka.common.serialization.StringSerializer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
@@ -50,7 +53,7 @@ internal class AfpOffentligServerTest {
             System.setProperty("KAFKA_TRUSTSTORE_PATH", "http://kafka")
             System.setProperty("KAFKA_KEYSTORE_PATH", "http://kafka")
             System.setProperty("KAFKA_CREDSTORE_PASSWORD", "http://kafka")
-            System.setProperty("SPORINGSLOGG_ENABLED", "http://kafka")
+            System.setProperty("SPORINGSLOGG_ENABLED", "true")
             System.setProperty("SPORINGSLOGG_TOPIC", "http://kafka")
             System.setProperty("API_INTERN_URL", "http://kafka")
             System.setProperty("API_INTERN_SCOPE", "http://kafka")
@@ -75,12 +78,11 @@ internal class AfpOffentligServerTest {
 
     @Test
     fun testAfpOffentlig() = testApplication {
-        val mockProducer = MockProducer<String, Spor>()
         val apiInternClient = ApiInternKlient()
 
         application {
             api(
-                Config(), mockProducer,
+                Config(), mockProducer(),
                 apiInternClient,
                 tpRegisterKlient()
             )
@@ -105,12 +107,11 @@ internal class AfpOffentligServerTest {
 
     @Test
     fun `hent ut dummy-vedtak fra tp-ordningen`() = testApplication {
-        val mockProducer = MockProducer<String, Spor>()
         val apiInternClient = ApiInternKlient()
 
         application {
             api(
-                Config(), mockProducer,
+                Config(), mockProducer(),
                 apiInternClient,
                 tpRegisterKlient(),
             )
@@ -134,12 +135,11 @@ internal class AfpOffentligServerTest {
 
     @Test
     fun `får 404 ved negativt svar fra tp-ordningen`() = testApplication {
-        val mockProducer = MockProducer<String, Spor>()
         val apiInternClient = ApiInternKlient()
 
         application {
             api(
-                Config(), mockProducer,
+                Config(), mockProducer(),
                 apiInternClient,
                 // Får false fra TP-registeret
                 tpRegisterKlient(false),
@@ -167,7 +167,7 @@ internal class AfpOffentligServerTest {
         application {
             api(
                 Config(),
-                MockProducer(),
+                mockProducer(),
                 ApiInternKlient(),
                 tpRegisterKlient(),
             )
@@ -190,7 +190,7 @@ internal class AfpOffentligServerTest {
         application {
             api(
                 Config(),
-                MockProducer(),
+                mockProducer(),
                 ApiInternKlient(),
                 tpRegisterKlient(),
             )
@@ -213,27 +213,28 @@ internal class AfpOffentligServerTest {
         "/tp-samhandling",
         "/tp-samhandling-med-utbetalinger",
     )
-    fun `TP Samhandling - Ugyldig request gir 400 Bad request`(endepunkt: String) = testApplication {
-        application {
-            api(
-                Config(),
-                MockProducer(),
-                ApiInternKlient(),
-                tpRegisterKlient(),
-            )
+    fun `TP Samhandling - Ugyldig request gir 400 Bad request`(endepunkt: String) =
+        testApplication {
+            application {
+                api(
+                    Config(),
+                    mockProducer(),
+                    ApiInternKlient(),
+                    tpRegisterKlient(),
+                )
+            }
+
+            val jwt = issueToken("nav:aap:tpordningen.read")
+
+            val response = client.post(endepunkt) {
+                header("Authorization", "Bearer ${jwt.serialize()}")
+                header("X-callid", UUID.randomUUID().toString())
+                contentType(ContentType.Application.Json)
+                setBody("""{"personidentifikator":"1234","fraOgMedDato":"2025-01-01","tilOgMedDato":"2024-01-01"}""")
+            }
+
+            assertEquals(HttpStatusCode.BadRequest, response.status)
         }
-
-        val jwt = issueToken("nav:aap:tpordningen.read")
-
-        val response = client.post(endepunkt) {
-            header("Authorization", "Bearer ${jwt.serialize()}")
-            header("X-callid", UUID.randomUUID().toString())
-            contentType(ContentType.Application.Json)
-            setBody("""{"personidentifikator":"1234","fraOgMedDato":"2025-01-01","tilOgMedDato":"2024-01-01"}""")
-        }
-
-        assertEquals(HttpStatusCode.BadRequest, response.status)
-    }
 
     private fun tpRegisterKlient(ønsketSvar: Boolean? = true) = object : ITpRegisterClient {
         override fun brukerHarTpForholdOgYtelse(
@@ -275,6 +276,8 @@ internal class AfpOffentligServerTest {
         }
     }
 
+    private fun mockProducer() = MockProducer(true, null, StringSerializer(), JacksonSerializer<Spor>())
+
     private suspend fun sendPostRequest(
         client: HttpClient,
         jwt: SignedJWT,
@@ -291,7 +294,7 @@ internal class AfpOffentligServerTest {
         issuerId = "default",
         claims = mapOf(
             "scope" to scope,
-            "consumer" to mapOf("authority" to "123", "ID" to "0192:889640782")
+            "consumer" to mapOf("authority" to "123", "ID" to "0192:938708606")
         ),
     )
 }

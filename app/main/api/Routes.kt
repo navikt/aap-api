@@ -323,23 +323,23 @@ private suspend fun hentMaksimum(
         )
         val maksimumFraApiIntern = apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
         Maksimum(
-            vedtak = maksimumFraApiIntern.vedtak.map { vestak ->
+            vedtak = maksimumFraApiIntern.vedtak.map { vedtak ->
                 Vedtak(
-                    dagsats = vestak.dagsats,
-                    vedtakId = vestak.vedtakId,
-                    status = vestak.status,
-                    saksnummer = vestak.saksnummer,
-                    vedtaksdato = localDate(vestak.vedtaksdato.toString()),
-                    vedtaksTypeKode = vestak.vedtaksTypeKode,
-                    periode = Periode(vestak.periode.fraOgMedDato, vestak.periode.tilOgMedDato),
-                    rettighetsType = vestak.rettighetsType,
-                    beregningsgrunnlag = vestak.beregningsgrunnlag,
-                    barnMedStonad = vestak.barnMedStonad,
-                    kildesystem = vestak.kildesystem.toString(),
-                    samordningsId = vestak.samordningsId,
-                    opphorsAarsak = vestak.opphorsAarsak,
-                    vedtaksTypeNavn = vestak.vedtaksTypeNavn,
-                    utbetaling = vestak.utbetaling.map {
+                    dagsats = vedtak.dagsats,
+                    vedtakId = vedtak.vedtakId,
+                    status = vedtak.status,
+                    saksnummer = vedtak.saksnummer,
+                    vedtaksdato = localDate(vedtak.vedtaksdato.toString()),
+                    vedtaksTypeKode = vedtak.vedtaksTypeKode,
+                    periode = Periode(vedtak.periode.fraOgMedDato, vedtak.periode.tilOgMedDato),
+                    rettighetsType = vedtak.rettighetsType,
+                    beregningsgrunnlag = vedtak.beregningsgrunnlag,
+                    barnMedStonad = vedtak.barnMedStonad,
+                    kildesystem = vedtak.kildesystem.toString(),
+                    samordningsId = vedtak.samordningsId,
+                    opphorsAarsak = vedtak.opphorsAarsak,
+                    vedtaksTypeNavn = vedtak.vedtaksTypeNavn,
+                    utbetaling = vedtak.utbetaling.map {
                         UtbetalingMedMer(
                             reduksjon = it.reduksjon?.let {
                                 Reduksjon(

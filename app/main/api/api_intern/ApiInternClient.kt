@@ -22,7 +22,7 @@ interface IApiInternClient {
 }
 
 class ApiInternClient(
-    private val apiInternConfig: ApiInternConfig
+    apiInternConfig: ApiInternConfig
 ) : IApiInternClient {
     private val uri = apiInternConfig.url
     private val config = ClientConfig(scope = apiInternConfig.scope)
