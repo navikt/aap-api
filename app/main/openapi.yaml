@@ -155,7 +155,8 @@ paths:
         - TP-Ordningen
       description: |-
         Hent vedtak og alle tilhørende utbetalinger for en person.
-
+        behandlinger ferdige før 18/8 vil potensielt mangle beregningsgrunnlag frem til neste meldekort er levert.
+        
         Scope: `nav:aap:tpordningen.read`.
       security:
         - maskinporten: [ ]
@@ -197,7 +198,8 @@ paths:
         - TP-Ordningen
       description: |-
         Hent innvilget vedtak og alle tilhørende utbetalinger for en person.
-
+        Behandlinger ferdige før 18/8 vil potensielt mangle beregningsgrunnlag frem til neste meldekort er levert.
+        
         Scope: `nav:aap:tpordningen.read`.
       security:
         - maskinporten: [ ]
