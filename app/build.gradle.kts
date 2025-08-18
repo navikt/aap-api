@@ -11,7 +11,7 @@ application {
 }
 
 val ktorVersion = "3.2.3"
-val komponenterVersjon = "1.0.318"
+val komponenterVersjon = "1.0.326"
 val mockOAuth2ServerVersion = "2.2.1"
 val apiInternVersjon = "0.0.10"
 
