@@ -242,6 +242,7 @@ private suspend fun hentMedium(
                     rettighetsType = it.rettighetsType,
                     beregningsgrunnlag = it.beregningsgrunnlag,
                     barnMedStonad = it.barnMedStonad,
+                    barnetillegg = it.barnetillegg*it.barnMedStonad,
                     kildesystem = it.kildesystem,
                     samordningsId = it.samordningsId,
                     opphorsAarsak = it.opphorsAarsak
@@ -335,6 +336,7 @@ private suspend fun hentMaksimum(
                     rettighetsType = vedtak.rettighetsType,
                     beregningsgrunnlag = vedtak.beregningsgrunnlag,
                     barnMedStonad = vedtak.barnMedStonad,
+                    barnetillegg = vedtak.barnetillegg,
                     kildesystem = vedtak.kildesystem.toString(),
                     samordningsId = vedtak.samordningsId,
                     opphorsAarsak = vedtak.opphorsAarsak,

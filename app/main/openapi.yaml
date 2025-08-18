@@ -361,6 +361,10 @@ components:
             type: integer
             description: Hvor mange barn gis det tilleg for i vedtaket.
             example: 1
+          barneTillegg:
+            type: number
+            description: Antall barn med stønad multiplisert med barneTilleggSats.
+            example: 123
           kildesystem:
             type: string
             description: Kelvin er navnet på den nye løsningen.
@@ -448,6 +452,10 @@ components:
             type: integer
             description: Hvor mange barn gis det tilleg for i vedtaket.
             example: 1
+          barneTillegg:
+            type: number
+            description: Antall barn med stønad multiplisert med barneTilleggSats.
+            example: 123
           kildesystem:
             type: string
             description: Kelvin er navnet på den nye løsningen.
