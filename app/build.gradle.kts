@@ -1,7 +1,6 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    kotlin("jvm") version "2.2.10"
+    id("api.conventions")
+    kotlin("jvm")
     id("io.ktor.plugin") version "3.2.3"
     application
 }
@@ -69,26 +68,3 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.27.4")
     testImplementation(kotlin("test"))
 }
-
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-    }
-}
-
-kotlin {
-    jvmToolchain(21)
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
-    }
-}
-
-repositories {
-    mavenCentral()
-    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
-}
-
-kotlin.sourceSets["main"].kotlin.srcDirs("main")
-kotlin.sourceSets["test"].kotlin.srcDirs("test")
-sourceSets["main"].resources.srcDirs("main")
-sourceSets["test"].resources.srcDirs("test")
