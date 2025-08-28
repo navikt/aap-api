@@ -56,7 +56,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.15.3")
     implementation("net.logstash.logback:logstash-logback-encoder:8.1")
     implementation("org.apache.kafka:kafka-streams:4.0.0")
-    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.3.10")
+    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.4.1")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     constraints {
