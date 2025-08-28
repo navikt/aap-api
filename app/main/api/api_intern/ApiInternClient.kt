@@ -48,7 +48,7 @@ class ApiInternClient(
                     mapper = { body, _ -> DefaultJsonMapper.fromJson(body) })
             )
         } catch (e: Exception) {
-            throw Exception("Feil ved forsøk på å hente Medium fra api-intern: ${e.message}")
+            throw Exception("Feil ved forsøk på å hente Medium fra api-intern", e)
         }
     }
 
@@ -71,7 +71,7 @@ class ApiInternClient(
                     mapper = { body, _ -> DefaultJsonMapper.fromJson(body) })
             )
         } catch (e: Exception) {
-            throw Exception("Feil ved forsøk på å hente Maksimum fra api-intern: ${e.message}")
+            throw Exception("Feil ved forsøk på å hente Maksimum fra api-intern", e)
         }
     }
 
@@ -94,7 +94,7 @@ class ApiInternClient(
                     mapper = { body, _ -> DefaultJsonMapper.fromJson(body) })
             )
         } catch (e: Exception) {
-            throw Exception("Feil ved forsøk på å hente Perioder fra api-intern: ${e.message}")
+            throw Exception("Feil ved forsøk på å hente Perioder fra api-intern", e)
         }
     }
 }
