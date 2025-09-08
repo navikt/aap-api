@@ -242,7 +242,7 @@ private suspend fun hentMedium(
                     rettighetsType = it.rettighetsType,
                     beregningsgrunnlag = it.beregningsgrunnlag,
                     barnMedStonad = it.barnMedStonad,
-                    barnetillegg = it.barnetillegg*it.barnMedStonad,
+                    barnetillegg = it.barnetillegg * it.barnMedStonad,
                     kildesystem = it.kildesystem,
                     samordningsId = it.samordningsId,
                     opphorsAarsak = it.opphorsAarsak
@@ -322,6 +322,7 @@ private suspend fun hentMaksimum(
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
+        logger.info("Henter maksimum fra API intern. Fra og med-dato: ${arenaOppslagRequestBody.fraOgMedDato}. Til og med dato: ${arenaOppslagRequestBody.tilOgMedDato}.")
         val maksimumFraApiIntern = apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
         Maksimum(
             vedtak = maksimumFraApiIntern.vedtak.map { vedtak ->

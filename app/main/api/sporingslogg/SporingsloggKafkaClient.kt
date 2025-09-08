@@ -37,7 +37,7 @@ data class Spor(
     val samtykkeToken: String? = null,
     val dataForespoersel: String?,
     val leverandoer: String? = null,
-    ) {
+) {
     companion object {
         fun opprett(
             personIdent: String,
@@ -50,7 +50,7 @@ data class Spor(
             tema = "AAP",
             behandlingsGrunnlag = Consumers.getBehandlingsgrunnlag(konsumentOrgNr),
             uthentingsTidspunkt = LocalDateTime.now(),
-            dataForespoersel =  DefaultJsonMapper.toJson(requestObjekt),
+            dataForespoersel = DefaultJsonMapper.toJson(requestObjekt),
             leverteData = Base64.getEncoder()
                 .encodeToString(objectMapper.writeValueAsString(utlevertData).encodeToByteArray()),
         )
