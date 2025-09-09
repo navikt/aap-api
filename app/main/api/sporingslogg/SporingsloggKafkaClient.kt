@@ -8,6 +8,7 @@ import no.nav.aap.komponenter.json.DefaultJsonMapper
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.clients.producer.RecordMetadata
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 
@@ -21,6 +22,8 @@ class SporingsloggKafkaClient(
 
     private fun <V> record(value: V) = ProducerRecord<String, V>(sporingsloggTopic, value)
 }
+
+private val log = LoggerFactory.getLogger("SporingsloggKafkaClient")
 
 /**
  * Definert her https://confluence.adeo.no/display/KES/Sporingslogg
@@ -44,16 +47,25 @@ data class Spor(
             utlevertData: Any,
             requestObjekt: Any,
             konsumentOrgNr: String
-        ) = Spor(
-            person = personIdent,
-            mottaker = konsumentOrgNr,
-            tema = "AAP",
-            behandlingsGrunnlag = Consumers.getBehandlingsgrunnlag(konsumentOrgNr),
-            uthentingsTidspunkt = LocalDateTime.now(),
-            dataForespoersel = DefaultJsonMapper.toJson(requestObjekt),
-            leverteData = Base64.getEncoder()
-                .encodeToString(objectMapper.writeValueAsString(utlevertData).encodeToByteArray()),
-        )
+        ): Spor {
+            val jsonStringified = objectMapper.writeValueAsString(utlevertData)
+            val maksEnMillTegn = jsonStringified.take(minOf(jsonStringified.length, 1_000_000))
+
+            if (jsonStringified.length > 1_000_000) {
+                log.warn("Leverte data er større enn 1MB, data er trunkert. Konsument: $konsumentOrgNr.")
+            }
+
+            return Spor(
+                person = personIdent,
+                mottaker = konsumentOrgNr,
+                tema = "AAP",
+                behandlingsGrunnlag = Consumers.getBehandlingsgrunnlag(konsumentOrgNr),
+                uthentingsTidspunkt = LocalDateTime.now(),
+                dataForespoersel = DefaultJsonMapper.toJson(requestObjekt),
+                leverteData = Base64.getEncoder()
+                    .encodeToString(maksEnMillTegn.encodeToByteArray()),
+            )
+        }
 
         private val objectMapper = jacksonObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)

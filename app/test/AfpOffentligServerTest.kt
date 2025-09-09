@@ -1,5 +1,6 @@
 import api.afp.VedtakRequest
 import api.afp.VedtakRequestMedSaksRef
+import api.afp.VedtakResponse
 import api.api
 import api.api_intern.IApiInternClient
 import api.sporingslogg.JacksonSerializer
@@ -17,20 +18,20 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
-import io.ktor.websocket.Serializer
 import no.nav.aap.api.intern.Medium
 import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.apache.kafka.clients.producer.MockProducer
 import org.apache.kafka.common.serialization.StringSerializer
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.util.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.time.LocalDate
+import java.util.*
 
 internal class AfpOffentligServerTest {
     companion object {
@@ -78,7 +79,7 @@ internal class AfpOffentligServerTest {
 
     @Test
     fun testAfpOffentlig() = testApplication {
-        val apiInternClient = ApiInternKlient()
+        val apiInternClient = apiInternKlient()
 
         application {
             api(
@@ -100,18 +101,19 @@ internal class AfpOffentligServerTest {
         )
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals(
-            api.afp.VedtakResponse(perioder = listOf()),
-            response.body() as api.afp.VedtakResponse
+            VedtakResponse(perioder = listOf()),
+            response.body() as VedtakResponse
         )
     }
 
     @Test
     fun `hent ut dummy-vedtak fra tp-ordningen`() = testApplication {
-        val apiInternClient = ApiInternKlient()
+        val apiInternClient = apiInternKlient()
 
+        val kafkaProducer = mockProducer()
         application {
             api(
-                Config(), mockProducer(),
+                Config(), kafkaProducer,
                 apiInternClient,
                 tpRegisterKlient(),
             )
@@ -123,19 +125,23 @@ internal class AfpOffentligServerTest {
             client, jwt, VedtakRequest(
                 personidentifikator = "123",
                 fraOgMedDato = LocalDate.now(),
-                tilOgMedDato = LocalDate.now(),
+                tilOgMedDato = LocalDate.now().plusWeeks(1),
             ), "/tp-samhandling"
         )
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals(
-            api.Maksimum(vedtak = listOf()),
-            response.body() as api.Maksimum
+            api.Medium(vedtak = listOf()),
+            response.body() as api.Medium
         )
+
+        val sporingslogg = kafkaProducer.history()
+        // Det blir logget i sporingslogg
+        assertThat(sporingslogg).hasSize(1)
     }
 
     @Test
     fun `får 404 ved negativt svar fra tp-ordningen`() = testApplication {
-        val apiInternClient = ApiInternKlient()
+        val apiInternClient = apiInternKlient()
 
         application {
             api(
@@ -168,7 +174,7 @@ internal class AfpOffentligServerTest {
             api(
                 Config(),
                 mockProducer(),
-                ApiInternKlient(),
+                apiInternKlient(),
                 tpRegisterKlient(),
             )
         }
@@ -191,7 +197,7 @@ internal class AfpOffentligServerTest {
             api(
                 Config(),
                 mockProducer(),
-                ApiInternKlient(),
+                apiInternKlient(),
                 tpRegisterKlient(),
             )
         }
@@ -219,7 +225,7 @@ internal class AfpOffentligServerTest {
                 api(
                     Config(),
                     mockProducer(),
-                    ApiInternKlient(),
+                    apiInternKlient(),
                     tpRegisterKlient(),
                 )
             }
@@ -247,7 +253,7 @@ internal class AfpOffentligServerTest {
 
     }
 
-    private fun ApiInternKlient() = object : IApiInternClient {
+    private fun apiInternKlient() = object : IApiInternClient {
         override fun hentMaksimum(
             callId: String,
             vedtakRequest: EksternVedtakRequest
@@ -276,7 +282,8 @@ internal class AfpOffentligServerTest {
         }
     }
 
-    private fun mockProducer() = MockProducer(true, null, StringSerializer(), JacksonSerializer<Spor>())
+    private fun mockProducer() =
+        MockProducer(true, null, StringSerializer(), JacksonSerializer<Spor>())
 
     private suspend fun sendPostRequest(
         client: HttpClient,
