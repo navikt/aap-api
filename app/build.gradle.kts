@@ -32,8 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
-        implementation("io.netty:netty-common:4.2.5.Final")
-        implementation("io.netty:netty-handler:4.2.5.Final")
+        implementation("io.netty:netty-common:4.2.6.Final")
+        implementation("io.netty:netty-handler:4.2.6.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-webjars:$ktorVersion")
