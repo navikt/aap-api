@@ -49,7 +49,7 @@ data class Spor(
             konsumentOrgNr: String
         ): Spor {
             val jsonStringified = objectMapper.writeValueAsString(utlevertData)
-            val maksEnMillTegn = jsonStringified.take(minOf(jsonStringified.length, 1_000_000))
+            val maksEnMillTegn = jsonStringified.take(minOf(jsonStringified.length, 950_000))
 
             if (jsonStringified.length > 1_000_000) {
                 log.warn("Leverte data er større enn 1MB, data er trunkert. Konsument: $konsumentOrgNr.")
