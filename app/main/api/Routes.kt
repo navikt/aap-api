@@ -185,7 +185,7 @@ private suspend fun hentPerioder(
         )
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        logger.error("Klarte ikke hente vedtak fra intern API", ex)
+
         throw ex
     }.onSuccess { res ->
         sporingsloggClient.loggTilSporingslogg(
@@ -251,7 +251,7 @@ private suspend fun hentMedium(
         )
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        logger.error("Klarte ikke hente vedtak fra intern API", ex)
+
         throw ex
     }.onSuccess { res ->
         sporingsloggClient.loggTilSporingslogg(
@@ -362,7 +362,7 @@ private suspend fun hentMaksimum(
             }.filter { it.status != "INAKT" })
     }.onFailure { ex ->
         prometheus.httpFailedCallCounter(consumerTag, call.request.path()).increment()
-        logger.error("Klarte ikke hente vedtak fra intern API", ex)
+
         throw ex
     }.onSuccess { res ->
         sporingsloggClient.loggTilSporingslogg(
