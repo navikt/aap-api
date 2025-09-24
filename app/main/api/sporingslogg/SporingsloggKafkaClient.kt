@@ -69,7 +69,7 @@ data class Spor(
                             .encodeToByteArray()
                     ),
             )
-            }while(objectMapper.writeValueAsString(orginalMeldingTilSporing).length > 1_0485_76)
+            } while(objectMapper.writeValueAsString(orginalMeldingTilSporing).length > 1_0485_76)
 
             if (MAX_SIZE < 1_000_000) {
                 log.warn("Leverte data er større enn 1MB, data er trunkert. Konsument: $konsumentOrgNr.")
