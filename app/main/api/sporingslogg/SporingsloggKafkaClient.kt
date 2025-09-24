@@ -48,14 +48,15 @@ data class Spor(
             requestObjekt: Any,
             konsumentOrgNr: String
         ): Spor {
+            var MAX_SIZE = 1_050_000
+            val reduction = 50_000
             val jsonStringified = objectMapper.writeValueAsString(utlevertData)
-            val maksEnMillTegn = jsonStringified.take(minOf(jsonStringified.length, 900_000))
 
-            if (jsonStringified.length > 1_000_000) {
-                log.warn("Leverte data er større enn 1MB, data er trunkert. Konsument: $konsumentOrgNr.")
-            }
+            var orginalMeldingTilSporing: Spor
 
-            return Spor(
+            do {
+                MAX_SIZE-=reduction
+                orginalMeldingTilSporing = Spor(
                 person = personIdent,
                 mottaker = konsumentOrgNr,
                 tema = "AAP",
@@ -63,8 +64,18 @@ data class Spor(
                 uthentingsTidspunkt = LocalDateTime.now(),
                 dataForespoersel = DefaultJsonMapper.toJson(requestObjekt),
                 leverteData = Base64.getEncoder()
-                    .encodeToString(maksEnMillTegn.encodeToByteArray()),
+                    .encodeToString(
+                        jsonStringified.take(minOf(jsonStringified.length, MAX_SIZE))
+                            .encodeToByteArray()
+                    ),
             )
+            }while(objectMapper.writeValueAsString(orginalMeldingTilSporing).length > 1_0485_76)
+
+            if (MAX_SIZE < 1_000_000) {
+                log.warn("Leverte data er større enn 1MB, data er trunkert. Konsument: $konsumentOrgNr.")
+            }
+
+            return orginalMeldingTilSporing
         }
 
         private val objectMapper = jacksonObjectMapper()
