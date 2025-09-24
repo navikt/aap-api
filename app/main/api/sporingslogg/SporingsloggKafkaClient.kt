@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 
+val MAX_SPORINGSLOGG_SIZE = 1_048_576 // 1 MB
+
 class SporingsloggException(cause: Throwable) : Exception(cause)
 
 class SporingsloggKafkaClient(
@@ -69,10 +71,10 @@ data class Spor(
                             .encodeToByteArray()
                     ),
             )
-            } while(objectMapper.writeValueAsString(orginalMeldingTilSporing).length > 1_0485_76)
+            } while(objectMapper.writeValueAsString(orginalMeldingTilSporing).length > MAX_SPORINGSLOGG_SIZE)
 
             if (MAX_SIZE < 1_000_000) {
-                log.warn("Leverte data er større enn 1MB, data er trunkert. Konsument: $konsumentOrgNr.")
+                log.warn("Leverte data er større enn 1MB, ${jsonStringified.length-MAX_SIZE} bytes med data er trunkert. Konsument: $konsumentOrgNr.")
             }
 
             return orginalMeldingTilSporing
