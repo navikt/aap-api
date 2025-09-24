@@ -11,7 +11,7 @@ application {
 }
 
 val ktorVersion = "3.3.0"
-val komponenterVersjon = "1.0.360"
+val komponenterVersjon = "1.0.366"
 val mockOAuth2ServerVersion = "2.3.0"
 val apiInternVersjon = "0.0.15"
 
@@ -66,7 +66,7 @@ dependencies {
     constraints {
         implementation("net.minidev:json-smart:2.6.0")
     }
-    testImplementation("org.assertj:assertj-core:3.27.4")
+    testImplementation("org.assertj:assertj-core:3.27.6")
     testImplementation(kotlin("test"))
 }
 
