@@ -49,7 +49,7 @@ dependencies {
 
     implementation("no.nav.aap.arenaoppslag:kontrakt:0.0.28")
 
-    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("ch.qos.logback:logback-classic:1.5.19")
     implementation("com.auth0:java-jwt:4.5.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0")
     implementation("com.nimbusds:nimbus-jose-jwt:10.5")
