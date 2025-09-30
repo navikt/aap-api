@@ -66,13 +66,13 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is BadRequestException -> {
-                logger.warn("Bad request", cause)
+                logger.info("Bad request. Message: ${rootCause.message}")
                 call.respond(HttpStatusCode.BadRequest, FeilRespons("Feil i mottatte data"))
             }
 
             else -> {
                 if (cause is BadRequestException) {
-                    logger.warn("Bad request", cause)
+                    logger.warn("Bad request. Melding: ${cause.message}", cause)
                     call.respond(
                         HttpStatusCode.BadRequest,
                         FeilRespons("Feil i mottatte data: ${rootCause.message}")
