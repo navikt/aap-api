@@ -11,9 +11,9 @@ application {
 }
 
 val ktorVersion = "3.3.0"
-val komponenterVersjon = "1.0.360"
+val komponenterVersjon = "1.0.375"
 val mockOAuth2ServerVersion = "3.0.0"
-val apiInternVersjon = "0.0.15"
+val apiInternVersjon = "0.0.17"
 
 dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
@@ -47,9 +47,9 @@ dependencies {
     implementation("io.ktor:ktor-client-jackson:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    implementation("no.nav.aap.arenaoppslag:kontrakt:0.0.26")
+    implementation("no.nav.aap.arenaoppslag:kontrakt:0.0.28")
 
-    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("ch.qos.logback:logback-classic:1.5.19")
     implementation("com.auth0:java-jwt:4.5.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0")
     implementation("com.nimbusds:nimbus-jose-jwt:10.5")
@@ -66,7 +66,7 @@ dependencies {
     constraints {
         implementation("net.minidev:json-smart:2.6.0")
     }
-    testImplementation("org.assertj:assertj-core:3.27.4")
+    testImplementation("org.assertj:assertj-core:3.27.6")
     testImplementation(kotlin("test"))
 }
 
