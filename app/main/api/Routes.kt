@@ -25,7 +25,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
-import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
+import no.nav.aap.api.intern.InternVedtakRequestApiIntern
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -222,7 +222,7 @@ private suspend fun hentMedium(
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
 
     runCatching {
-        val arenaOppslagRequestBody = EksternVedtakRequest(
+        val arenaOppslagRequestBody = InternVedtakRequestApiIntern(
             personidentifikator = body.personidentifikator,
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
@@ -317,7 +317,7 @@ private suspend fun hentMaksimum(
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
     val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
     runCatching {
-        val arenaOppslagRequestBody = EksternVedtakRequest(
+        val arenaOppslagRequestBody = InternVedtakRequestApiIntern(
             personidentifikator = body.personidentifikator,
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato

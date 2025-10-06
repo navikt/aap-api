@@ -18,8 +18,8 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
+import no.nav.aap.api.intern.InternVedtakRequestApiIntern
 import no.nav.aap.api.intern.Medium
-import no.nav.aap.arenaoppslag.kontrakt.ekstern.EksternVedtakRequest
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.apache.kafka.clients.producer.MockProducer
 import org.apache.kafka.common.serialization.StringSerializer
@@ -256,7 +256,7 @@ internal class AfpOffentligServerTest {
     private fun apiInternKlient() = object : IApiInternClient {
         override fun hentMaksimum(
             callId: String,
-            vedtakRequest: EksternVedtakRequest
+            vedtakRequest: InternVedtakRequestApiIntern
         ): no.nav.aap.api.intern.Maksimum {
             return no.nav.aap.api.intern.Maksimum(vedtak = listOf())
         }
@@ -268,7 +268,7 @@ internal class AfpOffentligServerTest {
             return no.nav.aap.api.intern.PerioderResponse(perioder = listOf())
         }
 
-        override fun hentMedium(vedtakRequest: EksternVedtakRequest): Medium {
+        override fun hentMedium(vedtakRequest: InternVedtakRequestApiIntern): Medium {
             return Medium(vedtak = listOf())
         }
     }

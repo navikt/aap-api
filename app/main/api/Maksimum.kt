@@ -66,30 +66,6 @@ data class Reduksjon(
     val annenReduksjon: Float
 )
 
-
-fun no.nav.aap.arenaoppslag.kontrakt.modeller.Reduksjon.fraKontrakt(): Reduksjon {
-    return Reduksjon(
-        this.timerArbeidet,
-        this.annenReduksjon.fraKontrakt()
-            .let { (it.fraver ?: 0F) + (it.sykedager ?: 0F) + it.sentMeldekort }
-    )
-}
-
-
-data class AnnenReduksjon(
-    val sykedager: Float?,
-    val sentMeldekort: Int,
-    val fraver: Float?
-)
-
-fun no.nav.aap.arenaoppslag.kontrakt.modeller.AnnenReduksjon.fraKontrakt(): AnnenReduksjon {
-    return AnnenReduksjon(
-        this.sykedager,
-        if (this.sentMeldekort == true) 1 else 0,
-        this.fraver
-    )
-}
-
 data class Periode(
     val fraOgMedDato: LocalDate?,
     val tilOgMedDato: LocalDate?
