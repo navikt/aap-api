@@ -17,24 +17,23 @@ info:
     bruke denne Swagger-dokumentasjonen som en referanse til å lage en automatisert test,
     ikke teste selve oppslaget.
     
-    Vi tilbyr to løsninger, avhengig av behov og konsument. Vi har kalt dem henholdsvis
-    minimumsløsningen og maksimumsløsningen.
+    Vi tilbyr flere løsninger, avhengig av behov og konsument. Vi har kalt dem henholdsvis
+    minimumsløsningen, medium- og maksimumsløsningen.
     
     For en gitt person returnerer maksimumsløsningen en liste med vedtak, gyldig for en
     gitt periode, og en liste med utbetalinger på dette vedtaket.
-    
     
     | Ord                   | Kommentar                                                                                                                      |
     |-----------------------|--------------------------------------------------------------------------------------------------------------------------------|
     | Dagsats               | Her har vi to verdier. Den som ligger på selve vedtaket er før samordning uten barnetillegg, mens det som ligger i utbetalingsobjektet er etter samordning uten barnetillegg. |
     | Beløp                 | Fullt beløp, etter samhandling med barnetillegg. Det bruker faktisk får utbetalt.                                       |
-    | Barnetillegg          |                                                                                                                                |
+    | Barnetillegg          | Totalt barnetillegg på det siste vedtaket.              |                                                                                                                 |
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
     | Rettighetstype        | Ativitetsfasekode i gammelt system.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning). Om kildesystem (`kilde`) er Kelvin er disse verdiene mulige: `BISTANDSBEHOV`, `SYKEPENGEERSTATNING`, `STUDENT`,  `ARBEIDSSØKER`,  `VURDERES_FOR_UFØRETRYGD`.|                                                                                                |
     | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_. Fra ny løsning (Kelvin) kommer verdiene `LØPENDE` (tilsvarer `IVERK`), `AVSLUTTET` og `UTREDES`.                                                                                          |
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
     | Saksnummer | Referanse til saken. Fra gammelt system er dette en long, fra nytt system er dette en string. |
-    | Vedtaksdato | Dato fra da vedtaket er fattet. |
+    | Vedtaksdato | For Arena-saker: dato på første vedtak. For Kelvin-saker: dato for siste vedtak på saken. |
     | Vedtakstype | Kun fra Arena: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet), `A` (Reaksjon), `F` (Forlenget ventetid), `S` (Stans), `T` (Tidsbegrenset bortfall), `N` (Annuler sanksjon), `K` (Kontroll), `M` (Omgjør reaksjon). |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
     | Barn med stønad | Antall barn som bruker får barnetillegg for.|
@@ -45,6 +44,12 @@ info:
     | Samordnings-ID | Her finnes kun data fra ny løsning. Ellers null. |
     | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. Fra Kelvin: `OVERGANG_UFORE`, `AVKLART_TIL_ARBEID`, `ANNET`. |
     | Kilde | Om dataen kommer fra Arena eller Kelvin (henholdsvis gammel og ny løsning) |
+    
+  
+    ## Litt om vedtak fra nytt system
+    
+    Den største forskjellen på nytt og gammelt system er bruken av ordet _vedtak_. I nytt system teller hvert saksbehandlingløp som et nytt vedtak. Man snakker heller om "sak" når man vil referere til den løpende ytelsen.
+
   contact:
     url: https://github.com/navikt/aap-api
   version: 1.0.0
