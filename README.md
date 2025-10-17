@@ -1,25 +1,27 @@
 # API for AAP-data
-AAP-API tilbyr AAP-data til eksterne konsumenter som enten har hjemmel til å hente AAP-data eller et samtykke fra bruker. Denne versjonen av API’et vil kun eksponere et REST-endepunkt der konsumentene kan hente data. Hvert endepunkt vil være tilpasset det behovet den enkelte konsument har.
+AAP-API tilbyr AAP-data til eksterne konsumenter som enten har hjemmel til å hente AAP-data eller et samtykke fra bruker. Denne versjonen av API’et eksponerer kun et REST-endepunkt der konsumentene kan hente data.
 
 ![img](diagram.png)
 
-API’et vil hente data fra 2 kilder
+API’et henter data fra 2 kilder
 - Arena – det eksisterende saksbehandlingsverktøyet Nav bruker til å behandle AAP-saker
-- Kelvin – nytt saksbehandlingsverktøy som nå er under utvikling
-
-Når Kelvin er ferdig vil data begynne å flyte derfra, men tanken er at dette ikke skal merkes av konsumentene.
+- Kelvin – nytt saksbehandlingsverktøy som ble innført i 2025
 
 Interndokumentasjon for datadeling fra AAP kan finnes på [aap-sysdoc](https://aap-sysdoc.ansatt.nav.no/funksjonalitet/Datadeling/funksjonell).
 
 ## URL som benyttes
+
 Base-URL for AAP-API er:
+
 - For test: https://aap-api.ekstern.dev.nav.no/
 - For prod: https://aap-api.nav.no/
 
 ## Beskrivelse av uttrekk
+
 Beskrivelse av uttrekk kan finnes på vår [Swagger dokumentasjon](https://aap-api.ekstern.dev.nav.no/swagger).
 
 ## Tilgang
+
 Tilgangen til AAP-API oppnås på to måter:
 - Maskinporten
 - Samtykke
