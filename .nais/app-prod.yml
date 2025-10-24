@@ -68,6 +68,8 @@ spec:
               orgno: "938708606"
             - name: "GARANTIKASSEN FOR FISKERE"
               orgno: "974652382"
+            - name: "MARITIM PENSJONSKASSE"
+              orgno: "940415683"
         - name: "delegertafpoffentlig.read"
           enabled: true
           product: "aap"
