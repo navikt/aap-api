@@ -102,7 +102,10 @@ fun Application.api(
         )
         maskinporten(
             MASKINPORTEN_TP_ORDNINGEN,
-            listOf(config.oauth.maskinporten.scope.tpordningen),
+            listOf(
+                config.oauth.maskinporten.scope.tpordningen,
+                config.oauth.maskinporten.scope.delegertTpOrdningen,
+            ),
             config
         )
     }

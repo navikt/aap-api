@@ -54,6 +54,7 @@ data class MaskinportenConfig(
         val afpprivat: String = "nav:aap:afpprivat.read",
         val afpoffentlig: String = "nav:aap:afpoffentlig.read",
         val tpordningen: String = "nav:aap:tpordningen.read",
+        val delegertTpOrdningen: String = "nav:aap/tpordningen.read",
         val afpoffentligAksio: String = "nav:aap/delegertafpoffentlig.read"
     )
 }

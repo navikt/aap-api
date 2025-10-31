@@ -56,6 +56,18 @@ spec:
               orgno: "982759412"
             - name: "GARANTIKASSEN FOR FISKERE"
               orgno: "974652382"
+        - name: "tpordningen.read"
+          enabled: true
+          product: "aap"
+          delegationSource: altinn
+          separator: "/"
+          consumers:
+            - name: "Drammen"
+              orgno: "980650383"
+            - name: "Arendal"
+              orgno: "940380014"
+            - name: "aksio"
+              orgno: "927613298"
         - name: "delegertafpoffentlig.read"
           enabled: true
           product: "aap"
