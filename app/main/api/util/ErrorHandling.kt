@@ -1,6 +1,7 @@
 package api.util
 
 import api.auth.SamtykkeIkkeGittException
+import api.getCallId
 import api.sporingslogg.SporingsloggException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.plugins.BadRequestException
@@ -29,17 +30,17 @@ fun StatusPagesConfig.feilhåndtering(
         when (val rootCause = cause.findRootCause()) {
             is SporingsloggException -> {
                 logger.error(
-                    "Klarte ikke produsere til Kafka sporingslogg og kan derfor ikke returnere data",
+                    "Klarte ikke produsere til Kafka sporingslogg og kan derfor ikke returnere data, x-call-id: ${call.getCallId()}",
                     cause
                 )
                 call.respond(
                     HttpStatusCode.ServiceUnavailable,
-                    FeilRespons("Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere.")
+                    FeilRespons("Feilet sporing av oppslag, kan derfor ikke returnere data. Feilen er på vår side, prøv igjen senere. x-call-id: ${call.getCallId()}")
                 )
             }
 
             is SamtykkeIkkeGittException -> {
-                logger.warn("Samtykke ikke gitt", cause)
+                logger.warn("Samtykke ikke gitt. x-call-id: ${call.getCallId()}", cause)
                 call.respond(HttpStatusCode.Forbidden, FeilRespons("Samtykke ikke gitt"))
             }
 
@@ -54,20 +55,20 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is IllegalArgumentException -> {
-                logger.warn("Feil i mottatte data: IllegalArgumentException", cause)
+                logger.warn("Feil i mottatte data: IllegalArgumentException. x-call-id: ${call.getCallId()}", cause)
                 call.respond(HttpStatusCode.BadRequest, "Feil i mottatte data")
             }
 
             is ManglerTilgangException -> {
                 call.respond(
                     HttpStatusCode.Forbidden,
-                    FeilRespons("Mangler tilgang til baksysystemer.")
+                    FeilRespons("Mangler tilgang til baksysystemer. x-call-id: ${call.getCallId()}")
                 )
             }
 
             is BadRequestException -> {
                 logger.info("Bad request. Message: ${rootCause.message}")
-                call.respond(HttpStatusCode.BadRequest, FeilRespons("Feil i mottatte data"))
+                call.respond(HttpStatusCode.BadRequest, FeilRespons("Feil i mottatte data. x-call-id: ${call.getCallId()}"))
             }
 
             else -> {
@@ -75,17 +76,17 @@ fun StatusPagesConfig.feilhåndtering(
                     logger.warn("Bad request. Melding: ${cause.message}", cause)
                     call.respond(
                         HttpStatusCode.BadRequest,
-                        FeilRespons("Feil i mottatte data: ${rootCause.message}")
+                        FeilRespons("Feil i mottatte data: ${rootCause.message}. x-call-id: ${call.getCallId()}")
                     )
                     return@exception
                 }
                 logger.error(
-                    "Uhåndtert feil ved kall mot ${call.request.path()}. Feiltype: ${cause.javaClass}",
+                    "Uhåndtert feil ved kall mot ${call.request.path()}. Feiltype: ${cause.javaClass}. x-call-id: ${call.getCallId()}.",
                     cause
                 )
                 call.respond(
                     HttpStatusCode.InternalServerError,
-                    "Feil i tjeneste: ${cause.message}"
+                    "Feil i tjeneste: ${cause.message}. x-call-id: ${call.getCallId()} "
                 )
             }
         }
