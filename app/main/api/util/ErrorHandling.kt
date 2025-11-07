@@ -60,6 +60,7 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is ManglerTilgangException -> {
+                logger.warn("Mangler tilgang til bruker. x-call-id: ${call.getCallId()}", cause)
                 call.respond(
                     HttpStatusCode.Forbidden,
                     FeilRespons("Mangler tilgang til baksysystemer. x-call-id: ${call.getCallId()}")
