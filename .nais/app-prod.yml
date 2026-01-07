@@ -120,6 +120,9 @@ spec:
       rules:
         - application: api-intern
           namespace: aap
+        - application: tp
+          namespace: pensjonsamhandling
+          cluster: prod-fss
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.nav.no
