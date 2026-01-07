@@ -129,9 +129,8 @@ spec:
         - application: test-token-provider
         - application: api-intern
           namespace: aap
-        - application: tp-api
-          namespace: pensjonsamhandling
-          cluster: dev-fss
+      external:
+        - host: tp-api-q2.dev-fss-pub.nais.io
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.ekstern.dev.nav.no
