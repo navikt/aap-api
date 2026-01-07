@@ -129,15 +129,9 @@ spec:
         - application: test-token-provider
         - application: api-intern
           namespace: aap
-      external:
-        - host: arenaoppslag.dev-fss-pub.nais.io
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.ekstern.dev.nav.no
-    - name: ARENAOPPSLAG_PROXY_BASE_URL
-      value: https://arenaoppslag.dev-fss-pub.nais.io
-    - name: ARENAOPPSLAG_SCOPE
-      value: api://dev-fss.aap.arenaoppslag/.default
     - name: ALTINN_WELLKNOWN
       value: http://test-token-provider/samtykke/.well-known/oauth-authorization-server
     - name: ALTINN_AUDIENCE

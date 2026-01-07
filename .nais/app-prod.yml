@@ -116,18 +116,11 @@ spec:
   secureLogs:
     enabled: true
   accessPolicy:
-    outbound:
-      external:
-        - host: arenaoppslag.prod-fss-pub.nais.io
       rules:
         - application: api-intern
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.nav.no
-    - name: ARENAOPPSLAG_PROXY_BASE_URL
-      value: https://arenaoppslag.prod-fss-pub.nais.io
-    - name: ARENAOPPSLAG_SCOPE
-      value: api://prod-fss.aap.arenaoppslag/.default
     - name: ALTINN_WELLKNOWN
       value: https://idporten.no/.well-known/openid-configuration
     - name: ALTINN_AUDIENCE

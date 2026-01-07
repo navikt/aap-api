@@ -222,12 +222,12 @@ private suspend fun hentMedium(
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
 
     runCatching {
-        val arenaOppslagRequestBody = InternVedtakRequestApiIntern(
+        val apiInternRequestBody = InternVedtakRequestApiIntern(
             personidentifikator = body.personidentifikator,
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        val res = apiInternClient.hentMedium(arenaOppslagRequestBody)
+        val res = apiInternClient.hentMedium(apiInternRequestBody)
         Medium(
             vedtak = res.vedtak.map {
                 VedtakUtenUtbetaling(
@@ -317,13 +317,13 @@ private suspend fun hentMaksimum(
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
     val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
     runCatching {
-        val arenaOppslagRequestBody = InternVedtakRequestApiIntern(
+        val apiInternRequestBody = InternVedtakRequestApiIntern(
             personidentifikator = body.personidentifikator,
             fraOgMedDato = body.fraOgMedDato,
             tilOgMedDato = body.tilOgMedDato
         )
-        logger.info("Henter maksimum fra API intern. Fra og med-dato: ${arenaOppslagRequestBody.fraOgMedDato}. Til og med dato: ${arenaOppslagRequestBody.tilOgMedDato}.")
-        val maksimumFraApiIntern = apiInternClient.hentMaksimum(callId, arenaOppslagRequestBody)
+        logger.info("Henter maksimum fra API intern. Fra og med-dato: ${apiInternRequestBody.fraOgMedDato}. Til og med dato: ${apiInternRequestBody.tilOgMedDato}.")
+        val maksimumFraApiIntern = apiInternClient.hentMaksimum(callId, apiInternRequestBody)
         Maksimum(
             vedtak = maksimumFraApiIntern.vedtak.map { vedtak ->
                 Vedtak(

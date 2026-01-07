@@ -43,8 +43,6 @@ internal class AfpOffentligServerTest {
             System.setProperty("AAP_AUDIENCE", "http://kafka")
             System.setProperty("ALTINN_WELLKNOWN", "http://kafka")
             System.setProperty("ALTINN_AUDIENCE", "http://kafka")
-            System.setProperty("ARENAOPPSLAG_PROXY_BASE_URL", "http://kafka")
-            System.setProperty("ARENAOPPSLAG_SCOPE", "http://kafka")
             System.setProperty("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT", "http://kafka")
             System.setProperty("AZURE_APP_CLIENT_ID", "http://kafka")
             System.setProperty("AZURE_APP_CLIENT_SECRET", "http://kafka")

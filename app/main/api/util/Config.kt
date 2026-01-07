@@ -8,7 +8,6 @@ import java.net.URL
 
 data class Config(
     val oauth: OauthConfig = OauthConfig(),
-    val arenaoppslag: ArenaoppslagConfig = ArenaoppslagConfig(),
     val azure: AzureConfig = AzureConfig(
         tokenEndpoint = URI.create(requiredConfigForKey("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT")),
         clientId = requiredConfigForKey("AZURE_APP_CLIENT_ID"),
@@ -58,11 +57,6 @@ data class MaskinportenConfig(
         val afpoffentligAksio: String = "nav:aap/delegertafpoffentlig.read"
     )
 }
-
-data class ArenaoppslagConfig(
-    val proxyBaseUrl: String = requiredConfigForKey("ARENAOPPSLAG_PROXY_BASE_URL"),
-    val scope: String = requiredConfigForKey("ARENAOPPSLAG_SCOPE")
-)
 
 data class ApiInternConfig(
     val url: String = requiredConfigForKey("API_INTERN_URL"),

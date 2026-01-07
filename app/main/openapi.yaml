@@ -65,9 +65,9 @@ tags:
     description: Tjenestepensjon
 servers:
   - url: https://aap-api.nav.no
-    description: Prodserver
+    description: Produksjonsmiljø.
   - url: https://aap-api.ekstern.dev.nav.no
-    description: Dev-server
+    description: Utviklingsmiljø.
 paths:
   /afp/fellesordningen:
     post:
