@@ -116,8 +116,10 @@ spec:
   secureLogs:
     enabled: true
   accessPolicy:
+    outbound:
       rules:
         - application: api-intern
+          namespace: aap
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.nav.no
@@ -137,4 +139,3 @@ spec:
       value: http://api-intern
     - name: API_INTERN_SCOPE
       value: api://prod-gcp.aap.api-intern/.default
-
