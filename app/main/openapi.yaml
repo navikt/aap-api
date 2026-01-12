@@ -30,11 +30,11 @@ info:
     | Barnetillegg          | Totalt barnetillegg på det siste vedtaket.              |                                                                                                                 |
     | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
     | Rettighetstype        | Ativitetsfasekode i gammelt system.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning). Om kildesystem (`kilde`) er Kelvin er disse verdiene mulige: `BISTANDSBEHOV`, `SYKEPENGEERSTATNING`, `STUDENT`,  `ARBEIDSSØKER`,  `VURDERES_FOR_UFØRETRYGD`.|                                                                                                |
-    | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_. Fra ny løsning (Kelvin) kommer verdiene `LØPENDE` (tilsvarer `IVERK`), `AVSLUTTET` og `UTREDES`.                                                                                          |
-    | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. |
+    | Status (vedtakstatus) | Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr _iverksatt_, mens `AVSLU` betyr _avsluttet_. Fra ny løsning (Kelvin) kommer verdiene `LØPENDE` (tilsvarer `IVERK`), `AVSLUTTET` og `UTREDES`. Fra nytt system tolkes `AVSLUTTET` som at ytelsen har stoppet opp.                                                                                        |
+    | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. Fra nytt system er dette en referanse til nyeste endring på saken. |
     | Saksnummer | Referanse til saken. Fra gammelt system er dette en long, fra nytt system er dette en string. |
     | Vedtaksdato | For Arena-saker: dato på første vedtak. For Kelvin-saker: dato for siste vedtak på saken. |
-    | Vedtakstype | Kun fra Arena: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet), `A` (Reaksjon), `F` (Forlenget ventetid), `S` (Stans), `T` (Tidsbegrenset bortfall), `N` (Annuler sanksjon), `K` (Kontroll), `M` (Omgjør reaksjon). |
+    | Vedtakstype | Kun fra Arena (gammelt system): kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet), `A` (Reaksjon), `F` (Forlenget ventetid), `S` (Stans), `T` (Tidsbegrenset bortfall), `N` (Annuler sanksjon), `K` (Kontroll), `M` (Omgjør reaksjon). |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
     | Barn med stønad | Antall barn som bruker får barnetillegg for.|
     | Sykedager | Reduksjon som skyldes   |
