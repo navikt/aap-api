@@ -121,8 +121,6 @@ spec:
       destinations:
         - id: elastic
         - id: loki
-  secureLogs:
-    enabled: true
   accessPolicy:
     outbound:
       rules:
