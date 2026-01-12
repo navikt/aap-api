@@ -10,9 +10,4 @@
     <root level="INFO">
         <appender-ref ref="pretty"/>
     </root>
-
-    <logger name="secureLog" level="TRACE" additivity="false">
-        <appender-ref ref="pretty"/>
-    </logger>
-
 </configuration>
