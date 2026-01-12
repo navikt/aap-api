@@ -113,11 +113,13 @@ spec:
       destinations:
         - id: elastic
         - id: loki
-  secureLogs:
-    enabled: true
   accessPolicy:
+    outbound:
       rules:
         - application: api-intern
+          namespace: aap
+        - application: logging
+          namespace: nais-system
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.nav.no
