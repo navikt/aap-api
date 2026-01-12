@@ -129,6 +129,8 @@ spec:
           namespace: aap
         - application: logging
           namespace: nais-system
+      external:
+        - host: tp-api-q2.dev-fss-pub.nais.io
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.ekstern.dev.nav.no

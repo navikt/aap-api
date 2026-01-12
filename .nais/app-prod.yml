@@ -120,6 +120,9 @@ spec:
           namespace: aap
         - application: logging
           namespace: nais-system
+      external:
+        - host: tp-api.prod-fss-pub.nais.io
+
   env:
     - name: AAP_AUDIENCE
       value: https://aap-api.nav.no
@@ -139,4 +142,3 @@ spec:
       value: http://api-intern
     - name: API_INTERN_SCOPE
       value: api://prod-gcp.aap.api-intern/.default
-
