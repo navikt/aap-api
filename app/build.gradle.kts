@@ -48,10 +48,10 @@ dependencies {
     implementation("io.ktor:ktor-client-jackson:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    implementation("ch.qos.logback:logback-classic:1.5.23")
+    implementation("ch.qos.logback:logback-classic:1.5.24")
     implementation("com.auth0:java-jwt:4.5.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
-    implementation("com.nimbusds:nimbus-jose-jwt:10.6")
+    implementation("com.nimbusds:nimbus-jose-jwt:10.7")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.1")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
     implementation("org.apache.kafka:kafka-streams:4.1.1")
