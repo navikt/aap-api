@@ -104,6 +104,7 @@ spec:
     initialDelay: 1
     periodSeconds: 1
     failureThreshold: 60
+  terminationGracePeriodSeconds: 30
   prometheus:
     enabled: true
     path: /actuator/metrics

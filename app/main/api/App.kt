@@ -30,12 +30,25 @@ import io.ktor.server.routing.*
 import io.micrometer.core.instrument.binder.logging.LogbackMetrics
 import org.apache.kafka.clients.producer.Producer
 import org.slf4j.LoggerFactory
+import kotlin.time.Duration.Companion.seconds
 
 private val logger = LoggerFactory.getLogger("App")
 
 fun main() {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> logger.error("Uhåndtert feil", e) }
-    embeddedServer(Netty, port = 8080) {
+    embeddedServer(Netty, configure = {
+        // Default i NAIS-config
+        val kubernetesTimeout = 30.seconds
+        // Tid før ktor avslutter uansett. Må være litt mindre enn `kubernetesTimeout`.
+        val shutdownTimeout = kubernetesTimeout - 2.seconds
+        this.shutdownTimeout = shutdownTimeout.inWholeMilliseconds
+
+        // Tid appen får til å fullføre påbegynte requests, jobber etc. Må være mindre enn `endeligShutdownTimeout`.
+        shutdownGracePeriod = (shutdownTimeout - 3.seconds).inWholeMilliseconds
+        connector {
+            port = 8080
+        }
+    }) {
         val config = Config()
         api(
             config = Config(),
