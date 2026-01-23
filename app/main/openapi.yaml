@@ -50,6 +50,20 @@ info:
     
     Den største forskjellen på nytt og gammelt system er bruken av ordet _vedtak_. I nytt system teller hvert saksbehandlingløp som et nytt vedtak. Man snakker heller om "sak" når man vil referere til den løpende ytelsen.
 
+
+    ## SAM-varsler
+  
+    For varsling av nye vedtak eller signifikante endringer i vedtak blir det sendt varsler via SAM.
+    Fra aap vil det komme varsler i disse tilfellene:
+    * Førstegangsvedtak
+    * Endring i RettighetsType
+    * signifikant endring i utbetaling
+      - fra 0 til >0
+      - fra >0 til 0
+    * Utvidelse av rettighetsperiode (forlengelse av til-dato)
+
+    ## Relevante lenker
+
   contact:
     url: https://github.com/navikt/aap-api
   version: 1.0.0
