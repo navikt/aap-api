@@ -50,7 +50,7 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.5.25")
     implementation("com.auth0:java-jwt:4.5.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.0")
     implementation("com.nimbusds:nimbus-jose-jwt:10.7")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.2")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
