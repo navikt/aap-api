@@ -65,7 +65,7 @@ dependencies {
     constraints {
         implementation("net.minidev:json-smart:2.6.0")
     }
-    testImplementation("org.assertj:assertj-core:3.27.6")
+    testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation(kotlin("test"))
 }
 
