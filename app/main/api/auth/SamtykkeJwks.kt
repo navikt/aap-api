@@ -33,7 +33,7 @@ class SamtykkeJwks (
 
     private data class SamtykkeResponse(
         val issuer: String,
-        @JsonProperty("jwks_uri")
+        @param:JsonProperty("jwks_uri")
         val jwksUri: String
     )
 
