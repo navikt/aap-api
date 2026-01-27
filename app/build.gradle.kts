@@ -3,7 +3,7 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("aap.conventions")
-    id("io.ktor.plugin") version "3.3.3"
+    id("io.ktor.plugin") version "3.4.0"
     application
 }
 
@@ -11,7 +11,7 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val ktorVersion = "3.3.3"
+val ktorVersion = "3.4.0"
 val komponenterVersjon = "1.0.490"
 val mockOAuth2ServerVersion = "3.0.1"
 val apiInternVersjon = "0.0.25"
@@ -45,7 +45,7 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.5.25")
     implementation("com.auth0:java-jwt:4.5.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.0")
     implementation("com.nimbusds:nimbus-jose-jwt:10.7")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.2")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
