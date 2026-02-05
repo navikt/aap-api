@@ -92,6 +92,8 @@ spec:
               orgno: "916833520"
             - name: "Storebrand pensjonstjenester"
               orgno: "931936492"
+            - name: "Storebrand Livsforsikring"
+              orgno: "958995369"
             - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
               orgno: "938708606"
             - name: "Oslo Pensjonsforsikring"
