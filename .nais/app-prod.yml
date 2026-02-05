@@ -76,6 +76,8 @@ spec:
               orgno: "982759412"
             - name: "Storebrand Pensjonstjenester"
               orgno: "931936492"
+            - name: "Storebrand Livsforsikring"
+              orgno: "958995369"
             - name: "KOMMUNAL LANDSPENSJONSKASSE GJENSIDIG FORSIKRINGSSELSKAP"
               orgno: "938708606"
             - name: "GARANTIKASSEN FOR FISKERE"
