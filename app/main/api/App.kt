@@ -24,7 +24,6 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.callid.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
@@ -108,11 +107,6 @@ fun Application.api(
             ),
             config
         )
-    }
-
-    install(CORS) {
-        anyHost()
-        allowHeader(HttpHeaders.ContentType)
     }
 
     routing {
