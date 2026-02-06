@@ -11,6 +11,8 @@ import org.apache.kafka.clients.producer.RecordMetadata
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.time.Duration
+import kotlin.time.toJavaDuration
 
 val MAX_SPORINGSLOGG_SIZE = 1_048_576 // 1 MB
 
@@ -18,9 +20,14 @@ class SporingsloggException(cause: Throwable) : Exception(cause)
 
 class SporingsloggKafkaClient(
     private val sporingsloggTopic: String,
-    private val kafkaProducer: Producer<String, Spor>
+    private val kafkaProducer: Producer<String, Spor>,
+    private val closeTimeout: Duration
 ) {
     fun send(spor: Spor): RecordMetadata = kafkaProducer.send(record(spor)).get()
+
+    fun close(){
+        kafkaProducer.close(closeTimeout.toJavaDuration())
+    }
 
     private fun <V> record(value: V) = ProducerRecord<String, V>(sporingsloggTopic, value)
 }
