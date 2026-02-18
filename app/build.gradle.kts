@@ -32,8 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
-        implementation("io.netty:netty-common:4.2.9.Final")
-        implementation("io.netty:netty-handler:4.2.9.Final")
+        implementation("io.netty:netty-common:4.2.10.Final")
+        implementation("io.netty:netty-handler:4.2.10.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
@@ -44,18 +44,18 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
-    implementation("ch.qos.logback:logback-classic:1.5.25")
+    implementation("ch.qos.logback:logback-classic:1.5.31")
     implementation("com.auth0:java-jwt:4.5.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.0")
     implementation("com.nimbusds:nimbus-jose-jwt:10.7")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.16.2")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.16.3")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
     implementation("org.apache.kafka:kafka-streams:4.1.1")
-    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.4.3")
+    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.5.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     constraints {
-        implementation("commons-codec:commons-codec:1.20.0")
+        implementation("commons-codec:commons-codec:1.21.0")
     }
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
     constraints {
