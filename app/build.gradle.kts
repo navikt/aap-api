@@ -3,7 +3,7 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("aap.conventions")
-    id("io.ktor.plugin") version "3.3.3"
+    id("io.ktor.plugin") version "3.4.0"
     application
 }
 
@@ -11,8 +11,8 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val ktorVersion = "3.3.3"
-val komponenterVersjon = "1.0.937"
+val ktorVersion = "3.4.0"
+val komponenterVersjon = "2.0.1"
 val mockOAuth2ServerVersion = "3.0.1"
 val apiInternVersjon = "0.0.25"
 
@@ -38,6 +38,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
+    implementation("io.ktor:ktor-openapi-schema:$ktorVersion")
     implementation("io.ktor:ktor-server-cors:$ktorVersion")
 
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
@@ -61,6 +62,7 @@ dependencies {
         implementation("net.minidev:json-smart:2.6.0")
     }
     testImplementation("org.assertj:assertj-core:3.27.7")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation(kotlin("test"))
 }
 
