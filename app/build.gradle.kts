@@ -44,13 +44,13 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
-    implementation("ch.qos.logback:logback-classic:1.5.31")
-    implementation("com.auth0:java-jwt:4.5.0")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
+    implementation("com.auth0:java-jwt:4.5.1")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.0")
     implementation("com.nimbusds:nimbus-jose-jwt:10.7")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.3")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
-    implementation("org.apache.kafka:kafka-streams:4.1.1")
+    implementation("org.apache.kafka:kafka-streams:4.2.0")
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.5.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
