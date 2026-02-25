@@ -131,35 +131,7 @@ fun Route.api(
                 }
             }
         }
-    }/* TESTING PURPOSES
-        if (Miljø.er() == MiljøKode.DEV) {
-            route("/tp-samhandling-2") {
-                authenticate(MASKINPORTEN_TP_ORDNINGEN) {
-                    post {
-                        val body = call.receive<VedtakRequest>()
-                        if (tpRegisterClient.brukerHarTpForholdOgYtelse(
-                                body.personidentifikator,
-                                982759412.toString(),
-                                call.callId ?: UUID.randomUUID().toString()
-                            ) != true
-                        ) {
-                            call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
-                        } else {
-                            call.respond(
-                                hentMaksimum(
-                                    call,
-                                    body,
-                                    brukSporingslogg,
-                                    apiInternClient,
-                                    sporingsloggClient,
-                                    prometheus
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        }*/
+    }
 }
 
 private suspend fun hentPerioder(
@@ -243,7 +215,7 @@ private suspend fun hentMedium(
                     beregningsgrunnlag = it.beregningsgrunnlag,
                     barnMedStonad = it.barnMedStonad,
                     barnetillegg = it.barnetillegg * it.barnMedStonad,
-                    kildesystem = it.kildesystem,
+                    kildesystem = it.kildesystem.tilKilde(),
                     samordningsId = it.samordningsId,
                     opphorsAarsak = it.opphorsAarsak
                 )
@@ -338,7 +310,7 @@ private suspend fun hentMaksimum(
                     beregningsgrunnlag = vedtak.beregningsgrunnlag,
                     barnMedStonad = vedtak.barnMedStonad,
                     barnetillegg = vedtak.barnetillegg,
-                    kildesystem = vedtak.kildesystem.toString(),
+                    kildesystem = vedtak.kildesystem.tilKilde(),
                     samordningsId = vedtak.samordningsId,
                     opphorsAarsak = vedtak.opphorsAarsak,
                     vedtaksTypeNavn = vedtak.vedtaksTypeNavn,

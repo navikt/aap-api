@@ -43,7 +43,7 @@ info:
     | Utbetalingsgrad | Kommer fra Kelvin. Er `null` fra Arena. |
     | Samordnings-ID | Her finnes kun data fra ny løsning. Ellers null. |
     | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. Fra Kelvin: `OVERGANG_UFORE`, `AVKLART_TIL_ARBEID`, `ANNET`. |
-    | Kilde | Om dataen kommer fra Arena eller Kelvin (henholdsvis gammel og ny løsning) |
+    | Kilde | Enten `ARENA` (gammelt system), eller `KELVIN` (nytt system). |
     
   
     ## Litt om vedtak fra nytt system
@@ -65,6 +65,7 @@ info:
     ## Relevante lenker
 
   contact:
+    name: AAP API
     url: https://github.com/navikt/aap-api
   version: 1.0.0
   license:
