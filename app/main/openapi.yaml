@@ -118,14 +118,34 @@ paths:
                 $ref: '#/components/schemas/PeriodeResponse'
         '400':
           description: Feil i request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UgyldigForespørselFeil'
         '401':
           description: Mangler / feil maskinporten token eller samtykke-token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UautorisertFeil'
         '403':
           description: Feil scope i maskinporten token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManglerTilgangFeil'
         '404':
           description: Manglende URL / Person ikke funnet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IkkeFunnetFeil'
         '500':
           description: Feil på tjeneste, meld fra og send med call-id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternFeil'
   /afp/offentlig:
     post:
       summary: Hent perioder med AAP, scopet for offentlig sektor
@@ -160,14 +180,34 @@ paths:
                 $ref: '#/components/schemas/PeriodeResponse'
         '400':
           description: Feil i request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UgyldigForespørselFeil'
         '401':
           description: Mangler / feil maskinporten token eller samtykke-token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UautorisertFeil'
         '403':
           description: Feil scope i maskinporten token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManglerTilgangFeil'
         '404':
           description: Manglende URL / Person ikke funnet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IkkeFunnetFeil'
         '500':
           description: Feil på tjeneste, meld fra og send med call-id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternFeil'
   /tp-samhandling-med-utbetalinger:
     post:
       summary: Hent vedtak og alle tilhørende utbetalinger for en person
@@ -202,14 +242,34 @@ paths:
                 $ref: '#/components/schemas/MaksimumRespons'
         '400':
           description: Feil i request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UgyldigForespørselFeil'
         '401':
           description: Mangler / feil maskinporten token eller samtykke-token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UautorisertFeil'
         '403':
           description: Feil scope i maskinporten token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManglerTilgangFeil'
         '404':
           description: Manglende URL / Person ikke funnet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IkkeFunnetFeil'
         '500':
           description: Feil på tjeneste, meld fra og send med call-id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternFeil'
   /tp-samhandling:
     post:
       summary: Hent innvilget vedtak
@@ -244,16 +304,67 @@ paths:
                 $ref: '#/components/schemas/MediumRespons'
         '400':
           description: Feil i request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UgyldigForespørselFeil'
         '401':
           description: Mangler / feil maskinporten token eller samtykke-token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UautorisertFeil'
         '403':
           description: Feil scope i maskinporten token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManglerTilgangFeil'
         '404':
           description: Manglende URL / Person ikke funnet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IkkeFunnetFeil'
         '500':
           description: Feil på tjeneste, meld fra og send med call-id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternFeil'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        melding:
+          type: string
+          description: Beskrivelse av feilen
+          example: Feil i mottatte data
+        kode:
+          type: string
+          description: Maskinlesbar feilkode
+          example: MANGLER_TILGANG
+    UgyldigForespørselFeil:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      description: Feilmeldinger ved ugyldig request (400)
+    UautorisertFeil:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      description: Feilmeldinger ved autentiseringsfeil (401)
+    ManglerTilgangFeil:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      description: Feilmeldinger ved manglende tilgang (403)
+    IkkeFunnetFeil:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      description: Feilmeldinger når ressurs ikke finnes (404)
+    InternFeil:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      description: Interne feil (500)
     PeriodeResponse:
       type: object
       properties:
@@ -309,19 +420,25 @@ components:
         reduksjon:
           $ref: '#/components/schemas/Reduksjon'
         belop:
-          type: number
+          type: integer
           description: Faktisk utbetalingsbeløp.
           example: 6509
         dagsats:
-          type: number
+          type: integer
           description: Dagsats for utbetalingen.
           example: 849
         barnetillegg:
-          type: number
+          type: integer
           description: Barnetillegg for utbetalingen.
           example: 123.45
+        barnetilegg:
+          type: integer
+          deprecated: true
+          description: Feilstavet felt, bruk barnetillegg.
+          example: 123.45
         utbetalingsgrad:
-          type: number
+          type: integer
+          nullable: true
           description: Kommer i Kelvin. Er null fra Arena.
           example: 90
 
@@ -379,8 +496,8 @@ components:
             type: integer
             description: Hvor mange barn gis det tilleg for i vedtaket.
             example: 1
-          barneTillegg:
-            type: number
+          barnetillegg:
+            type: integer
             description: Antall barn med stønad multiplisert med barneTilleggSats.
             example: 123
           kildesystem:
@@ -470,8 +587,8 @@ components:
             type: integer
             description: Hvor mange barn gis det tilleg for i vedtaket.
             example: 1
-          barneTillegg:
-            type: number
+          barnetillegg:
+            type: integer
             description: Antall barn med stønad multiplisert med barneTilleggSats.
             example: 123
           kildesystem:

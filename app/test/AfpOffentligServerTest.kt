@@ -7,6 +7,7 @@ import api.sporingslogg.JacksonSerializer
 import api.sporingslogg.Spor
 import api.tp.ITpRegisterClient
 import api.util.Config
+import api.util.IkkeFunnetFeil
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.nimbusds.jwt.SignedJWT
@@ -32,6 +33,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
 import java.util.*
+
+import no.nav.aap.komponenter.httpklient.httpclient.error.ManglerTilgangException
+import api.util.ManglerTilgangFeil
+import java.net.URI
 
 internal class AfpOffentligServerTest {
     companion object {
@@ -160,10 +165,39 @@ internal class AfpOffentligServerTest {
             ), "/tp-samhandling"
         )
         assertEquals(HttpStatusCode.NotFound, response.status)
-        assertEquals(
-            "Mangler TP-ytelse.",
-            response.bodyAsText()
+        val feil = response.body<IkkeFunnetFeil>()
+        assertEquals("Mangler TP-ytelse.", feil.melding)
+        assertEquals("MANGLER_TP_YTELSE", feil.kode)
+    }
+
+    @Test
+    fun `får 403 ved manglende tilgang i tp-ordningen`() = testApplication {
+        val apiInternClient = apiInternKlient()
+
+        application {
+            api(
+                Config(), mockProducer(),
+                apiInternClient,
+                object : ITpRegisterClient {
+                    override fun brukerHarTpForholdOgYtelse(fnr: String, orgnr: String, requestId: String): Boolean {
+                        throw ManglerTilgangException("Ingen tilgang", "Ingen tilgang")
+                    }
+                }
+            )
+        }
+        val client = createClient()
+        val jwt = issueToken("nav:aap:tpordningen.read")
+
+        val response = sendPostRequest(
+            client, jwt, VedtakRequest(
+                personidentifikator = "123",
+                fraOgMedDato = LocalDate.now(),
+                tilOgMedDato = LocalDate.now(),
+            ), "/tp-samhandling"
         )
+        assertEquals(HttpStatusCode.Forbidden, response.status)
+        val feil = response.body<ManglerTilgangFeil>()
+        assertEquals("MANGLER_TILGANG", feil.kode)
     }
 
     @Test
