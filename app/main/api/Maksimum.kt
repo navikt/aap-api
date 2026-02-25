@@ -72,7 +72,7 @@ data class UtbetalingMedMer(
 
 data class Reduksjon(
     val timerArbeidet: Double,
-    val annenReduksjon: Float
+    val annenReduksjon: Double
 )
 
 data class Periode(

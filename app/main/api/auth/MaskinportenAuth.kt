@@ -12,6 +12,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
+import api.util.UautorisertFeil
 
 private val logger = LoggerFactory.getLogger("MaskinportenAuth")
 const val MASKINPORTEN_AFP_PRIVAT = "fellesordning"
@@ -29,6 +30,7 @@ fun ApplicationCall.hentConsumerId(): String {
     return res
 }
 
+
 fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config: Config) {
     val maskinportenJwkProvider: JwkProvider = JwkProviderBuilder(config.oauth.maskinporten.jwksUri)
         .cached(10, 24, TimeUnit.HOURS)
@@ -40,7 +42,7 @@ fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config:
         challenge { _, _ ->
             call.respond(
                 HttpStatusCode.Unauthorized,
-                "Ikke tilgang til maskinporten"
+                UautorisertFeil("Ikke tilgang til maskinporten", "IKKE_TILGANG_MASKINPORTEN")
             )
                 .also { logger.info("Ikke tilgang til maskinporten. Path: ${call.request.path()}. Call-ID: ${call.callId}") }
         }

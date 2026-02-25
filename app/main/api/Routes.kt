@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.DateTimeParseException
 import java.util.*
+import api.util.IkkeFunnetFeil
 
 private val logger = LoggerFactory.getLogger("App")
 
@@ -39,6 +40,7 @@ fun ApplicationCall.getCallId(): String? {
     val headerNames = listOf("x-call-id", "x-callid", "x-request-id")
     return headerNames.firstNotNullOfOrNull { request.headers[it] }
 }
+
 
 fun Route.api(
     brukSporingslogg: Boolean,
@@ -89,7 +91,7 @@ fun Route.api(
                         call.callId ?: UUID.randomUUID().toString()
                     ) != true
                 ) {
-                    call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
+                    call.respond(HttpStatusCode.NotFound, IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE"))
                 } else {
                     call.respond(
                         hentMaksimum(
@@ -116,7 +118,7 @@ fun Route.api(
                         call.callId ?: UUID.randomUUID().toString()
                     ) != true
                 ) {
-                    call.respond(HttpStatusCode.NotFound, "Mangler TP-ytelse.")
+                    call.respond(HttpStatusCode.NotFound, IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE"))
                 } else {
                     call.respond(
                         hentMedium(
@@ -319,7 +321,7 @@ private suspend fun hentMaksimum(
                             reduksjon = it.reduksjon?.let {
                                 Reduksjon(
                                     timerArbeidet = it.timerArbeidet,
-                                    annenReduksjon = it.annenReduksjon
+                                    annenReduksjon = it.annenReduksjon.toDouble()
                                 )
                             },
                             utbetalingsgrad = it.utbetalingsgrad,
