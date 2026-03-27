@@ -32,8 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
-        implementation("io.netty:netty-common:4.2.10.Final")
-        implementation("io.netty:netty-handler:4.2.10.Final")
+        implementation("io.netty:netty-common:4.2.11.Final")
+        implementation("io.netty:netty-handler:4.2.11.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
@@ -46,12 +46,12 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("com.auth0:java-jwt:4.5.1")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.2")
     implementation("com.nimbusds:nimbus-jose-jwt:10.8")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.16.3")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.16.4")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
     implementation("org.apache.kafka:kafka-streams:4.2.0")
-    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.5.0")
+    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.5.1")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     constraints {
