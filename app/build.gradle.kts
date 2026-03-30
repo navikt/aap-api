@@ -11,7 +11,7 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val ktorVersion = "3.4.1"
+val ktorVersion = "3.4.2"
 val komponenterVersjon = "2.0.17"
 val mockOAuth2ServerVersion = "3.0.1"
 val apiInternVersjon = "0.0.33"
@@ -32,8 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
-        implementation("io.netty:netty-common:4.2.11.Final")
-        implementation("io.netty:netty-handler:4.2.11.Final")
+        implementation("io.netty:netty-common:4.2.12.Final")
+        implementation("io.netty:netty-handler:4.2.12.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
