@@ -12,9 +12,9 @@ application {
 }
 
 val ktorVersion = "3.4.2"
-val komponenterVersjon = "2.0.42"
+val komponenterVersjon = "2.0.44"
 val mockOAuth2ServerVersion = "3.0.1"
-val apiInternVersjon = "0.0.36"
+val apiInternVersjon = "0.0.37"
 
 dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
