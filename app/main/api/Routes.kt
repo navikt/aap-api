@@ -216,10 +216,9 @@ private suspend fun hentMedium(
                     rettighetsType = it.rettighetsType,
                     beregningsgrunnlag = it.beregningsgrunnlag,
                     barnMedStonad = it.barnMedStonad,
-                    barnetillegg = it.barnetillegg * it.barnMedStonad,
+                    barnetillegg = it.barnetillegg,
                     kildesystem = it.kildesystem.tilKilde(),
                     samordningsId = it.samordningsId,
-                    opphorsAarsak = it.opphorsAarsak
                 )
             }.filter { it.status != "INAKT" }
         )
@@ -314,7 +313,6 @@ private suspend fun hentMaksimum(
                     barnetillegg = vedtak.barnetillegg,
                     kildesystem = vedtak.kildesystem.tilKilde(),
                     samordningsId = vedtak.samordningsId,
-                    opphorsAarsak = vedtak.opphorsAarsak,
                     vedtaksTypeNavn = vedtak.vedtaksTypeNavn,
                     utbetaling = vedtak.utbetaling.map {
                         UtbetalingMedMer(
