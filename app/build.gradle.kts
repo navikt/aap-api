@@ -55,7 +55,7 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     constraints {
-        implementation("commons-codec:commons-codec:1.21.0")
+        implementation("commons-codec:commons-codec:1.22.0")
     }
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
     constraints {
