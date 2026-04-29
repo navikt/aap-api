@@ -19,17 +19,16 @@ data class Maksimum(
 data class Medium(val vedtak: List<VedtakUtenUtbetaling>)
 
 /**
- * @param status Hypotese, vedtaksstatuskode
- * @param saksnummer hypotese sak_id
+ * @param saksnummer sak_id
  */
 data class Vedtak(
     val dagsats: Int,
     val vedtakId: String,
     val status: String,
     val saksnummer: String,
-    val vedtaksdato: LocalDate, //reg_dato
+    val vedtaksdato: LocalDate,
     val periode: Periode,
-    val rettighetsType: String, ////aktivitetsfase //Aktfasekode
+    val rettighetsType: String,
     val beregningsgrunnlag: Int,
     val barnMedStonad: Int,
     val barnetillegg: Int,
@@ -44,13 +43,13 @@ data class Vedtak(
 data class VedtakUtenUtbetaling(
     val dagsats: Int,
     val vedtakId: String,
-    val status: String, //Hypotese, vedtaksstatuskode
+    val status: String,
     val saksnummer: String,
-    val vedtaksdato: LocalDate, //reg_dato
+    val vedtaksdato: LocalDate,
     val vedtaksTypeKode: String?,
     val vedtaksTypeNavn: String?,
     val periode: Periode,
-    val rettighetsType: String, ////aktivitetsfase //Aktfasekode
+    val rettighetsType: String,
     val beregningsgrunnlag: Int,
     val barnMedStonad: Int,
     val barnetillegg: Int,

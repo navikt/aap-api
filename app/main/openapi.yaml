@@ -29,18 +29,18 @@ info:
     | Dagsats               | Her har vi to verdier. Den som ligger på selve vedtaket er før samordning uten barnetillegg, mens det som ligger i utbetalingsobjektet er etter samordning uten barnetillegg. |
     | Beløp                 | Fullt beløp, etter samhandling med barnetillegg. Det bruker faktisk får utbetalt.                                       |
     | Barnetillegg          | Totalt barnetillegg på det siste vedtaket.              |                                                                                                                 |
-    | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minste ~1.33G.                       |
+    | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minst ~1.33G.                       |
     | Rettighetstype        | Ativitetsfasekode i gammelt system.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning). Om kildesystem (`kilde`) er Kelvin er disse verdiene mulige: `BISTANDSBEHOV`, `SYKEPENGEERSTATNING`, `STUDENT`,  `ARBEIDSSØKER`,  `VURDERES_FOR_UFØRETRYGD`.|                                                                                                |
-    | Status (vedtakstatus) | Hvis Kan ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr at vedtaket er iverksatt (spesifikt om vedtakstypen er `S` (stans), betyr det at ytelsen er stanset), mens `AVSLU` betyr _avsluttet_. Fra ny løsning (Kelvin) kommer verdiene `LØPENDE`, `AVSLUTTET` og `UTREDES`. Fra nytt system tolkes `AVSLUTTET` som at ytelsen har stoppet opp.                                                                                        |
+    | Status (vedtakstatus) | Hvis kildesystem er Arena kan denne ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr at vedtaket er iverksatt (spesifikt om vedtakstypen er `S` (stans), betyr det at ytelsen er stanset), mens `AVSLU` betyr _avsluttet_. Fra ny løsning (Kelvin) kommer verdiene `LØPENDE`, `AVSLUTTET` og `UTREDES`. Fra nytt system tolkes `AVSLUTTET` som at ytelsen har stoppet opp.                                                                                        |
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. Fra nytt system er dette en referanse til nyeste endring på saken. |
     | Saksnummer | Referanse til saken. Fra gammelt system er dette en long, fra nytt system er dette en string. |
     | Vedtaksdato | Hvis `kildesystem` er `ARENA`: dato på første vedtak. For Kelvin-saker: dato for siste vedtak på saken. |
-    | Vedtakstype | Hvis `kildesystem` er `ARENA`: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet), `A` (Reaksjon), `F` (Forlenget ventetid), `S` (Stans), `T` (Tidsbegrenset bortfall), `N` (Annuler sanksjon), `K` (Kontroll), `M` (Omgjør reaksjon). Om vedstakstypen er `S`, kombinert med vedtaksstatus `IVERK`, betyr det at ytelsen er stanset. |
+    | Vedtakstype | Hvis `kildesystem` er `ARENA`: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet),  `S` (Stans). Om vedstakstypen er `S`, kombinert med vedtaksstatus `IVERK`, betyr det at ytelsen er stanset. Hvis kilde er `KELVIN` er denne `null`. |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
     | Barn med stønad | Antall barn som bruker får barnetillegg for.|
     | Sykedager | Reduksjon som skyldes   |
-    | Sent meldekort | Om meldekortet ble sendt inn sent. |
-    | Fravær | Antall fraværsdager. | 
+    | Sent meldekort | Om meldekortet ble sendt inn sent. Denne informasjonen er kun tilgjengelig fra Arena. |
+    | Fravær | Antall fraværsdager. Denne informasjonen er kun tilgjengelig fra Arena.| 
     | Utbetalingsgrad | Kommer fra Kelvin. Er `null` fra Arena. |
     | Samordnings-ID | Her finnes kun data fra ny løsning. Ellers null. |
     | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. |
@@ -54,7 +54,7 @@ info:
     ## SAM-varsler
   
     For varsling av nye vedtak eller signifikante endringer i vedtak blir det sendt varsler via SAM.
-    Fra aap vil det komme varsler i disse tilfellene:
+    Fra AAP vil det komme varsler i disse tilfellene:
     * Førstegangsvedtak
     * Endring i RettighetsType
     * signifikant endring i utbetaling
@@ -339,11 +339,11 @@ components:
       properties:
         melding:
           type: string
-          description: Beskrivelse av feilen
-          example: Feil i mottatte data
+          description: Beskrivelse av feilen.
+          example: Feil i mottatte data.
         kode:
           type: string
-          description: Maskinlesbar feilkode
+          description: Maskinlesbar feilkode.
           example: MANGLER_TILGANG
     UgyldigForespørselFeil:
       allOf:
@@ -380,13 +380,13 @@ components:
           type: string
           format: date
           nullable: true
-          description: Fra-dato for perioden
+          description: Fra-dato for perioden.
           example: 2022-05-01
         tilOgMedDato:
           type: string
           format: date
           nullable: true
-          description: Til-dato for perioden
+          description: Til-dato for perioden.
           example: 2022-08-25
 
     MaksimumRespons:
@@ -403,6 +403,7 @@ components:
 
     Reduksjon:
       type: object
+      nullable: true
       properties:
         timerArbeidet:
           type: number
@@ -430,16 +431,16 @@ components:
         barnetillegg:
           type: integer
           description: Barnetillegg for utbetalingen.
-          example: 123.45
+          example: 123
         barnetilegg:
           type: integer
           deprecated: true
-          description: Feilstavet felt, bruk barnetillegg.
-          example: 123.45
+          description: Feilstavet felt, bruk barnetillegg. Vil bli fjernet.
+          example: 123
         utbetalingsgrad:
           type: integer
           nullable: true
-          description: Kommer i Kelvin. Er null fra Arena.
+          description: Ikke-null fra nytt system. Er null fra Arena. 100% betyr at full AAP gis.
           example: 90
 
     Vedtak:
@@ -449,24 +450,22 @@ components:
         properties:
           dagsats:
             type: integer
-            description: Dagsats for vedtaket
+            description: Dagsats for vedtaket.
             example: 849
           status:
             type: string
-            description: Status for vedtaket.
+            description: Status for vedtaket. Per 29/4-2026 er denne konstant lik LØPENDE om kildesystem er KELVIN (nytt system).
             example: "IVERK"
             enum:
               - IVERK
               - AVSLU
-              - AVSLUTTET
               - LØPENDE
-              - UTREDES
           vedtakId:
             type: string
-            description: Vedtak-ID
+            description: Vedtak-ID. Dette er ID som sendes til SAM fra Kelvin.
           saksnummer:
             type: string
-            description: Saksnummer for vedtaket.
+            description: Saksnummer for vedtaket. Fra Arena er dette et tall, mens det fra nytt system er en streng av lengde 7.
             example: "13494077"
           vedtaksdato:
             type: string
@@ -480,6 +479,7 @@ components:
               - E
               - G
               - O
+              - S
           vedtaksTypeNavn:
             type: string
             nullable: true
@@ -494,12 +494,12 @@ components:
             example: 668862
           barnMedStonad:
             type: integer
-            description: Hvor mange barn gis det tilleg for i vedtaket.
+            description: Hvor mange barn det gis tillegg for i vedtaket.
             example: 1
           barnetillegg:
             type: integer
-            description: Antall barn med stønad multiplisert med barneTilleggSats.
-            example: 123
+            description: Antall barn med stønad multiplisert med gjeldende barnetilleggsats.
+            example: 72
           kildesystem:
             type: string
             description: Kelvin er navnet på den nye løsningen.
@@ -512,8 +512,9 @@ components:
             nullable: true
           opphorsAarsak:
             type: string
+            deprecated: true
             nullable: true
-            description: Her finnes kun data fra ny løsning. Ellers `null`.
+            description: Alltid `null`. Vil bli fjernet.
 
     RettighetsType:
       type: string
@@ -540,17 +541,15 @@ components:
         properties:
           dagsats:
             type: integer
-            description: Dagsats for vedtaket
+            description: Dagsats for vedtaket.
             example: 849
           status:
             type: string
             enum:
               - IVERK
               - AVSLU
-              - AVSLUTTET
               - LØPENDE
-              - UTREDES
-            description: Status for vedtaket.
+            description: Status for vedtaket. Per 29/4-2026 er denne konstant lik LØPENDE om kildesystem er KELVIN (nytt system).
             example: "AVSLU"
           vedtakId:
             type: string
@@ -585,12 +584,12 @@ components:
             example: 668862
           barnMedStonad:
             type: integer
-            description: Hvor mange barn gis det tilleg for i vedtaket.
+            description: Hvor mange barn det gis tillegg for i vedtaket.
             example: 1
           barnetillegg:
             type: integer
-            description: Antall barn med stønad multiplisert med barneTilleggSats.
-            example: 123
+            description: Antall barn med stønad multiplisert med barnetilleggsats.
+            example: 72
           kildesystem:
             type: string
             description: Kelvin er navnet på den nye løsningen.
@@ -603,8 +602,9 @@ components:
             nullable: true
           opphorsAarsak:
             type: string
+            deprecated: true
             nullable: true
-            description: Her finnes kun data fra ny løsning. Ellers `null`.
+            description: Alltid null. Vil bli fjernet.
           utbetaling:
             type: array
             description: Utbetalinger for vedtaket.
@@ -612,6 +612,7 @@ components:
               $ref: '#/components/schemas/UtbetalingMedMer'
     PeriodeRequest:
       type: object
+      required: [personidentifikator, fraOgMedDato, tilOgMedDato]
       properties:
         personidentifikator:
           type: string
@@ -622,16 +623,17 @@ components:
           type: string
           format: date
           nullable: false
-          description: Start-dato for ønsket uttak av AAP-perioder
+          description: Start-dato for ønsket uttak av AAP-perioder.
           example: 2021-01-01
         tilOgMedDato:
           type: string
           format: date
           nullable: false
-          description: Slutt-dato for ønsket uttak av AAP-perioder
+          description: Slutt-dato for ønsket uttak av AAP-perioder.
           example: 2021-01-01
     PeriodeRequestMedSaksId:
       type: object
+      required: [personidentifikator, fraOgMedDato, tilOgMedDato, saksId]
       properties:
         personidentifikator:
           type: string
@@ -641,20 +643,17 @@ components:
         fraOgMedDato:
           type: string
           format: date
-          required: true
           nullable: false
           description: Start-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
         tilOgMedDato:
           type: string
           format: date
-          required: true
           nullable: false
           description: Slutt-dato for ønsket uttak av AAP-perioder
           example: 2021-01-01
         saksId:
           type: string
-          required: true
           description: Ekstern saksId for sporing
           example: "086BE575-25E1-4425-8970-A16A9D7953E9"
   securitySchemes:
