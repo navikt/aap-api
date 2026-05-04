@@ -45,7 +45,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
     implementation("ch.qos.logback:logback-classic:1.5.32")
-    implementation("com.auth0:java-jwt:4.5.1")
+    implementation("com.auth0:java-jwt:4.5.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.3")
     implementation("com.nimbusds:nimbus-jose-jwt:10.9")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.5")
