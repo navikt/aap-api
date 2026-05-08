@@ -32,8 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
-        implementation("io.netty:netty-common:4.2.12.Final")
-        implementation("io.netty:netty-handler:4.2.12.Final")
+        implementation("io.netty:netty-common:4.2.13.Final")
+        implementation("io.netty:netty-handler:4.2.13.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
@@ -45,7 +45,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
     implementation("ch.qos.logback:logback-classic:1.5.32")
-    implementation("com.auth0:java-jwt:4.5.1")
+    implementation("com.auth0:java-jwt:4.5.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.3")
     implementation("com.nimbusds:nimbus-jose-jwt:10.9")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.5")
