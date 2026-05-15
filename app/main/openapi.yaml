@@ -29,7 +29,7 @@ info:
     | Dagsats               | Her har vi to verdier. Den som ligger på selve vedtaket er før samordning uten barnetillegg, mens det som ligger i utbetalingsobjektet er etter samordning uten barnetillegg. |
     | Beløp                 | Fullt beløp, etter samhandling med barnetillegg. Det bruker faktisk får utbetalt.                                       |
     | Barnetillegg          | Totalt barnetillegg på det siste vedtaket.              |                                                                                                                 |
-    | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minst ~1.33G.                       |
+    | Beregningsgrunnlag    | Inntektsgrunnlaget vedtaket ble basert på. Fra Arena er denne alltid større enn eller lik minst ~1.33G. Fra Kelvin er verdien et sted mellom 0 og 6G (den vil være null om personen ikke hadde noen pensjonsgivende inntekt de tre foregående årene før søknaden).                       |
     | Rettighetstype        | Ativitetsfasekode i gammelt system.  Mulige verdier er `UVUP` (påvente av uføretrygd), `FA` (påvente av arbeid), `UA` (under arbeidsavklaring), `AU` (arbeidsutprøving), `IKKE` (Ikke spesif. aktivitetsfase) og `SPE` (sykepengeerstatning). Om kildesystem (`kilde`) er Kelvin er disse verdiene mulige: `BISTANDSBEHOV`, `SYKEPENGEERSTATNING`, `STUDENT`,  `ARBEIDSSØKER`,  `VURDERES_FOR_UFØRETRYGD`.|                                                                                                |
     | Status (vedtakstatus) | Hvis kildesystem er Arena kan denne ha verdiene `IVERK` og `AVSLU`. `IVERK` betyr at vedtaket er iverksatt (spesifikt om vedtakstypen er `S` (stans), betyr det at ytelsen er stanset), mens `AVSLU` betyr _avsluttet_. Fra ny løsning (Kelvin) kommer verdiene `LØPENDE`, `AVSLUTTET` og `UTREDES`. Fra nytt system tolkes `AVSLUTTET` som at ytelsen har stoppet opp.                                                                                        |
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. Fra nytt system er dette en referanse til nyeste endring på saken. |
@@ -45,14 +45,14 @@ info:
     | Samordnings-ID | Her finnes kun data fra ny løsning. Ellers null. |
     | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. |
     
-  
+    
     ## Litt om vedtak fra nytt system
     
     Den største forskjellen på nytt og gammelt system er bruken av ordet _vedtak_. I nytt system teller hvert saksbehandlingløp som et nytt vedtak. Man snakker heller om "sak" når man vil referere til den løpende ytelsen.
 
 
     ## SAM-varsler
-  
+    
     For varsling av nye vedtak eller signifikante endringer i vedtak blir det sendt varsler via SAM.
     Fra AAP vil det komme varsler i disse tilfellene:
     * Førstegangsvedtak
