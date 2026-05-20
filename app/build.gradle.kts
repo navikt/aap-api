@@ -3,7 +3,7 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("aap.conventions")
-    id("io.ktor.plugin") version "3.4.3"
+    id("io.ktor.plugin") version "3.5.0"
     application
 }
 
@@ -11,7 +11,7 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val ktorVersion = "3.4.3"
+val ktorVersion = "3.5.0"
 val komponenterVersjon = "2.0.58"
 val mockOAuth2ServerVersion = "3.0.3"
 val apiInternVersjon = "0.0.80"
