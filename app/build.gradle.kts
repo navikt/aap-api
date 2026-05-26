@@ -3,7 +3,7 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("aap.conventions")
-    id("io.ktor.plugin") version "3.4.3"
+    id("io.ktor.plugin") version "3.5.0"
     application
 }
 
@@ -11,7 +11,7 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val ktorVersion = "3.4.3"
+val ktorVersion = "3.5.0"
 val komponenterVersjon = "2.0.58"
 val mockOAuth2ServerVersion = "3.0.3"
 val apiInternVersjon = "0.0.80"
@@ -32,8 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     constraints {
-        implementation("io.netty:netty-common:4.2.13.Final")
-        implementation("io.netty:netty-handler:4.2.13.Final")
+        implementation("io.netty:netty-common:4.2.14.Final")
+        implementation("io.netty:netty-handler:4.2.14.Final")
     }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
@@ -50,7 +50,7 @@ dependencies {
     implementation("com.nimbusds:nimbus-jose-jwt:10.9")
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.5")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
-    implementation("org.apache.kafka:kafka-streams:4.2.0")
+    implementation("org.apache.kafka:kafka-streams:4.3.0")
     implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.6.1")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
