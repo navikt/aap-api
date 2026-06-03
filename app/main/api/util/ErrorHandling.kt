@@ -88,7 +88,7 @@ fun StatusPagesConfig.feilhåndtering(
                 logger.warn("Feil i periode:", rootCause)
                 call.respond(
                     HttpStatusCode.BadRequest,
-                    UgyldigForespørselFeil("${rootCause.message}", "FEIL_I_PERIODE")
+                    UgyldigForespørselFeil("Ugyldig periode.", "FEIL_I_PERIODE")
                 )
             }
 
@@ -112,7 +112,7 @@ fun StatusPagesConfig.feilhåndtering(
             }
 
             is BadRequestException -> {
-                logger.info("Bad request. Message: ${rootCause.message}")
+                logger.warn("Bad request", rootCause)
                 call.respond(
                     HttpStatusCode.BadRequest,
                     UgyldigForespørselFeil("Feil i mottatte data", "FEIL_I_DATA")
@@ -121,7 +121,7 @@ fun StatusPagesConfig.feilhåndtering(
 
             else -> {
                 if (cause is BadRequestException) {
-                    logger.warn("Bad request. Melding: ${cause.message}", cause)
+                    logger.warn("Bad request", cause)
                     call.respond(
                         HttpStatusCode.BadRequest,
                         UgyldigForespørselFeil("Feil i mottatte data", "FEIL_I_DATA")
@@ -129,13 +129,13 @@ fun StatusPagesConfig.feilhåndtering(
                     return@exception
                 }
                 logger.error(
-                    "Uhåndtert feil ved kall mot ${call.request.path()}. Feiltype: ${cause.javaClass}. x-call-id: ${call.getCallId()}.",
+                    "Uhåndtert feil ved kall mot ${call.request.path()}. Feiltype: ${cause.javaClass.simpleName}. x-call-id: ${call.getCallId()}.",
                     cause
                 )
                 call.respond(
                     HttpStatusCode.InternalServerError,
                     InternFeil(
-                        "Feil i tjeneste: ${cause.message}. x-call-id: ${call.getCallId()}",
+                        "En intern feil oppstod. Kontakt support med call-id: ${call.getCallId()}",
                         "UKJENT_FEIL"
                     )
                 )

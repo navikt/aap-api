@@ -118,7 +118,8 @@ internal class ErrorResponseTest {
         assertEquals(HttpStatusCode.BadRequest, responseDateError.status)
         val body2 = responseDateError.body<UgyldigForespørselFeil>()
         println("Response 2 (Invalid Date): $body2")
-        assertTrue(body2.melding.contains("må være mindre eller lik"))
+        // Error messages are now sanitized to prevent PII leakage
+        assertTrue(body2.melding == "Ugyldig periode.", "Expected 'Ugyldig periode.' but got '${body2.melding}'")
         assertEquals("FEIL_I_PERIODE", body2.kode)
     }
     
