@@ -21,8 +21,11 @@ dependencies {
 
     implementation("no.nav.aap.kelvin:httpklient:$komponenterVersjon")
     implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
-
     implementation("no.nav.aap.api.intern:kontrakt:$apiInternVersjon")
+
+    // Import Netty BOM with desired version, overriding the version ktor declares
+    implementation(platform("io.netty:netty-bom:4.2.15.Final"))
+
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
@@ -31,10 +34,6 @@ dependencies {
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    constraints {
-        implementation("io.netty:netty-common:4.2.15.Final")
-        implementation("io.netty:netty-handler:4.2.15.Final")
-    }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
