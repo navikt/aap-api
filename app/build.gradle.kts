@@ -12,17 +12,27 @@ application {
 }
 
 val ktorVersion = "3.4.3"
+val jacksonVersion = "2.22.0"
+val jackson3Version = "3.2.0"
+val nettyVersion = "4.2.15.Final"
+
 val komponenterVersjon = "2.0.77"
 val mockOAuth2ServerVersion = "3.0.3"
 val apiInternVersjon = "0.0.87"
 
 dependencies {
+    // Overstyr versjoner ktor setter, for å få sikkerhetsfikser
+    implementation(platform("io.netty:netty-bom:$nettyVersion"))
+    implementation(platform("com.fasterxml.jackson:jackson-bom:$jacksonVersion"))
+    // Overstyr versjoner logstash setter, for å få sikkerhetsfikser
+    implementation(platform("tools.jackson:jackson-bom:$jackson3Version"))
+
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
 
     implementation("no.nav.aap.kelvin:httpklient:$komponenterVersjon")
     implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
-
     implementation("no.nav.aap.api.intern:kontrakt:$apiInternVersjon")
+
     implementation("io.ktor:ktor-server-auth:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
@@ -31,10 +41,6 @@ dependencies {
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    constraints {
-        implementation("io.netty:netty-common:4.2.15.Final")
-        implementation("io.netty:netty-handler:4.2.15.Final")
-    }
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
 
     implementation("io.ktor:ktor-server-swagger:$ktorVersion")
