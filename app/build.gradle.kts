@@ -17,7 +17,7 @@ val jackson3Version = "3.2.0"
 val nettyVersion = "4.2.15.Final"
 
 val komponenterVersjon = "2.0.88"
-val mockOAuth2ServerVersion = "5.0.1"
+val mockOAuth2ServerVersion = "5.0.2"
 val apiInternVersjon = "0.0.93"
 
 dependencies {
