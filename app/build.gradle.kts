@@ -12,9 +12,9 @@ application {
 }
 
 val ktorVersion = "3.5.1"
-val jacksonVersion = "2.22.0"
-val jackson3Version = "3.2.0"
-val nettyVersion = "4.2.15.Final"
+val jacksonVersion = "2.22.1"
+val jackson3Version = "3.2.1"
+val nettyVersion = "4.2.16.Final"
 
 val komponenterVersjon = "2.0.94"
 val mockOAuth2ServerVersion = "5.0.2"
@@ -50,9 +50,9 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
-    implementation("ch.qos.logback:logback-classic:1.5.37")
+    implementation("ch.qos.logback:logback-classic:1.5.38")
     implementation("com.auth0:java-jwt:4.5.2")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.0")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1")
     implementation("com.nimbusds:nimbus-jose-jwt:10.9.1")
     implementation("io.micrometer:micrometer-registry-prometheus:1.17.0")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
