@@ -16,9 +16,9 @@ val jacksonVersion = "2.22.1"
 val jackson3Version = "3.2.0"
 val nettyVersion = "4.2.16.Final"
 
-val komponenterVersjon = "2.0.98"
+val komponenterVersjon = "2.0.100"
 val mockOAuth2ServerVersion = "5.0.2"
-val apiInternVersjon = "0.0.96"
+val apiInternVersjon = "0.0.97"
 
 dependencies {
     // Overstyr versjoner ktor setter, for å få sikkerhetsfikser
