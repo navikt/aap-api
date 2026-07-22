@@ -13,7 +13,7 @@ application {
 
 val ktorVersion = "3.5.1"
 val jacksonVersion = "2.22.1"
-val jackson3Version = "3.2.0"
+val jackson3Version = "3.2.1"
 val nettyVersion = "4.2.16.Final"
 
 val komponenterVersjon = "2.0.108"
@@ -51,7 +51,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
     implementation("ch.qos.logback:logback-classic:1.5.38")
-    implementation("com.auth0:java-jwt:4.5.2")
+    implementation("com.auth0:java-jwt:4.6.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1")
     implementation("com.nimbusds:nimbus-jose-jwt:10.9.1")
     implementation("io.micrometer:micrometer-registry-prometheus:1.17.0")
