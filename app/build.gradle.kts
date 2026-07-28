@@ -3,7 +3,7 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("aap.conventions")
-    id("io.ktor.plugin") version "3.5.1"
+    alias(libs.plugins.ktor)
     application
 }
 
@@ -11,64 +11,55 @@ application {
     mainClass.set("api.AppKt")
 }
 
-val ktorVersion = "3.5.1"
-val jacksonVersion = "2.22.1"
-val jackson3Version = "3.2.1"
-val nettyVersion = "4.2.16.Final"
-
-val komponenterVersjon = "2.0.115"
-val mockOAuth2ServerVersion = "5.0.2"
-val apiInternVersjon = "0.0.97"
-
 dependencies {
     // Overstyr versjoner ktor setter, for å få sikkerhetsfikser
-    implementation(platform("io.netty:netty-bom:$nettyVersion"))
-    implementation(platform("com.fasterxml.jackson:jackson-bom:$jacksonVersion"))
+    implementation(platform(libs.nettyBom))
+    implementation(platform(libs.jacksonBom))
     // Overstyr versjoner logstash setter, for å få sikkerhetsfikser
-    implementation(platform("tools.jackson:jackson-bom:$jackson3Version"))
+    implementation(platform(libs.jackson3Bom))
 
-    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+    implementation(libs.ktorSerializationJackson)
 
-    implementation("no.nav.aap.kelvin:httpklient:$komponenterVersjon")
-    implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
-    implementation("no.nav.aap.api.intern:kontrakt:$apiInternVersjon")
+    implementation(libs.kelvinHttpklient)
+    implementation(libs.kelvinInfrastructure)
+    implementation(libs.apiInternKontrakt)
 
-    implementation("io.ktor:ktor-server-auth:$ktorVersion")
-    implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-id:$ktorVersion")
-    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
+    implementation(libs.ktorServerAuth)
+    implementation(libs.ktorServerAuthJwt)
+    implementation(libs.ktorServerCallLogging)
+    implementation(libs.ktorServerCallId)
+    implementation(libs.ktorServerContentNegotiation)
+    implementation(libs.ktorServerCore)
+    implementation(libs.ktorServerMetricsMicrometer)
+    implementation(libs.ktorServerNetty)
+    implementation(libs.ktorServerStatusPages)
 
-    implementation("io.ktor:ktor-server-swagger:$ktorVersion")
-    implementation("io.ktor:ktor-openapi-schema:$ktorVersion")
-    implementation("io.ktor:ktor-server-cors:$ktorVersion")
+    implementation(libs.ktorServerSwagger)
+    implementation(libs.ktorOpenapiSchema)
+    implementation(libs.ktorServerCors)
 
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation(libs.ktorClientCio)
+    implementation(libs.ktorClientContentNegotiation)
 
-    implementation("ch.qos.logback:logback-classic:1.6.0")
-    implementation("com.auth0:java-jwt:4.6.0")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1")
-    implementation("com.nimbusds:nimbus-jose-jwt:10.9.1")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.17.0")
-    implementation("net.logstash.logback:logstash-logback-encoder:9.0")
-    implementation("org.apache.kafka:kafka-streams:4.3.1")
-    implementation("io.prometheus:prometheus-metrics-tracer-initializer:1.8.0")
+    implementation(libs.logback)
+    implementation(libs.javaJwt)
+    implementation(libs.jacksonDatatypeJsr310)
+    implementation(libs.nimbusJoseJwt)
+    implementation(libs.micrometerRegistryPrometheus)
+    implementation(libs.logstashLogbackEncoder)
+    implementation(libs.kafkaStreams)
+    implementation(libs.prometheusMetricsTracerInitializer)
 
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation(libs.ktorServerTestHost)
     constraints {
-        implementation("commons-codec:commons-codec:1.22.0")
+        implementation(libs.commonsCodec)
     }
-    testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
+    testImplementation(libs.mockOAuth2Server)
     constraints {
-        implementation("net.minidev:json-smart:2.6.0")
+        implementation(libs.jsonSmart)
     }
-    testImplementation("org.assertj:assertj-core:3.27.7")
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation(libs.assertj)
+    testImplementation(libs.junitJupiterParams)
     testImplementation(kotlin("test"))
 }
 

@@ -14,7 +14,7 @@ import java.util.*
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration
 
-val MAX_SPORINGSLOGG_SIZE = 1_048_576 // 1 MB
+const val MAX_SPORINGSLOGG_SIZE = 1_048_576 // 1 MB
 
 class SporingsloggException(cause: Throwable) : Exception(cause)
 

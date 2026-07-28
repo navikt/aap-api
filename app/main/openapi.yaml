@@ -35,14 +35,14 @@ info:
     | vedtakId | ID som refererer til vedtaket. Denne ID'en brukes også for hendelser fra Arena i samhandlings-API'et. Fra nytt system er dette en referanse til nyeste endring på saken. |
     | Saksnummer | Referanse til saken. Fra gammelt system er dette en long, fra nytt system er dette en string. |
     | Vedtaksdato | Hvis `kildesystem` er `ARENA`: dato på første vedtak. For Kelvin-saker: dato for siste vedtak på saken. |
-    | Vedtakstype | Hvis `kildesystem` er `ARENA`: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet),  `S` (Stans). Om vedstakstypen er `S`, kombinert med vedtaksstatus `IVERK`, betyr det at ytelsen er stanset. Hvis kilde er `KELVIN` er denne `null`. |
+    | Vedtakstype | Hvis `kildesystem` er `ARENA`: kan være `E` (Endring), `G` (Gjenpptak), `O` (Ny rettighet),  `S` (Stans). Om vedstakstypen er `S`, kombinert med vedtaksstatus `IVERK`, betyr det at ytelsen er stanset. |
     | Periode (på vedtaket) | Gyldighetsperioden for vedtaket.|
     | Barn med stønad | Antall barn som bruker får barnetillegg for.|
     | Sykedager | Reduksjon som skyldes   |
     | Sent meldekort | Om meldekortet ble sendt inn sent. Denne informasjonen er kun tilgjengelig fra Arena. |
     | Fravær | Antall fraværsdager. Denne informasjonen er kun tilgjengelig fra Arena.| 
     | Utbetalingsgrad | Kommer fra Kelvin. Er `null` fra Arena. |
-    | Samordnings-ID | Her finnes kun data fra ny løsning. Ellers null. |
+    | Samordnings-ID og TP-nummer (`samordningOgTpnr`) | En liste med samordnings-ID og tilhørende TP-nummer. Her finnes kun data fra ny løsning (Kelvin). For vedtak fra Kelvin opprettet før 28. juli 2026 kan TP-nummer være `null`. |
     | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. |
     
     
@@ -56,7 +56,7 @@ info:
     For varsling av nye vedtak eller signifikante endringer i vedtak blir det sendt varsler via SAM.
     Fra AAP vil det komme varsler i disse tilfellene:
     * Førstegangsvedtak
-    * Endring i RettighetsType
+    * Endring i rettighetstype
     * signifikant endring i utbetaling
       - fra 0 til >0
       - fra >0 til 0
@@ -508,13 +508,32 @@ components:
               - "KELVIN"
           samordningsId:
             type: string
-            description: Her finnes kun data fra ny løsning. Ellers `null`.
+            deprecated: true
+            description: Bruk `samordningOgTpnr`. Her finnes kun data fra ny løsning. Ellers `null`.
             nullable: true
+          samordningOgTpnr:
+            type: array
+            description: Liste med samordnings-ID og TP-nummer. Her finnes kun data fra ny løsning.
+            items:
+              $ref: '#/components/schemas/SamordningIdOgTpNummer'
           opphorsAarsak:
             type: string
             deprecated: true
             nullable: true
             description: Alltid `null`. Vil bli fjernet.
+
+    SamordningIdOgTpNummer:
+      type: object
+      properties:
+        samordningId:
+          type: string
+          description: Samordnings-ID fra ny løsning.
+          example: "1234"
+        tpNummer:
+          type: string
+          nullable: true
+          description: TP-nummer tilknyttet samordnings-ID.
+          example: "3010"
 
     RettighetsType:
       type: string
@@ -570,6 +589,7 @@ components:
               - E
               - G
               - O
+              - S
           vedtaksTypeNavn:
             type: string
             nullable: true
@@ -598,8 +618,14 @@ components:
               - "KELVIN"
           samordningsId:
             type: string
-            description: Her finnes kun data fra ny løsning. Ellers `null`.
+            deprecated: true
+            description: Bruk `samordningOgTpnr`. Her finnes kun data fra ny løsning. Ellers `null`.
             nullable: true
+          samordningOgTpnr:
+            type: array
+            description: Liste med samordnings-ID og TP-nummer. Her finnes kun data fra ny løsning.
+            items:
+              $ref: '#/components/schemas/SamordningIdOgTpNummer'
           opphorsAarsak:
             type: string
             deprecated: true
