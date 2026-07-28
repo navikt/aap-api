@@ -1,5 +1,6 @@
 package api
 
+import no.nav.aap.api.intern.SamordningIdOgTpNummer
 import java.time.LocalDate
 
 enum class Kilde {
@@ -33,12 +34,16 @@ data class Vedtak(
     val barnMedStonad: Int,
     val barnetillegg: Int,
     val kildesystem: Kilde,
+    @Deprecated("Bruk samordningOgTpnr.", replaceWith = ReplaceWith("samordningOgTpnr"))
     val samordningsId: String? = null,
+    val samordningOgTpnr: List<SamordningIdOgTpNummer>,
     val opphorsAarsak: String? = null,
     val vedtaksTypeKode: String?,
     val vedtaksTypeNavn: String?,
     val utbetaling: List<UtbetalingMedMer>,
 )
+
+data class SamordningIdOgTpNummer(val samordningId: String, val tpNummer: String?)
 
 data class VedtakUtenUtbetaling(
     val dagsats: Int,
@@ -54,7 +59,9 @@ data class VedtakUtenUtbetaling(
     val barnMedStonad: Int,
     val barnetillegg: Int,
     val kildesystem: Kilde,
+    @Deprecated("Bruk samordningOgTpnr.", replaceWith = ReplaceWith("samordningOgTpnr"))
     val samordningsId: String? = null,
+    val samordningOgTpnr: List<SamordningIdOgTpNummer>,
     val opphorsAarsak: String? = null,
 )
 

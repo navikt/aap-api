@@ -14,6 +14,7 @@ import api.sporingslogg.SporingsloggException
 import api.sporingslogg.SporingsloggKafkaClient
 import api.tp.ITpRegisterClient
 import api.util.Consumers.getConsumerTag
+import api.util.IkkeFunnetFeil
 import api.util.httpCallCounter
 import api.util.httpFailedCallCounter
 import api.util.sporingsloggFailCounter
@@ -26,13 +27,13 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import no.nav.aap.api.intern.InternVedtakRequestApiIntern
+import no.nav.aap.api.intern.SamordningIdOgTpNummer
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.DateTimeParseException
 import java.util.*
-import api.util.IkkeFunnetFeil
 
 private val logger = LoggerFactory.getLogger("App")
 
@@ -91,7 +92,10 @@ fun Route.api(
                         call.callId ?: UUID.randomUUID().toString()
                     ) != true
                 ) {
-                    call.respond(HttpStatusCode.NotFound, IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE"))
+                    call.respond(
+                        HttpStatusCode.NotFound,
+                        IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE")
+                    )
                 } else {
                     call.respond(
                         hentMaksimum(
@@ -118,7 +122,10 @@ fun Route.api(
                         call.callId ?: UUID.randomUUID().toString()
                     ) != true
                 ) {
-                    call.respond(HttpStatusCode.NotFound, IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE"))
+                    call.respond(
+                        HttpStatusCode.NotFound,
+                        IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE")
+                    )
                 } else {
                     call.respond(
                         hentMedium(
@@ -218,7 +225,13 @@ private suspend fun hentMedium(
                     barnMedStonad = it.barnMedStonad,
                     barnetillegg = it.barnetillegg,
                     kildesystem = it.kildesystem.tilKilde(),
-                    samordningsId = it.samordningsId,
+                    samordningsId = it.samordningOgTpnr.firstOrNull()?.samordningId,
+                    samordningOgTpnr = it.samordningOgTpnr.map { (samordningId, tpNummer) ->
+                        SamordningIdOgTpNummer(
+                            samordningId,
+                            tpNummer
+                        )
+                    }
                 )
             }.filter { it.status != "INAKT" }
         )
@@ -312,14 +325,20 @@ private suspend fun hentMaksimum(
                     barnMedStonad = vedtak.barnMedStonad,
                     barnetillegg = vedtak.barnetillegg,
                     kildesystem = vedtak.kildesystem.tilKilde(),
-                    samordningsId = vedtak.samordningsId,
+                    samordningsId = vedtak.samordningOgTpnr.firstOrNull()?.samordningId,
+                    samordningOgTpnr = vedtak.samordningOgTpnr.map { (samordningId, tpNummer) ->
+                        SamordningIdOgTpNummer(
+                            samordningId,
+                            tpNummer
+                        )
+                    },
                     vedtaksTypeNavn = vedtak.vedtaksTypeNavn,
                     utbetaling = vedtak.utbetaling.map {
                         UtbetalingMedMer(
-                            reduksjon = it.reduksjon?.let {
+                            reduksjon = it.reduksjon?.let { (timerArbeidet, annenReduksjon) ->
                                 Reduksjon(
-                                    timerArbeidet = it.timerArbeidet,
-                                    annenReduksjon = it.annenReduksjon.toDouble()
+                                    timerArbeidet = timerArbeidet,
+                                    annenReduksjon = annenReduksjon.toDouble()
                                 )
                             },
                             utbetalingsgrad = it.utbetalingsgrad,

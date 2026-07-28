@@ -1,0 +1,62 @@
+[versions]
+ktor = "3.5.1"
+netty = "4.2.16.Final"
+jackson = "2.22.1"
+jackson3 = "3.2.1"
+komponenter = "2.0.115"
+apiIntern = "0.0.98"
+logback = "1.6.0"
+javaJwt = "4.6.0"
+nimbusJoseJwt = "10.9.1"
+micrometer = "1.17.0"
+logstashEncoder = "9.0"
+kafka = "4.3.1"
+prometheus = "1.8.0"
+mockOAuth2Server = "5.0.2"
+commonsCodec = "1.22.0"
+jsonSmart = "2.6.0"
+assertj = "3.27.7"
+
+[libraries]
+nettyBom = { module = "io.netty:netty-bom", version.ref = "netty" }
+jacksonBom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+jackson3Bom = { module = "tools.jackson:jackson-bom", version.ref = "jackson3" }
+
+ktorSerializationJackson = { module = "io.ktor:ktor-serialization-jackson", version.ref = "ktor" }
+ktorServerAuth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktorServerAuthJwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
+ktorServerCallLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktorServerCallId = { module = "io.ktor:ktor-server-call-id", version.ref = "ktor" }
+ktorServerContentNegotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktorServerCore = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktorServerMetricsMicrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor" }
+ktorServerNetty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktorServerStatusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktorServerSwagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
+ktorOpenapiSchema = { module = "io.ktor:ktor-openapi-schema", version.ref = "ktor" }
+ktorServerCors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+ktorClientCio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktorClientContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktorServerTestHost = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+
+kelvinHttpklient = { module = "no.nav.aap.kelvin:httpklient", version.ref = "komponenter" }
+kelvinInfrastructure = { module = "no.nav.aap.kelvin:infrastructure", version.ref = "komponenter" }
+apiInternKontrakt = { module = "no.nav.aap.api.intern:kontrakt", version.ref = "apiIntern" }
+
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+javaJwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
+jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+nimbusJoseJwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "nimbusJoseJwt" }
+micrometerRegistryPrometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
+logstashLogbackEncoder = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstashEncoder" }
+kafkaStreams = { module = "org.apache.kafka:kafka-streams", version.ref = "kafka" }
+prometheusMetricsTracerInitializer = { module = "io.prometheus:prometheus-metrics-tracer-initializer", version.ref = "prometheus" }
+
+mockOAuth2Server = { module = "no.nav.security:mock-oauth2-server", version.ref = "mockOAuth2Server" }
+commonsCodec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
+jsonSmart = { module = "net.minidev:json-smart", version.ref = "jsonSmart" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+junitJupiterParams = { module = "org.junit.jupiter:junit-jupiter-params" }
+
+[plugins]
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
