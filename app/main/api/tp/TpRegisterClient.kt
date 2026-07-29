@@ -1,5 +1,6 @@
 package api.tp
 
+import java.net.URI
 import no.nav.aap.komponenter.config.requiredConfigForKey
 import no.nav.aap.komponenter.httpklient.httpclient.ClientConfig
 import no.nav.aap.komponenter.httpklient.httpclient.Header
@@ -9,9 +10,8 @@ import no.nav.aap.komponenter.httpklient.httpclient.error.ManglerTilgangExceptio
 import no.nav.aap.komponenter.httpklient.httpclient.post
 import no.nav.aap.komponenter.httpklient.httpclient.request.ContentType
 import no.nav.aap.komponenter.httpklient.httpclient.request.PostRequest
-import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.ClientCredentialsTokenProvider
+import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.AzureM2MTokenProvider
 import org.slf4j.LoggerFactory
-import java.net.URI
 
 private val logger = LoggerFactory.getLogger("api.tp.TpRegisterClient")
 
@@ -29,7 +29,7 @@ object TpRegisterClient : ITpRegisterClient {
     private val config = ClientConfig(scope = requiredConfigForKey("integrasjon.tp.scope"))
     private val client = RestClient.withDefaultResponseHandler(
         config = config,
-        tokenProvider = ClientCredentialsTokenProvider
+        tokenProvider = AzureM2MTokenProvider
     )
 
     override fun brukerHarTpForholdOgYtelse(

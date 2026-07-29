@@ -2,6 +2,8 @@ package api.api_intern
 
 import api.afp.VedtakRequest
 import api.util.ApiInternConfig
+import java.net.URI
+import java.util.UUID
 import no.nav.aap.api.intern.InternVedtakRequestApiIntern
 import no.nav.aap.api.intern.Medium
 import no.nav.aap.api.intern.PerioderResponse
@@ -9,10 +11,8 @@ import no.nav.aap.komponenter.httpklient.httpclient.ClientConfig
 import no.nav.aap.komponenter.httpklient.httpclient.Header
 import no.nav.aap.komponenter.httpklient.httpclient.RestClient
 import no.nav.aap.komponenter.httpklient.httpclient.request.PostRequest
-import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.ClientCredentialsTokenProvider
+import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.AzureM2MTokenProvider
 import no.nav.aap.komponenter.json.DefaultJsonMapper
-import java.net.URI
-import java.util.*
 
 
 interface IApiInternClient {
@@ -29,7 +29,7 @@ class ApiInternClient(
 
     private val client = RestClient.withDefaultResponseHandler(
         config = config,
-        tokenProvider = ClientCredentialsTokenProvider,
+        tokenProvider = AzureM2MTokenProvider,
     )
 
     override fun hentMedium(vedtakRequest: InternVedtakRequestApiIntern): Medium {
