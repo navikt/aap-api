@@ -1,7 +1,7 @@
 [versions]
 ktor = "3.5.2"
 netty = "4.2.17.Final"
-jackson = "2.22.1"
+jackson = "2.22.2"
 jackson3 = "3.2.2"
 komponenter = "2.0.141"
 apiIntern = "0.0.101"
