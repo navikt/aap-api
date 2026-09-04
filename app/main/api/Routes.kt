@@ -55,14 +55,16 @@ fun Route.api(
         authenticate(MASKINPORTEN_AFP_PRIVAT) {
             post("/fellesordningen") {
                 val body = call.receive<VedtakRequest>()
-                hentPerioder(
-                    call,
-                    body,
-                    saksnummer = null,
-                    brukSporingslogg,
-                    apiInternClient,
-                    sporingsloggClient,
-                    prometheus
+                call.respond(
+                    hentPerioder(
+                        call,
+                        body,
+                        saksnummer = null,
+                        brukSporingslogg,
+                        apiInternClient,
+                        sporingsloggClient,
+                        prometheus
+                    )
                 )
             }
         }
@@ -70,14 +72,16 @@ fun Route.api(
         authenticate(MASKINPORTEN_AFP_OFFENTLIG) {
             post("/offentlig") {
                 val body = call.receive<VedtakRequestMedSaksRef>()
-                hentPerioder(
-                    call,
-                    body.tilVedtakRequest(),
-                    saksnummer = body.saksId,
-                    brukSporingslogg,
-                    apiInternClient,
-                    sporingsloggClient,
-                    prometheus
+                call.respond(
+                    hentPerioder(
+                        call,
+                        body.tilVedtakRequest(),
+                        saksnummer = body.saksId,
+                        brukSporingslogg,
+                        apiInternClient,
+                        sporingsloggClient,
+                        prometheus
+                    )
                 )
             }
         }
@@ -143,7 +147,7 @@ fun Route.api(
     }
 }
 
-private suspend fun hentPerioder(
+private fun hentPerioder(
     call: ApplicationCall,
     vedtakRequest: VedtakRequest,
     saksnummer: String? = null,
@@ -151,13 +155,14 @@ private suspend fun hentPerioder(
     apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
-) {
+): VedtakResponse {
     val orgnr = call.hentConsumerId()
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
     val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
-    runCatching {
+
+    return runCatching {
         VedtakResponse(
             perioder = apiInternClient.hentPerioder(
                 UUID.fromString(callId),
@@ -185,24 +190,24 @@ private suspend fun hentPerioder(
                 ) else vedtakRequest,
             )
         )
-        call.respond(res)
     }
+        .getOrThrow()
 }
 
-private suspend fun hentMedium(
+private fun hentMedium(
     call: ApplicationCall,
     body: VedtakRequest,
     brukSporingslogg: Boolean,
     apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
-) {
+): Medium {
     val orgnr = call.hentConsumerId()
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
 
-    runCatching {
+    return runCatching {
         val apiInternRequestBody = InternVedtakRequestApiIntern(
             personidentifikator = body.personidentifikator,
             fraOgMedDato = body.fraOgMedDato,
@@ -225,7 +230,7 @@ private suspend fun hentMedium(
                     barnMedStonad = it.barnMedStonad,
                     barnetillegg = it.barnetillegg,
                     kildesystem = it.kildesystem.tilKilde(),
-                    samordningsId = it.samordningOgTpnr.firstOrNull()?.samordningId,
+                    samordningsId = it.samordningOgTpnr.firstOrNull { it.tpNummer == orgnr }?.samordningId,
                     samordningOgTpnr = it.samordningOgTpnr.map { (samordningId, tpNummer) ->
                         SamordningIdOgTpNummer(
                             samordningId,
@@ -251,8 +256,7 @@ private suspend fun hentMedium(
                 konsumentOrgNr = orgnr,
             )
         )
-        call.respond(res)
-    }
+    }.getOrThrow()
 }
 
 private fun SporingsloggKafkaClient.loggTilSporingslogg(
@@ -289,20 +293,20 @@ fun localDate(s: String): LocalDate {
 }
 
 
-private suspend fun hentMaksimum(
+private fun hentMaksimum(
     call: ApplicationCall,
     body: VedtakRequest,
     brukSporingslogg: Boolean,
     apiInternClient: IApiInternClient,
     sporingsloggClient: SporingsloggKafkaClient,
     prometheus: PrometheusMeterRegistry
-) {
+): Maksimum {
     val orgnr = call.hentConsumerId()
     val consumerTag = getConsumerTag(orgnr)
 
     prometheus.httpCallCounter(consumerTag, call.request.path()).increment()
     val callId = requireNotNull(call.getCallId()) { "x-callid ikke satt" }
-    runCatching {
+    return runCatching {
         val apiInternRequestBody = InternVedtakRequestApiIntern(
             personidentifikator = body.personidentifikator,
             fraOgMedDato = body.fraOgMedDato,
@@ -325,7 +329,7 @@ private suspend fun hentMaksimum(
                     barnMedStonad = vedtak.barnMedStonad,
                     barnetillegg = vedtak.barnetillegg,
                     kildesystem = vedtak.kildesystem.tilKilde(),
-                    samordningsId = vedtak.samordningOgTpnr.firstOrNull()?.samordningId,
+                    samordningsId = vedtak.samordningOgTpnr.firstOrNull { it.tpNummer == orgnr }?.samordningId,
                     samordningOgTpnr = vedtak.samordningOgTpnr.map { (samordningId, tpNummer) ->
                         SamordningIdOgTpNummer(
                             samordningId,
@@ -367,7 +371,6 @@ private suspend fun hentMaksimum(
                 konsumentOrgNr = orgnr,
             )
         )
-        call.respond(res)
-    }
+    }.getOrThrow()
 }
 
