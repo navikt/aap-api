@@ -34,7 +34,6 @@ data class Vedtak(
     val barnMedStonad: Int,
     val barnetillegg: Int,
     val kildesystem: Kilde,
-    @Deprecated("Bruk samordningOgTpnr.", replaceWith = ReplaceWith("samordningOgTpnr"))
     val samordningsId: String? = null,
     val samordningOgTpnr: List<SamordningIdOgTpNummer>,
     val opphorsAarsak: String? = null,
@@ -59,7 +58,6 @@ data class VedtakUtenUtbetaling(
     val barnMedStonad: Int,
     val barnetillegg: Int,
     val kildesystem: Kilde,
-    @Deprecated("Bruk samordningOgTpnr.", replaceWith = ReplaceWith("samordningOgTpnr"))
     val samordningsId: String? = null,
     val samordningOgTpnr: List<SamordningIdOgTpNummer>,
     val opphorsAarsak: String? = null,

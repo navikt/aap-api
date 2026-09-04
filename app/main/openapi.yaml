@@ -42,7 +42,7 @@ info:
     | Sent meldekort | Om meldekortet ble sendt inn sent. Denne informasjonen er kun tilgjengelig fra Arena. |
     | Fravær | Antall fraværsdager. Denne informasjonen er kun tilgjengelig fra Arena.| 
     | Utbetalingsgrad | Kommer fra Kelvin. Er `null` fra Arena. |
-    | Samordnings-ID og TP-nummer (`samordningOgTpnr`) | En liste med samordnings-ID og tilhørende TP-nummer. Her finnes kun data fra ny løsning (Kelvin). For vedtak fra Kelvin opprettet før 28. juli 2026 kan TP-nummer være `null`. |
+    | Samordnings-ID og TP-nummer (`samordningOgTpnr`) | En liste med samordnings-ID og tilhørende TP-nummer. Her finnes kun data fra ny løsning (Kelvin). For vedtak fra Kelvin opprettet før 28. juli 2026 kan TP-nummer være `null`. Vi har også feltet `samordningsId`, som er den samme listen, men filtrert på TP-nummer til organisasjonen som kaller endepunktet. Denne kan være null om det ikke var registrert noen aktiv TP-ytelse på personen da vedtaket ble fattet. |
     | Opphørsårsak | Kommer i Kelvin. Er `null` når kilden er Arena. |
     
     
@@ -508,8 +508,7 @@ components:
               - "KELVIN"
           samordningsId:
             type: string
-            deprecated: true
-            description: Bruk `samordningOgTpnr`. Her finnes kun data fra ny løsning. Ellers `null`.
+            description: Samme liste som `samordningOgTpnr`, men filtrert på TP-nummer til organisasjonen som kaller endepunktet. Kan være `null` om det ikke var registrert noen aktiv TP-ytelse på personen da vedtaket ble fattet.
             nullable: true
           samordningOgTpnr:
             type: array
@@ -618,8 +617,7 @@ components:
               - "KELVIN"
           samordningsId:
             type: string
-            deprecated: true
-            description: Bruk `samordningOgTpnr`. Her finnes kun data fra ny løsning. Ellers `null`.
+            description: Samme liste som `samordningOgTpnr`, men filtrert på TP-nummer til organisasjonen som kaller endepunktet. Kan være `null` om det ikke var registrert noen aktiv TP-ytelse på personen da vedtaket ble fattet.
             nullable: true
           samordningOgTpnr:
             type: array
