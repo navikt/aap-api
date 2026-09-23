@@ -3,7 +3,7 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("aap.conventions")
-    alias(libs.plugins.ktor)
+    alias(kelvinLibs.plugins.ktor)
     application
 }
 
@@ -18,48 +18,41 @@ dependencies {
     // Overstyr versjoner logstash setter, for å få sikkerhetsfikser
     implementation(platform(libs.jackson3Bom))
 
-    implementation(libs.ktorSerializationJackson)
+    implementation(kelvinLibs.ktor.serialization.jackson)
 
     implementation(libs.kelvinHttpklient)
     implementation(libs.kelvinInfrastructure)
     implementation(libs.apiInternKontrakt)
 
-    implementation(libs.ktorServerAuth)
-    implementation(libs.ktorServerAuthJwt)
-    implementation(libs.ktorServerCallLogging)
-    implementation(libs.ktorServerCallId)
-    implementation(libs.ktorServerContentNegotiation)
-    implementation(libs.ktorServerCore)
-    implementation(libs.ktorServerMetricsMicrometer)
-    implementation(libs.ktorServerNetty)
-    implementation(libs.ktorServerStatusPages)
+    implementation(kelvinLibs.ktor.server.auth)
+    implementation(kelvinLibs.ktor.server.auth.jwt)
+    implementation(kelvinLibs.ktor.server.call.logging)
+    implementation(kelvinLibs.ktor.server.call.id)
+    implementation(kelvinLibs.ktor.server.content.negotiation)
+    implementation(kelvinLibs.ktor.server.core)
+    implementation(kelvinLibs.ktor.server.metrics.micrometer)
+    implementation(kelvinLibs.ktor.server.netty)
+    implementation(kelvinLibs.ktor.server.status.pages)
+    implementation("io.ktor:ktor-server-swagger:${kelvinLibs.versions.ktor.get()}")
+    implementation("io.ktor:ktor-openapi-schema:${kelvinLibs.versions.ktor.get()}")
+    implementation(kelvinLibs.ktor.server.cors)
 
-    implementation(libs.ktorServerSwagger)
-    implementation(libs.ktorOpenapiSchema)
-    implementation(libs.ktorServerCors)
+    implementation(kelvinLibs.ktor.client.cio)
+    implementation(kelvinLibs.ktor.client.content.negotiation)
 
-    implementation(libs.ktorClientCio)
-    implementation(libs.ktorClientContentNegotiation)
-
-    implementation(libs.logback)
+    implementation(kelvinLibs.logback.classic)
     implementation(libs.javaJwt)
-    implementation(libs.jacksonDatatypeJsr310)
-    implementation(libs.nimbusJoseJwt)
-    implementation(libs.micrometerRegistryPrometheus)
-    implementation(libs.logstashLogbackEncoder)
+    implementation(kelvinLibs.jackson.datatype.jsr310)
+    implementation(kelvinLibs.micrometer.prometheus)
+    implementation(kelvinLibs.logstash.logback.encoder)
     implementation(libs.kafkaStreams)
     implementation(libs.prometheusMetricsTracerInitializer)
 
-    testImplementation(libs.ktorServerTestHost)
-    constraints {
-        implementation(libs.commonsCodec)
-    }
-    testImplementation(libs.mockOAuth2Server)
-    constraints {
-        implementation(libs.jsonSmart)
-    }
-    testImplementation(libs.assertj)
-    testImplementation(libs.junitJupiterParams)
+    testImplementation(kelvinLibs.ktor.server.test.host)
+    testImplementation(kelvinLibs.mock.oauth2.server)
+    testImplementation(kelvinLibs.nimbus.jose.jwt)
+    testImplementation(kelvinLibs.assertj.core)
+    testImplementation(kelvinLibs.junit.jupiter.params)
     testImplementation(kotlin("test"))
 }
 
