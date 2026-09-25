@@ -5,17 +5,11 @@
 plugins {
     // Provides a no-op 'build' lifecycle task
     base
-    id("aap.conventions")
-}
-
-subprojects {
-    // no-op; just ensuring subprojects are configured
 }
 
 // Call the tasks of the subprojects
 for (taskName in listOf("clean", "build", "assemble", "check")) {
     tasks.named(taskName) {
-        dependsOn(subprojects.map { it.path + ":$taskName" })
+        dependsOn(subprojects.map { it.tasks.named(taskName) })
     }
 }
-
