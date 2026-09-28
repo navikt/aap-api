@@ -47,14 +47,9 @@ fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config:
                 .also { logger.info("Ikke tilgang til maskinporten. Path: ${call.request.path()}. Call-ID: ${call.callId}") }
         }
         validate { cred ->
-            val expectedAudience = config.oauth.maskinporten.issuer.audience
-            if (expectedAudience !in cred.audience) {
-                logger.warn(
-                    "Maskinporten token has unexpected audience. Expected: {}. Actual: {}",
-                    expectedAudience,
-                    cred.audience
-                )
-            }
+            //  val expectedAudience = config.oauth.maskinporten.issuer.audience
+            // Skal ikke trenge å validere audience for maskinporten, ref:
+            // https://doc.nais.io/auth/maskinporten/reference/
 
             if (!scope.contains(cred.getClaim("scope", String::class))) {
                 logger.warn(
