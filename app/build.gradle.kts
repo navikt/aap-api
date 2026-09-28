@@ -33,8 +33,8 @@ dependencies {
     implementation(kelvinLibs.ktor.server.metrics.micrometer)
     implementation(kelvinLibs.ktor.server.netty)
     implementation(kelvinLibs.ktor.server.status.pages)
-    implementation("io.ktor:ktor-server-swagger:${kelvinLibs.versions.ktor.get()}")
-    implementation("io.ktor:ktor-openapi-schema:${kelvinLibs.versions.ktor.get()}")
+    implementation(kelvinLibs.versions.ktor.map { "io.ktor:ktor-server-swagger:$it" })
+    implementation(kelvinLibs.versions.ktor.map { "io.ktor:ktor-openapi-schema:$it" })
     implementation(kelvinLibs.ktor.server.cors)
 
     implementation(kelvinLibs.ktor.client.cio)

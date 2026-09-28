@@ -47,6 +47,15 @@ fun AuthenticationConfig.maskinporten(name: String, scope: List<String>, config:
                 .also { logger.info("Ikke tilgang til maskinporten. Path: ${call.request.path()}. Call-ID: ${call.callId}") }
         }
         validate { cred ->
+            val expectedAudience = config.oauth.maskinporten.issuer.audience
+            if (expectedAudience !in cred.audience) {
+                logger.warn(
+                    "Maskinporten token has unexpected audience. Expected: {}. Actual: {}",
+                    expectedAudience,
+                    cred.audience
+                )
+            }
+
             if (!scope.contains(cred.getClaim("scope", String::class))) {
                 logger.warn(
                     "Wrong scope in claim. Ser etter $scope, fikk ${

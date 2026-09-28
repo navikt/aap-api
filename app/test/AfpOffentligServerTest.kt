@@ -3,6 +3,7 @@ import api.afp.VedtakRequestMedSaksRef
 import api.afp.VedtakResponse
 import api.api
 import api.api_intern.IApiInternClient
+import api.auth.maskinporten
 import api.sporingslogg.JacksonSerializer
 import api.sporingslogg.Spor
 import api.tp.ITpRegisterClient
@@ -11,6 +12,9 @@ import api.util.IkkeFunnetFeil
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.nimbusds.jwt.SignedJWT
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -18,6 +22,10 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import no.nav.aap.api.intern.InternVedtakRequestApiIntern
 import no.nav.aap.api.intern.Medium
@@ -31,6 +39,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 
@@ -91,6 +100,7 @@ internal class AfpOffentligServerTest {
                 tpRegisterKlient()
             )
         }
+
         val client = createClient()
         val jwt = issueToken("nav:aap:afpoffentlig.read")
 
@@ -107,6 +117,56 @@ internal class AfpOffentligServerTest {
             VedtakResponse(perioder = listOf()),
             response.body() as VedtakResponse
         )
+    }
+
+    @Test
+    fun `token with wrong audience is accepted while being observable`() = testApplication {
+        application {
+            this.install(Authentication) {
+                maskinporten(
+                    "maskinporten-test",
+                    listOf("nav:aap:afpoffentlig.read"),
+                    Config()
+                )
+            }
+            routing {
+                authenticate("maskinporten-test") {
+                    get("/") {
+                        call.respond(HttpStatusCode.OK)
+                    }
+                }
+            }
+        }
+
+        val jwt = server.issueToken(
+            issuerId = "default",
+            audience = "another-api",
+            claims = mapOf(
+                "scope" to "nav:aap:afpoffentlig.read",
+                "consumer" to mapOf("authority" to "123", "ID" to "0192:938708606")
+            )
+        )
+
+        val logger = LoggerFactory.getLogger("MaskinportenAuth") as Logger
+        val appender = ListAppender<ILoggingEvent>().apply { start() }
+        logger.addAppender(appender)
+        try {
+            val response = client.get("/") {
+                header(HttpHeaders.Authorization, "Bearer ${jwt.serialize()}")
+                accept(ContentType.Application.Json)
+            }
+
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertThat(appender.list)
+                .anySatisfy { event ->
+                    assertThat(event.formattedMessage)
+                        .contains("Maskinporten token has unexpected audience")
+                        .contains("default")
+                        .contains("another-api")
+                }
+        } finally {
+            logger.detachAppender(appender)
+        }
     }
 
     @Test
