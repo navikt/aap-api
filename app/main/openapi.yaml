@@ -259,7 +259,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ManglerTilgangFeil'
         '404':
-          description: Manglende URL / Person ikke funnet
+          description: Person ikke funnet eller mangler TP-forhold. Ved manglende TP-forhold returneres feilkoden `MANGLER_TP_FORHOLD`.
           content:
             application/json:
               schema:
@@ -321,7 +321,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ManglerTilgangFeil'
         '404':
-          description: Manglende URL / Person ikke funnet
+          description: Person ikke funnet eller mangler TP-forhold. Ved manglende TP-forhold returneres feilkoden `MANGLER_TP_FORHOLD`.
           content:
             application/json:
               schema:

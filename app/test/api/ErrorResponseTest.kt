@@ -130,6 +130,6 @@ internal class ErrorResponseTest {
     }
 
     private fun mockTpRegisterClient() = object : ITpRegisterClient {
-        override fun brukerHarTpForholdOgYtelse(fnr: String, orgnr: String, requestId: String) = true
+        override fun brukerHarTpForhold(fnr: String, orgnr: String, requestId: String) = true
     }
 }

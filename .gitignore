@@ -27,3 +27,4 @@ gradle/kotlin-profile
 gradle/.tmp
 # Ignore Gradle build output directory
 build
+.kotlin

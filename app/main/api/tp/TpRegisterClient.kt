@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
 private val logger = LoggerFactory.getLogger("api.tp.TpRegisterClient")
 
 interface ITpRegisterClient {
-    fun brukerHarTpForholdOgYtelse(
+    fun brukerHarTpForhold(
         fnr: String,
         orgnr: String,
         requestId: String
@@ -32,7 +32,7 @@ object TpRegisterClient : ITpRegisterClient {
         tokenProvider = AzureM2MTokenProvider
     )
 
-    override fun brukerHarTpForholdOgYtelse(
+    override fun brukerHarTpForhold(
         fnr: String,
         orgnr: String,
         requestId: String
@@ -40,7 +40,7 @@ object TpRegisterClient : ITpRegisterClient {
         require(orgnr.isNotBlank())
         require(fnr.isNotBlank())
 
-        val uri = baseUri.resolve("/api/tjenestepensjon/hasYtelse?orgnr=$orgnr")
+        val uri = baseUri.resolve("/api/tjenestepensjon/hasForhold?orgnr=$orgnr")
         val httpRestClient = PostRequest(
             body = fnr,
             contentType = ContentType.TEXT_PLAIN,
