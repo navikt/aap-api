@@ -169,8 +169,8 @@ internal class AfpOffentligServerTest {
         )
         assertEquals(HttpStatusCode.NotFound, response.status)
         val feil = response.body<IkkeFunnetFeil>()
-        assertEquals("Mangler TP-ytelse.", feil.melding)
-        assertEquals("MANGLER_TP_YTELSE", feil.kode)
+        assertEquals("Mangler TP-forhold.", feil.melding)
+        assertEquals("MANGLER_TP_FORHOLD", feil.kode)
     }
 
     @Test
@@ -182,7 +182,7 @@ internal class AfpOffentligServerTest {
                 Config(), mockProducer(),
                 apiInternClient,
                 object : ITpRegisterClient {
-                    override fun brukerHarTpForholdOgYtelse(fnr: String, orgnr: String, requestId: String): Boolean {
+                    override fun brukerHarTpForhold(fnr: String, orgnr: String, requestId: String): Boolean {
                         throw ManglerTilgangException("Ingen tilgang", "Ingen tilgang")
                     }
                 }
@@ -278,7 +278,7 @@ internal class AfpOffentligServerTest {
         }
 
     private fun tpRegisterKlient(ønsketSvar: Boolean? = true) = object : ITpRegisterClient {
-        override fun brukerHarTpForholdOgYtelse(
+        override fun brukerHarTpForhold(
             fnr: String,
             orgnr: String,
             requestId: String

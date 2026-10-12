@@ -90,7 +90,7 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequest>()
-                if (tpRegisterClient.brukerHarTpForholdOgYtelse(
+                if (tpRegisterClient.brukerHarTpForhold(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
@@ -98,7 +98,7 @@ fun Route.api(
                 ) {
                     call.respond(
                         HttpStatusCode.NotFound,
-                        IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE")
+                        IkkeFunnetFeil("Mangler TP-forhold.", "MANGLER_TP_FORHOLD")
                     )
                 } else {
                     call.respond(
@@ -120,7 +120,7 @@ fun Route.api(
         authenticate(MASKINPORTEN_TP_ORDNINGEN) {
             post {
                 val body = call.receive<VedtakRequest>()
-                if (tpRegisterClient.brukerHarTpForholdOgYtelse(
+                if (tpRegisterClient.brukerHarTpForhold(
                         body.personidentifikator,
                         call.hentConsumerId(),
                         call.callId ?: UUID.randomUUID().toString()
@@ -128,7 +128,7 @@ fun Route.api(
                 ) {
                     call.respond(
                         HttpStatusCode.NotFound,
-                        IkkeFunnetFeil("Mangler TP-ytelse.", "MANGLER_TP_YTELSE")
+                        IkkeFunnetFeil("Mangler TP-forhold.", "MANGLER_TP_FORHOLD")
                     )
                 } else {
                     call.respond(
