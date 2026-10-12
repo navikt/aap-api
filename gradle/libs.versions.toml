@@ -2,10 +2,9 @@
 netty = "4.2.17.Final"
 jackson = "2.22.2"
 jackson3 = "3.2.2"
-komponenter = "2.0.172"
+komponenter = "2.0.185"
 apiIntern = "0.0.109"
 javaJwt = "4.6.1"
-kafka = "4.3.1"
 prometheus = "1.8.0"
 
 [libraries]
@@ -18,5 +17,4 @@ kelvinInfrastructure = { module = "no.nav.aap.kelvin:infrastructure", version.re
 apiInternKontrakt = { module = "no.nav.aap.api.intern:kontrakt", version.ref = "apiIntern" }
 
 javaJwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
-kafkaStreams = { module = "org.apache.kafka:kafka-streams", version.ref = "kafka" }
 prometheusMetricsTracerInitializer = { module = "io.prometheus:prometheus-metrics-tracer-initializer", version.ref = "prometheus" }

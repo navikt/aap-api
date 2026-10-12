@@ -11,7 +11,7 @@ include(
 dependencyResolutionManagement {
     versionCatalogs {
         create("kelvinLibs") {
-            from("no.nav.aap.kelvin:version-catalog:2.0.160")
+            from("no.nav.aap.kelvin:version-catalog:2.0.185")
         }
     }
 
