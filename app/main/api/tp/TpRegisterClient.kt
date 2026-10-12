@@ -23,6 +23,9 @@ interface ITpRegisterClient {
     ): Boolean?
 }
 
+/**
+ * Kildekode: https://github.com/navikt/tp/blob/afc4d78b2923c5e38f9f07d617b1661761291ebd/src/main/kotlin/no/nav/samhandling/tp/controller/TjenestepensjonController.kt
+ */
 object TpRegisterClient : ITpRegisterClient {
 
     private val baseUri = URI.create(requiredConfigForKey("integrasjon.tp.url"))
@@ -50,7 +53,7 @@ object TpRegisterClient : ITpRegisterClient {
             )
         )
         return try {
-            client.post<String, TpRespons>(uri, httpRestClient)?.value.also {
+            client.post<String, TpRespons>(uri, httpRestClient)?.forhold.also {
                 if (it == null) {
                     logger.info("Fikk null-respons fra tp-registeret. Orgnr: $orgnr")
                 }
@@ -65,4 +68,4 @@ object TpRegisterClient : ITpRegisterClient {
     }
 }
 
-data class TpRespons(val value: Boolean)
+data class TpRespons(val forhold: Boolean)
