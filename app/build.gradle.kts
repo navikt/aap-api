@@ -45,7 +45,7 @@ dependencies {
     implementation(kelvinLibs.jackson.datatype.jsr310)
     implementation(kelvinLibs.micrometer.prometheus)
     implementation(kelvinLibs.logstash.logback.encoder)
-    implementation(libs.kafkaStreams)
+    implementation(kelvinLibs.kafka.streams)
     implementation(libs.prometheusMetricsTracerInitializer)
 
     testImplementation(kelvinLibs.ktor.server.test.host)
